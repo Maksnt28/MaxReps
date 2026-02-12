@@ -1,0 +1,22 @@
+{
+  "tabs": {
+    "home": "Accueil",
+    "workout": "Entra\u00eenement",
+    "exercises": "Exercices",
+    "programs": "Programmes",
+    "profile": "Profil"
+  },
+  "common": {
+    "loading": "Chargement...",
+    "error": "Une erreur est survenue",
+    "retry": "R\u00e9essayer",
+    "cancel": "Annuler",
+    "save": "Enregistrer",
+    "delete": "Supprimer",
+    "confirm": "Confirmer"
+  },
+  "home": {
+    "title": "MaxReps",
+    "welcome": "Pr\u00eat \u00e0 t'entra\u00eener"
+  }
+}

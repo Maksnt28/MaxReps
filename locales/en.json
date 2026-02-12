@@ -1,0 +1,22 @@
+{
+  "tabs": {
+    "home": "Home",
+    "workout": "Workout",
+    "exercises": "Exercises",
+    "programs": "Programs",
+    "profile": "Profile"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Something went wrong",
+    "retry": "Retry",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "confirm": "Confirm"
+  },
+  "home": {
+    "title": "MaxReps",
+    "welcome": "Ready to train"
+  }
+}
