@@ -18,5 +18,13 @@
   "home": {
     "title": "MaxReps",
     "welcome": "Pr\u00eat \u00e0 t'entra\u00eener"
+  },
+  "auth": {
+    "tagline": "Suis tes s\u00e9ries. Bats tes records.",
+    "signInGoogle": "Continuer avec Google",
+    "signInApple": "Continuer avec Apple",
+    "signOut": "Se d\u00e9connecter",
+    "signOutConfirm": "\u00cates-vous s\u00fbr de vouloir vous d\u00e9connecter ?",
+    "sessionExpired": "Session expir\u00e9e. Veuillez vous reconnecter."
   }
 }

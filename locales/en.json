@@ -18,5 +18,13 @@
   "home": {
     "title": "MaxReps",
     "welcome": "Ready to train"
+  },
+  "auth": {
+    "tagline": "Track your lifts. Beat your PRs.",
+    "signInGoogle": "Continue with Google",
+    "signInApple": "Continue with Apple",
+    "signOut": "Sign out",
+    "signOutConfirm": "Are you sure you want to sign out?",
+    "sessionExpired": "Session expired. Please sign in again."
   }
 }
