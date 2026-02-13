@@ -26,5 +26,80 @@
     "signOut": "Sign out",
     "signOutConfirm": "Are you sure you want to sign out?",
     "sessionExpired": "Session expired. Please sign in again."
+  },
+  "exercises": {
+    "searchPlaceholder": "Search exercises",
+    "filterMuscle": "Muscle group",
+    "filterEquipment": "Equipment",
+    "emptyTitle": "No exercises found",
+    "emptyMessage": "Try adjusting your filters or search term.",
+    "clearFilters": "Clear filters",
+    "formCues": "Form cues",
+    "musclesWorked": "Muscles worked",
+    "primaryMuscle": "Primary",
+    "secondaryMuscles": "Secondary muscles",
+    "equipmentLabel": "Equipment",
+    "difficultyLabel": "Difficulty",
+    "muscles": {
+      "chest": "Chest",
+      "back": "Back",
+      "shoulders": "Shoulders",
+      "biceps": "Biceps",
+      "triceps": "Triceps",
+      "quads": "Quads",
+      "hamstrings": "Hamstrings",
+      "glutes": "Glutes",
+      "calves": "Calves",
+      "abs": "Abs"
+    },
+    "equipment": {
+      "barbell": "Barbell",
+      "dumbbell": "Dumbbell",
+      "cable": "Cable",
+      "machine": "Machine",
+      "bodyweight": "Bodyweight",
+      "bands": "Bands",
+      "kettlebell": "Kettlebell"
+    },
+    "difficulty": {
+      "beginner": "Beginner",
+      "intermediate": "Intermediate",
+      "advanced": "Advanced"
+    }
+  },
+  "workout": {
+    "startWorkout": "Start Workout",
+    "startSubtitle": "Begin a free-form training session",
+    "finishWorkout": "Finish",
+    "discardWorkout": "Discard Workout",
+    "discardConfirm": "Are you sure? All sets will be lost.",
+    "finishConfirm": "Finish workout?",
+    "addExercise": "Add Exercise",
+    "addExercises": "Add ({{count}})",
+    "addSet": "Add Set",
+    "removeExercise": "Remove Exercise",
+    "removeExerciseConfirm": "Remove this exercise and all its sets?",
+    "set": "Set",
+    "warmup": "W",
+    "weight": "kg",
+    "reps": "Reps",
+    "rpe": "RPE",
+    "notes": "Notes",
+    "notesPlaceholder": "Add workout notes...",
+    "elapsed": "Elapsed",
+    "noExercises": "No exercises yet",
+    "noExercisesMessage": "Tap \"Add Exercise\" to get started.",
+    "alreadyAdded": "Already in workout",
+    "saving": "Saving workout...",
+    "saveError": "Failed to save workout. Please try again.",
+    "startError": "Failed to start workout. Check your connection.",
+    "summary": {
+      "title": "Workout Complete!",
+      "duration": "Duration",
+      "exercises": "Exercises",
+      "sets": "Sets",
+      "totalVolume": "Total Volume",
+      "done": "Done"
+    }
   }
 }

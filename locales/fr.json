@@ -26,5 +26,80 @@
     "signOut": "Se d\u00e9connecter",
     "signOutConfirm": "\u00cates-vous s\u00fbr de vouloir vous d\u00e9connecter ?",
     "sessionExpired": "Session expir\u00e9e. Veuillez vous reconnecter."
+  },
+  "exercises": {
+    "searchPlaceholder": "Rechercher des exercices",
+    "filterMuscle": "Groupe musculaire",
+    "filterEquipment": "\u00c9quipement",
+    "emptyTitle": "Aucun exercice trouv\u00e9",
+    "emptyMessage": "Essayez d'ajuster vos filtres ou votre recherche.",
+    "clearFilters": "Effacer les filtres",
+    "formCues": "Conseils de forme",
+    "musclesWorked": "Muscles travaill\u00e9s",
+    "primaryMuscle": "Primaire",
+    "secondaryMuscles": "Muscles secondaires",
+    "equipmentLabel": "\u00c9quipement",
+    "difficultyLabel": "Difficult\u00e9",
+    "muscles": {
+      "chest": "Pectoraux",
+      "back": "Dos",
+      "shoulders": "\u00c9paules",
+      "biceps": "Biceps",
+      "triceps": "Triceps",
+      "quads": "Quadriceps",
+      "hamstrings": "Ischio-jambiers",
+      "glutes": "Fessiers",
+      "calves": "Mollets",
+      "abs": "Abdominaux"
+    },
+    "equipment": {
+      "barbell": "Barre",
+      "dumbbell": "Halt\u00e8re",
+      "cable": "C\u00e2ble",
+      "machine": "Machine",
+      "bodyweight": "Poids du corps",
+      "bands": "\u00c9lastiques",
+      "kettlebell": "Kettlebell"
+    },
+    "difficulty": {
+      "beginner": "D\u00e9butant",
+      "intermediate": "Interm\u00e9diaire",
+      "advanced": "Avanc\u00e9"
+    }
+  },
+  "workout": {
+    "startWorkout": "Commencer l'entra\u00eenement",
+    "startSubtitle": "D\u00e9marrer une s\u00e9ance libre",
+    "finishWorkout": "Terminer",
+    "discardWorkout": "Abandonner l'entra\u00eenement",
+    "discardConfirm": "\u00cates-vous s\u00fbr ? Toutes les s\u00e9ries seront perdues.",
+    "finishConfirm": "Terminer l'entra\u00eenement ?",
+    "addExercise": "Ajouter un exercice",
+    "addExercises": "Ajouter ({{count}})",
+    "addSet": "Ajouter une s\u00e9rie",
+    "removeExercise": "Supprimer l'exercice",
+    "removeExerciseConfirm": "Supprimer cet exercice et toutes ses s\u00e9ries ?",
+    "set": "S\u00e9rie",
+    "warmup": "E",
+    "weight": "kg",
+    "reps": "R\u00e9ps",
+    "rpe": "RPE",
+    "notes": "Notes",
+    "notesPlaceholder": "Ajouter des notes...",
+    "elapsed": "\u00c9coul\u00e9",
+    "noExercises": "Aucun exercice",
+    "noExercisesMessage": "Appuyez sur \u00ab Ajouter un exercice \u00bb pour commencer.",
+    "alreadyAdded": "D\u00e9j\u00e0 ajout\u00e9",
+    "saving": "Enregistrement...",
+    "saveError": "\u00c9chec de l'enregistrement. R\u00e9essayez.",
+    "startError": "\u00c9chec du d\u00e9marrage. V\u00e9rifiez votre connexion.",
+    "summary": {
+      "title": "Entra\u00eenement termin\u00e9 !",
+      "duration": "Dur\u00e9e",
+      "exercises": "Exercices",
+      "sets": "S\u00e9ries",
+      "totalVolume": "Volume total",
+      "done": "Termin\u00e9"
+    }
   }
 }

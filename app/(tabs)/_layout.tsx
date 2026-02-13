@@ -44,6 +44,7 @@ export default function TabLayout() {
         name="exercises"
         options={{
           title: t('tabs.exercises'),
+          headerShown: false,
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="list-outline" size={size} color={color} />
           ),
