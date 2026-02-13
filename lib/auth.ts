@@ -11,8 +11,8 @@ export type AuthResult =
   | { type: 'error'; message: string }
 
 /**
- * Google Sign-In via Supabase OAuth (browser-based PKCE flow).
- * Opens the Google consent screen, then Supabase redirects back to the app.
+ * Google Sign-In via Supabase OAuth (browser-based flow).
+ * Handles both PKCE (code in query params) and implicit (tokens in hash) flows.
  */
 export async function signInWithGoogle(): Promise<AuthResult> {
   try {
@@ -33,25 +33,31 @@ export async function signInWithGoogle(): Promise<AuthResult> {
 
     if (result.type !== 'success') return { type: 'cancelled' }
 
-    // Extract tokens from the redirect URL fragment
     const url = new URL(result.url)
-    const params = new URLSearchParams(url.hash.substring(1)) // remove leading #
 
+    // PKCE flow: authorization code in query params
+    const code = url.searchParams.get('code')
+    if (code) {
+      const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code)
+      if (exchangeError) return { type: 'error', message: exchangeError.message }
+      return { type: 'success' }
+    }
+
+    // Implicit flow fallback: tokens in URL hash fragment
+    const params = new URLSearchParams(url.hash.substring(1))
     const accessToken = params.get('access_token')
     const refreshToken = params.get('refresh_token')
 
-    if (!accessToken || !refreshToken) {
-      return { type: 'error', message: 'Failed to extract tokens from callback' }
+    if (accessToken && refreshToken) {
+      const { error: sessionError } = await supabase.auth.setSession({
+        access_token: accessToken,
+        refresh_token: refreshToken,
+      })
+      if (sessionError) return { type: 'error', message: sessionError.message }
+      return { type: 'success' }
     }
 
-    const { error: sessionError } = await supabase.auth.setSession({
-      access_token: accessToken,
-      refresh_token: refreshToken,
-    })
-
-    if (sessionError) return { type: 'error', message: sessionError.message }
-
-    return { type: 'success' }
+    return { type: 'error', message: 'No auth code or tokens in callback URL' }
   } catch (e) {
     return { type: 'error', message: e instanceof Error ? e.message : 'Unknown error' }
   }
@@ -101,7 +107,12 @@ export async function signInWithApple(): Promise<AuthResult> {
 
 /**
  * Sign out the current user.
+ * Uses scope: 'local' to avoid server-side revocation call (which can hang).
  */
 export async function signOut(): Promise<void> {
-  await supabase.auth.signOut()
+  try {
+    await supabase.auth.signOut({ scope: 'local' })
+  } catch {
+    // Force-clear even if signOut throws — onAuthStateChange handles store cleanup
+  }
 }

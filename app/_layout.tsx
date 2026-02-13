@@ -43,21 +43,30 @@ export default function RootLayout() {
   const { setUser, clearUser } = useUserStore()
 
   const syncUserProfile = useCallback(async (s: Session) => {
-    const { data } = await supabase
-      .from('users')
-      .select('*')
-      .eq('id', s.user.id)
-      .single()
+    try {
+      const { data, error } = await supabase
+        .from('users')
+        .select('*')
+        .eq('id', s.user.id)
+        .single()
 
-    if (data) {
-      setUser({
-        id: data.id,
-        displayName: data.display_name,
-        experienceLevel: data.experience_level as 'beginner' | 'intermediate' | 'advanced' | null,
-        goal: data.goal as 'strength' | 'hypertrophy' | 'general_fitness' | 'body_recomp' | null,
-        equipment: data.equipment ?? [],
-        locale: (data.locale as 'en' | 'fr') ?? 'en',
-      })
+      if (error) {
+        console.warn('syncUserProfile: fetch failed', error.message)
+        return
+      }
+
+      if (data) {
+        setUser({
+          id: data.id,
+          displayName: data.display_name,
+          experienceLevel: data.experience_level as 'beginner' | 'intermediate' | 'advanced' | null,
+          goal: data.goal as 'strength' | 'hypertrophy' | 'general_fitness' | 'body_recomp' | null,
+          equipment: data.equipment ?? [],
+          locale: (data.locale as 'en' | 'fr') ?? 'en',
+        })
+      }
+    } catch (e) {
+      console.warn('syncUserProfile: unexpected error', e)
     }
   }, [setUser])
 
@@ -71,11 +80,12 @@ export default function RootLayout() {
 
     // Listen for auth state changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (_event, session) => {
+      (_event, session) => {
         setSession(session)
 
         if (session) {
-          await syncUserProfile(session)
+          // Fire-and-forget — errors caught inside syncUserProfile
+          syncUserProfile(session)
         } else {
           clearUser()
         }
