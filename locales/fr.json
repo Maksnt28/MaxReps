@@ -13,7 +13,8 @@
     "cancel": "Annuler",
     "save": "Enregistrer",
     "delete": "Supprimer",
-    "confirm": "Confirmer"
+    "confirm": "Confirmer",
+    "goBack": "Retour"
   },
   "home": {
     "title": "MaxReps",
@@ -101,5 +102,46 @@
       "totalVolume": "Volume total",
       "done": "Termin\u00e9"
     }
+  },
+  "programs": {
+    "create": "Créer un programme",
+    "name": "Nom du programme",
+    "namePlaceholder": "ex. : Push Pull Legs",
+    "addDay": "Ajouter un jour",
+    "dayName": "Nom du jour",
+    "dayNamePlaceholder": "ex. : Jour de poussée",
+    "dayFocus": "Focus (optionnel)",
+    "dayFocusPlaceholder": "ex. : Pectoraux & Triceps",
+    "editDay": "Modifier le jour",
+    "deleteDay": "Supprimer le jour",
+    "deleteDayConfirm": "Supprimer ce jour et tous ses exercices ?",
+    "deleteProgram": "Supprimer le programme",
+    "deleteProgramConfirm": "Supprimer ce programme et tous ses jours ?",
+    "emptyTitle": "Aucun programme",
+    "emptyMessage": "Créez une routine personnalisée pour commencer.",
+    "startWorkout": "Démarrer l'entraînement",
+    "sets": "Séries",
+    "reps": "Réps",
+    "targetRPE": "RPE cible",
+    "restSeconds": "Repos (sec)",
+    "exerciseCount": "{{count}} exercices",
+    "dayCount": "{{count}} jours",
+    "active": "Actif",
+    "addExercises": "Ajouter ({{count}})",
+    "reorderExercise": "Maintenir pour réordonner",
+    "removeExercise": "Retirer l'exercice",
+    "removeExerciseConfirm": "Retirer cet exercice du jour ?",
+    "programSaved": "Programme enregistré",
+    "programDeleted": "Programme supprimé",
+    "noDays": "Aucun jour",
+    "noDaysMessage": "Ajoutez un jour d'entraînement pour commencer.",
+    "noExercises": "Aucun exercice",
+    "noExercisesMessage": "Ajoutez des exercices à ce jour.",
+    "activeWorkoutTitle": "Entraînement en cours",
+    "activeWorkoutMessage": "Vous avez un entraînement en cours. L'abandonner et en démarrer un nouveau ?",
+    "discardAndStart": "Abandonner et démarrer",
+    "editTargets": "Modifier les objectifs",
+    "startWorkoutError": "Échec du démarrage. Réessayez.",
+    "dayDefault": "Jour {{number}}"
   }
 }

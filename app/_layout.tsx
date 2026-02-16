@@ -3,6 +3,7 @@ import '@/lib/i18n'
 import { useCallback, useEffect, useState } from 'react'
 import { Stack, useRouter, useSegments } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
+import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { TamaguiProvider, YStack, Spinner } from 'tamagui'
 import type { Session } from '@supabase/supabase-js'
@@ -99,26 +100,31 @@ export default function RootLayout() {
 
   if (isLoading) {
     return (
-      <TamaguiProvider config={tamaguiConfig} defaultTheme="dark">
-        <YStack flex={1} alignItems="center" justifyContent="center" backgroundColor="$background">
-          <Spinner size="large" color="$color" />
-        </YStack>
-        <StatusBar style="light" />
-      </TamaguiProvider>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <TamaguiProvider config={tamaguiConfig} defaultTheme="dark">
+          <YStack flex={1} alignItems="center" justifyContent="center" backgroundColor="$background">
+            <Spinner size="large" color="$color" />
+          </YStack>
+          <StatusBar style="light" />
+        </TamaguiProvider>
+      </GestureHandlerRootView>
     )
   }
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <TamaguiProvider config={tamaguiConfig} defaultTheme="dark">
-        <Stack screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="(auth)" />
-          <Stack.Screen name="(tabs)" />
-          <Stack.Screen name="exercise" />
-          <Stack.Screen name="workout" />
-        </Stack>
-        <StatusBar style="light" />
-      </TamaguiProvider>
-    </QueryClientProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <QueryClientProvider client={queryClient}>
+        <TamaguiProvider config={tamaguiConfig} defaultTheme="dark">
+          <Stack screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="(auth)" />
+            <Stack.Screen name="(tabs)" />
+            <Stack.Screen name="exercise" />
+            <Stack.Screen name="workout" />
+            <Stack.Screen name="program" />
+          </Stack>
+          <StatusBar style="light" />
+        </TamaguiProvider>
+      </QueryClientProvider>
+    </GestureHandlerRootView>
   )
 }

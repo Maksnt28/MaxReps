@@ -3,7 +3,7 @@ import { TouchableOpacity } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import Ionicons from '@expo/vector-icons/Ionicons'
 
-export default function ExerciseLayout() {
+export default function ProgramLayout() {
   const router = useRouter()
   const { t } = useTranslation()
 
@@ -24,9 +24,21 @@ export default function ExerciseLayout() {
       }}
     >
       <Stack.Screen
+        name="create"
+        options={{ headerTitle: '' }}
+      />
+      <Stack.Screen
         name="[id]"
+        options={{ headerTitle: '' }}
+      />
+      <Stack.Screen
+        name="day/[dayId]"
+        options={{ headerTitle: '' }}
+      />
+      <Stack.Screen
+        name="add-exercise"
         options={{
-          presentation: 'card',
+          presentation: 'modal',
           headerTitle: '',
         }}
       />

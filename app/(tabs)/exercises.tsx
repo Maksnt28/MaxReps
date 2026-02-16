@@ -139,7 +139,7 @@ export default function ExercisesScreen() {
             />
           }
           contentContainerStyle={
-            filteredExercises.length === 0 ? { flex: 1 } : undefined
+            filteredExercises.length === 0 ? { flexGrow: 1 } : undefined
           }
         />
       </YStack>

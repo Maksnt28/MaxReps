@@ -13,7 +13,8 @@
     "cancel": "Cancel",
     "save": "Save",
     "delete": "Delete",
-    "confirm": "Confirm"
+    "confirm": "Confirm",
+    "goBack": "Go back"
   },
   "home": {
     "title": "MaxReps",
@@ -101,5 +102,46 @@
       "totalVolume": "Total Volume",
       "done": "Done"
     }
+  },
+  "programs": {
+    "create": "Create Program",
+    "name": "Program Name",
+    "namePlaceholder": "e.g., Push Pull Legs",
+    "addDay": "Add Day",
+    "dayName": "Day Name",
+    "dayNamePlaceholder": "e.g., Push Day",
+    "dayFocus": "Focus (optional)",
+    "dayFocusPlaceholder": "e.g., Chest & Triceps",
+    "editDay": "Edit Day",
+    "deleteDay": "Delete Day",
+    "deleteDayConfirm": "Delete this day and all its exercises?",
+    "deleteProgram": "Delete Program",
+    "deleteProgramConfirm": "Delete this program and all its days?",
+    "emptyTitle": "No programs yet",
+    "emptyMessage": "Create a custom routine to get started.",
+    "startWorkout": "Start Workout",
+    "sets": "Sets",
+    "reps": "Reps",
+    "targetRPE": "Target RPE",
+    "restSeconds": "Rest (sec)",
+    "exerciseCount": "{{count}} exercises",
+    "dayCount": "{{count}} days",
+    "active": "Active",
+    "addExercises": "Add ({{count}})",
+    "reorderExercise": "Hold to reorder",
+    "removeExercise": "Remove Exercise",
+    "removeExerciseConfirm": "Remove this exercise from the day?",
+    "programSaved": "Program saved",
+    "programDeleted": "Program deleted",
+    "noDays": "No days yet",
+    "noDaysMessage": "Add a training day to get started.",
+    "noExercises": "No exercises yet",
+    "noExercisesMessage": "Add exercises to this day.",
+    "activeWorkoutTitle": "Active Workout",
+    "activeWorkoutMessage": "You have a workout in progress. Discard it and start a new one?",
+    "discardAndStart": "Discard & Start",
+    "editTargets": "Edit Targets",
+    "startWorkoutError": "Failed to start workout. Please try again.",
+    "dayDefault": "Day {{number}}"
   }
 }

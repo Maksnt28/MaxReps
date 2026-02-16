@@ -32,6 +32,7 @@ interface WorkoutData {
 interface WorkoutActions {
   startWorkout: (sessionId: string, programDayId?: string) => void
   endWorkout: () => void
+  loadProgramDay: (exercises: { exerciseId: string; setsTarget: number }[]) => void
   addExercise: (exerciseId: string) => void
   removeExercise: (exerciseId: string) => void
   addSet: (exerciseId: string) => void
@@ -80,6 +81,24 @@ export const useWorkoutStore = create<WorkoutState>()(
         }),
 
       endWorkout: () => set(initialData),
+
+      loadProgramDay: (programExercises) =>
+        set({
+          exercises: programExercises.map(({ exerciseId, setsTarget }) => ({
+            exerciseId,
+            sets: Array.from({ length: setsTarget }, (_, i) => ({
+              id: Crypto.randomUUID(),
+              exerciseId,
+              setNumber: i + 1,
+              weightKg: null,
+              reps: null,
+              rpe: null,
+              isWarmup: false,
+              isCompleted: false,
+              completedAt: null,
+            })),
+          })),
+        }),
 
       addExercise: (exerciseId) =>
         set((state) => {

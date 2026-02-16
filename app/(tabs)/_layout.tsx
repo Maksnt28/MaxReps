@@ -55,6 +55,7 @@ export default function TabLayout() {
         name="programs"
         options={{
           title: t('tabs.programs'),
+          headerShown: false,
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="calendar-outline" size={size} color={color} />
           ),

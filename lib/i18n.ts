@@ -14,6 +14,7 @@ i18n.use(initReactI18next).init({
   },
   lng: deviceLocale === 'fr' ? 'fr' : 'en',
   fallbackLng: 'en',
+  returnEmptyString: false,
   interpolation: {
     escapeValue: false,
   },
