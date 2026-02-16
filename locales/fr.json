@@ -80,6 +80,7 @@
     "addSet": "Ajouter une s\u00e9rie",
     "removeExercise": "Supprimer l'exercice",
     "removeExerciseConfirm": "Supprimer cet exercice et toutes ses s\u00e9ries ?",
+    "removeSet": "Supprimer la s\u00e9rie",
     "set": "S\u00e9rie",
     "warmup": "E",
     "weight": "kg",
@@ -94,6 +95,10 @@
     "saving": "Enregistrement...",
     "saveError": "\u00c9chec de l'enregistrement. R\u00e9essayez.",
     "startError": "\u00c9chec du d\u00e9marrage. V\u00e9rifiez votre connexion.",
+    "overload": {
+      "increase": "",
+      "deload": ""
+    },
     "summary": {
       "title": "Entra\u00eenement termin\u00e9 !",
       "duration": "Dur\u00e9e",

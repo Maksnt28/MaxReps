@@ -228,7 +228,7 @@ describe('useWorkoutStore', () => {
 
     it('creates exercise with correct number of empty sets', () => {
       useWorkoutStore.getState().loadProgramDay([
-        { exerciseId: 'ex-1', setsTarget: 3 },
+        { exerciseId: 'ex-1', setsTarget: 3, repsTarget: null },
       ])
       const exercises = useWorkoutStore.getState().exercises
       expect(exercises).toHaveLength(1)
@@ -238,9 +238,9 @@ describe('useWorkoutStore', () => {
 
     it('creates multiple exercises in correct order', () => {
       useWorkoutStore.getState().loadProgramDay([
-        { exerciseId: 'ex-1', setsTarget: 3 },
-        { exerciseId: 'ex-2', setsTarget: 5 },
-        { exerciseId: 'ex-3', setsTarget: 1 },
+        { exerciseId: 'ex-1', setsTarget: 3, repsTarget: null },
+        { exerciseId: 'ex-2', setsTarget: 5, repsTarget: null },
+        { exerciseId: 'ex-3', setsTarget: 1, repsTarget: null },
       ])
       const exercises = useWorkoutStore.getState().exercises
       expect(exercises).toHaveLength(3)
@@ -252,7 +252,7 @@ describe('useWorkoutStore', () => {
 
     it('creates sets with unique UUIDs and correct setNumbers', () => {
       useWorkoutStore.getState().loadProgramDay([
-        { exerciseId: 'ex-1', setsTarget: 3 },
+        { exerciseId: 'ex-1', setsTarget: 3, repsTarget: null },
       ])
       const sets = useWorkoutStore.getState().exercises[0].sets
       const ids = sets.map((s) => s.id)
@@ -264,7 +264,7 @@ describe('useWorkoutStore', () => {
 
     it('creates sets with null weight/reps/rpe and isCompleted false', () => {
       useWorkoutStore.getState().loadProgramDay([
-        { exerciseId: 'ex-1', setsTarget: 1 },
+        { exerciseId: 'ex-1', setsTarget: 1, repsTarget: null },
       ])
       const set = useWorkoutStore.getState().exercises[0].sets[0]
       expect(set.weightKg).toBeNull()
@@ -275,12 +275,30 @@ describe('useWorkoutStore', () => {
       expect(set.isWarmup).toBe(false)
     })
 
+    it('pre-fills reps from repsTarget when provided', () => {
+      useWorkoutStore.getState().loadProgramDay([
+        { exerciseId: 'ex-1', setsTarget: 3, repsTarget: 10 },
+      ])
+      const sets = useWorkoutStore.getState().exercises[0].sets
+      expect(sets[0].reps).toBe(10)
+      expect(sets[1].reps).toBe(10)
+      expect(sets[2].reps).toBe(10)
+      expect(sets[0].weightKg).toBeNull()
+    })
+
+    it('stores repsTarget on the exercise', () => {
+      useWorkoutStore.getState().loadProgramDay([
+        { exerciseId: 'ex-1', setsTarget: 2, repsTarget: 8 },
+      ])
+      expect(useWorkoutStore.getState().exercises[0].repsTarget).toBe(8)
+    })
+
     it('replaces existing exercises (clean slate)', () => {
       useWorkoutStore.getState().addExercise('old-ex')
       useWorkoutStore.getState().addSet('old-ex')
 
       useWorkoutStore.getState().loadProgramDay([
-        { exerciseId: 'new-ex', setsTarget: 2 },
+        { exerciseId: 'new-ex', setsTarget: 2, repsTarget: null },
       ])
 
       const exercises = useWorkoutStore.getState().exercises

@@ -80,6 +80,7 @@
     "addSet": "Add Set",
     "removeExercise": "Remove Exercise",
     "removeExerciseConfirm": "Remove this exercise and all its sets?",
+    "removeSet": "Remove Set",
     "set": "Set",
     "warmup": "W",
     "weight": "kg",
@@ -94,6 +95,10 @@
     "saving": "Saving workout...",
     "saveError": "Failed to save workout. Please try again.",
     "startError": "Failed to start workout. Check your connection.",
+    "overload": {
+      "increase": "+{{increment}} kg suggested",
+      "deload": "Deload suggested (-10%)"
+    },
     "summary": {
       "title": "Workout Complete!",
       "duration": "Duration",

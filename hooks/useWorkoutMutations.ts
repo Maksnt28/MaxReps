@@ -1,4 +1,4 @@
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 import { supabase } from '@/lib/supabase'
 import type { ActiveExercise } from '@/stores/useWorkoutStore'
@@ -22,7 +22,12 @@ export function useCreateSession() {
 }
 
 export function useFinishWorkout() {
+  const queryClient = useQueryClient()
+
   return useMutation({
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['exercise-history'] })
+    },
     mutationFn: async (params: {
       sessionId: string
       startedAt: string

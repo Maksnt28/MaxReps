@@ -10,6 +10,9 @@ interface SetRowProps {
   onUpdate: (updates: Partial<Pick<WorkoutSet, 'weightKg' | 'reps' | 'rpe'>>) => void
   onComplete: () => void
   onToggleWarmup: () => void
+  onRemove: () => void
+  suggestionType?: 'increase' | 'deload'
+  suggestionHint?: string
 }
 
 function parseNumber(text: string): number | null {
@@ -18,7 +21,7 @@ function parseNumber(text: string): number | null {
   return isNaN(n) ? null : n
 }
 
-export function SetRow({ set, onUpdate, onComplete, onToggleWarmup }: SetRowProps) {
+export function SetRow({ set, onUpdate, onComplete, onToggleWarmup, onRemove, suggestionType, suggestionHint }: SetRowProps) {
   const { t } = useTranslation()
 
   return (
@@ -66,9 +69,15 @@ export function SetRow({ set, onUpdate, onComplete, onToggleWarmup }: SetRowProp
         onChangeText={(text) => onUpdate({ weightKg: parseNumber(text) })}
         textAlign="center"
         backgroundColor="$backgroundHover"
-        borderWidth={0}
+        borderWidth={undefined}
+        borderTopWidth={0}
+        borderRightWidth={0}
+        borderBottomWidth={0}
+        borderLeftWidth={suggestionType ? 3 : 0}
+        borderLeftColor={suggestionType === 'increase' ? '$green8' : '$orange8'}
         color="$color"
         accessibilityLabel={t('workout.weight')}
+        accessibilityHint={suggestionHint}
       />
 
       {/* Reps input */}
@@ -118,6 +127,15 @@ export function SetRow({ set, onUpdate, onComplete, onToggleWarmup }: SetRowProp
           size={28}
           color={set.isCompleted ? '#4CAF50' : '#555'}
         />
+      </TouchableOpacity>
+
+      {/* Remove set */}
+      <TouchableOpacity
+        onPress={onRemove}
+        accessibilityLabel={t('workout.removeSet')}
+        hitSlop={4}
+      >
+        <Ionicons name="close" size={18} color="#888" />
       </TouchableOpacity>
     </XStack>
   )

@@ -96,6 +96,7 @@ export default function ProgramDetailScreen() {
           day.program_exercises.map((pe) => ({
             exerciseId: pe.exercise_id,
             setsTarget: pe.sets_target,
+            repsTarget: pe.reps_target,
           }))
         )
         router.push('/(tabs)/workout')
