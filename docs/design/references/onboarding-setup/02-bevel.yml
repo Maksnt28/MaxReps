@@ -1,0 +1,74 @@
+source_app: "Bevel"
+screen_type: "onboarding-setup"
+platform: "iOS"
+
+context: >
+  Onboarding screen asking "What is your training goal?" with a
+  descriptive subtitle explaining the purpose. Four goal options
+  presented as card-style rows with an icon, title, description,
+  and checkmark for the selected option. "Get stronger" is currently
+  selected. A "Save and continue" CTA at the bottom with a reassurance
+  note about updating later.
+
+elements:
+  - id: "narrative-header"
+    what: "Question title with explanatory subtitle"
+    like: >
+      The screen leads with a clear, bold question followed by a
+      softer subtitle that explains why this choice matters ("The
+      result you're working toward, shaping your exercises, effort,
+      and progress"). This narrative approach gives the user context
+      and motivation to answer thoughtfully. The screen feels
+      purposeful rather than just data collection.
+    apply_to_maxreps: >
+      Use this narrative header pattern for all MaxReps onboarding
+      screens. Each step should have: a bold question as the primary
+      heading, then a subtitle in muted text explaining why the answer
+      matters or how it will be used. This builds trust and helps the
+      user understand the value of providing information. Translate to
+      French: heading as a direct question, subtitle as a brief
+      contextual explanation.
+    priority: high
+
+  - id: "goal-option-cards"
+    what: "Selectable card rows with icon, title, and description"
+    like: >
+      Each option is a full-width card with an icon on the left, a
+      bold title, and a short description below. The selected option
+      has a visible checkmark and a distinct border. The cards are
+      generous in size, making them easy to tap. The layout is clean
+      and succinct — only four options, no scrolling needed.
+    apply_to_maxreps: >
+      Use card-style selectable rows for single-choice onboarding
+      questions. Each card: icon on the left, bold title, one-line
+      description in muted text, checkmark on the right when selected.
+      Selected state uses accent border or subtle background fill.
+      Keep options to 3-5 maximum per screen to avoid scrolling.
+    priority: high
+
+  - id: "reassurance-note"
+    what: "Small text below CTA noting responses can be changed later"
+    like: >
+      The note "All responses are saved and can be updated anytime in
+      Advanced Settings" reduces commitment anxiety. Users are more
+      likely to proceed quickly knowing their choices aren't permanent.
+    apply_to_maxreps: >
+      Add a reassurance note below the CTA on onboarding screens:
+      "Vous pourrez modifier vos réponses à tout moment dans les
+      paramètres." Keep it small and muted. This reduces friction
+      and encourages faster completion of the onboarding flow.
+    priority: medium
+
+takeaway: >
+  This is the strongest onboarding pattern seen so far. The narrative
+  approach — question + context + clear options + reassurance — creates
+  a flow that feels guided and purposeful rather than like a cold form.
+  The screen is slightly sparse but this is a feature, not a bug: it
+  keeps focus on the single decision at hand.
+
+avoid: >
+  The screen feels a bit empty due to generous vertical spacing. For
+  MaxReps, maintain the clarity but tighten spacing slightly to feel
+  more balanced. Do not add content just to fill space — the focused,
+  one-question-per-screen approach is correct for high-impact choices
+  like training goals.

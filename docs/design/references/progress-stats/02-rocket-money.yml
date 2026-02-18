@@ -1,0 +1,72 @@
+source_app: "Rocket Money"
+screen_type: "progress-stats"
+platform: "iOS"
+
+context: >
+  Net worth analytics screen with a tab bar (Summary, Assets, Debt),
+  a main card showing total assets with a line chart and time range
+  selector (1M, 3M, 6M, 1Y), followed by goal cards with progress
+  bars showing completion percentage.
+
+elements:
+  - id: "analytics-layout"
+    what: "Overall analytics page structure with tabs, chart card, and goal cards"
+    like: >
+      The general presentation is well-structured: a top-level tab
+      bar for switching between views, a primary card with the key
+      metric in large text plus a chart below, time range selectors
+      as pill buttons, and secondary cards below for detailed
+      breakdowns. The hierarchy flows naturally from overview to
+      detail.
+    apply_to_maxreps: >
+      Use this layout structure for MaxReps progress/stats screens.
+      Top: tab bar or segmented control to switch between stat views
+      (e.g. Volume, Strength, Frequency). Primary card: key metric
+      in large bold text with a chart below. Time range selector as
+      pill buttons (1S for 1 semaine, 1M, 3M, 6M, 1A). Secondary
+      cards below for per-exercise or per-muscle-group breakdowns.
+    priority: high
+
+  - id: "chart-card"
+    what: "Main metric card with line chart and time range selector"
+    like: >
+      The primary card prominently displays the total value in large
+      bold text, with a clean line chart below showing the trend over
+      time. The time range pill selector (1M, 3M, 6M, 1Y) sits inside
+      the card, making it clear it controls this specific chart. The
+      area fill under the line is subtle and adds depth.
+    apply_to_maxreps: >
+      Implement a chart card component for MaxReps stats. Large metric
+      value at top (e.g. total volume, estimated 1RM), line or area
+      chart showing progression over time, time range pills inside the
+      card. Use a subtle area fill under the line in accent color with
+      low opacity. Chart should be interactive — tap to see specific
+      data points.
+    priority: high
+
+  - id: "header-structure"
+    what: "Page title with tab navigation below"
+    like: >
+      The "Net Worth" title sits prominently at the top with tab
+      navigation directly below. Clean separation between the page
+      title and the content sections. The tab bar has a clear active
+      indicator.
+    apply_to_maxreps: >
+      Use a similar header structure for the MaxReps stats page:
+      bold page title ("Progression" or "Statistiques"), followed by
+      a tab bar or segmented control for switching between stat
+      categories. Active tab should have a clear underline indicator
+      in accent color.
+    priority: medium
+
+takeaway: >
+  The overall analytics layout is the key reference — the hierarchy
+  from page title to tabs to chart card to detail cards creates a
+  clear information architecture for progress tracking. The chart
+  card with time range selector is directly applicable to MaxReps
+  strength progression charts.
+
+avoid: >
+  The red/pink header color is brand-specific to Rocket Money — do
+  not replicate. The progress bar cards at the bottom are a savings
+  app pattern and not directly transferable to fitness tracking.

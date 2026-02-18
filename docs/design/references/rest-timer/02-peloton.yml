@@ -1,0 +1,39 @@
+source_app: "Peloton"
+screen_type: "rest-timer"
+platform: "iOS"
+
+context: >
+  Active workout screen for a "60 min Full Body Strength" session.
+  Timer displayed at top left showing 2:45 in large text, with stop
+  and pause buttons to the right. Below, a progress indicator (0/7
+  Blocks as segmented bar), followed by a scrollable exercise list
+  with thumbnails, names, and durations. "Swipe to complete" CTA at
+  the bottom.
+
+elements:
+  - id: "header-timer"
+    what: "Timer displayed in the top header area of the screen"
+    like: >
+      The timer sits in the header area at the top left, always
+      visible while the exercise list scrolls below. It's prominent
+      enough to read at a glance but doesn't dominate the screen.
+      The placement keeps the timer accessible while the main content
+      area is dedicated to the exercise list.
+    apply_to_maxreps: >
+      Consider a header-positioned timer as one display mode for the
+      MaxReps rest timer. When the timer is in compact mode, it sits
+      in the top area of the active workout screen, always visible
+      while the user scrolls through sets. The timer should not
+      interfere with set logging interactions below.
+    priority: medium
+
+takeaway: >
+  The header-positioned timer demonstrates that a timer can be
+  always-visible without taking dedicated screen space. This is
+  useful as a compact/minimized state for the MaxReps rest timer.
+
+avoid: >
+  The stop and pause button styling (square stop, red circle pause)
+  is functional but visually unappealing. The exercise list with
+  photo thumbnails takes too much vertical space per item. The font
+  styling overall is not attractive.

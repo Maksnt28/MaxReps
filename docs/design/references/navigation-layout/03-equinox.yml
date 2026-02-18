@@ -1,0 +1,72 @@
+source_app: "Equinox+"
+screen_type: "navigation-layout"
+platform: "iOS"
+
+context: >
+  Collections screen showing a vertical list of large, full-width
+  image cards. Each card has rounded corners, a collection title,
+  category tags with colored dots, and a class count badge. Cards
+  are stacked vertically with consistent spacing between them.
+
+elements:
+  - id: "card-shape-and-radius"
+    what: "Large full-width cards with generous rounded corners"
+    like: >
+      The cards have a perfect shape — large corner radius (appears
+      to be ~16-20px), full width with comfortable side margins, and
+      a generous height that gives each card visual weight and
+      presence. The rounded corners are pronounced enough to feel
+      modern and soft without being exaggerated.
+    apply_to_maxreps: >
+      Use this card shape as the primary reference for MaxReps content
+      cards. Large corner radius (~16-20px via Tamagui borderRadius
+      tokens), full width minus horizontal screen margins (~16px each
+      side). Cards should have enough height to feel substantial.
+      Apply this to program cards, workout overview cards, and any
+      primary content containers.
+    priority: high
+
+  - id: "card-spacing"
+    what: "Consistent vertical spacing between stacked cards"
+    like: >
+      The gap between cards is well-calibrated — enough to clearly
+      separate each card as its own unit but not so much that the
+      screen feels sparse. The spacing is consistent throughout the
+      list, creating a steady rhythm as you scroll.
+    apply_to_maxreps: >
+      Define a consistent card gap token in Tamagui (e.g. cardGap or
+      spacing.cardList) of approximately 16-20px. Apply this uniformly
+      across all vertically stacked card lists in the app: program
+      lists, workout history, exercise lists. Consistency in spacing
+      is critical for the app's visual rhythm.
+    priority: high
+
+  - id: "card-content-overlay"
+    what: "Text content overlaid on card with category dots"
+    like: >
+      The title and metadata are overlaid directly on the card image
+      with good contrast. Category tags use small colored dots as
+      prefixes — a subtle and space-efficient way to show categories
+      without chips or badges.
+    apply_to_maxreps: >
+      Consider overlaid text on program cards where background images
+      are used. Ensure contrast with a gradient overlay or semi-
+      transparent background behind text. The colored dot prefix for
+      categories is a good alternative to full chips when space is
+      limited — evaluate for program tag display.
+    priority: medium
+
+takeaway: >
+  The card shape and spacing on this screen set a gold standard for
+  card-based layouts. The generous corner radius, consistent gaps,
+  and full-width proportions create a visual rhythm that feels both
+  modern and premium. These exact proportions and spacing values
+  should form the baseline of the MaxReps card design system.
+
+avoid: >
+  The image-heavy card style with background photos works for a
+  content/class platform but may not suit MaxReps' data-focused
+  cards. Do not default to image backgrounds on workout or program
+  cards — use solid colors or subtle gradients from our design
+  tokens instead. The overlaid text approach requires careful
+  contrast management and can fail with inconsistent imagery.

@@ -1,0 +1,84 @@
+source_app: "Bevel"
+screen_type: "exercise-selection"
+platform: "iOS"
+
+context: >
+  Exercise library modal with active search for "Lunge". Shows search
+  bar, two filter chips (All groups, All equipment), a "Custom" section
+  with "Add custom exercise" option, then filtered results organized
+  alphabetically. Each exercise row has an illustration, name, equipment
+  type, info button, and add/selected toggle. "Lunge - Bodyweight" is
+  currently selected (checkmark).
+
+elements:
+  - id: "library-layout"
+    what: "Complete exercise library with search, filters, and list"
+    like: >
+      The overall layout is clean and well-structured: search bar at
+      top, filter chips below, then the exercise list. The hierarchy
+      is clear and the flow is intuitive — type to search, optionally
+      filter, then browse or select. Everything a user needs is on one
+      screen with no hidden navigation.
+    apply_to_maxreps: >
+      Adopt this full layout pattern for the MaxReps exercise selection
+      modal. Top-to-bottom hierarchy: search bar (with accent-colored
+      icon), filter chips (muscle group + equipment), custom exercise
+      option, then alphabetical exercise list. Present as a modal or
+      full-screen sheet.
+    priority: high
+
+  - id: "filter-system"
+    what: "Filter chips for muscle group and equipment"
+    like: >
+      The two filter chips ("All groups", "All equipment") are compact
+      and non-intrusive. They work in combination with the search bar
+      to progressively narrow results. The dropdown chevron makes it
+      clear they open a sub-selection.
+    apply_to_maxreps: >
+      Implement combinable filter chips for muscle group and equipment
+      type. Filters should work alongside the search query — all three
+      (search + group + equipment) narrow results simultaneously. Show
+      active filter value in the chip label when a filter is applied.
+    priority: high
+
+  - id: "add-select-toggle"
+    what: "Plus button that becomes a checkmark when selected"
+    like: >
+      Each exercise row has a "+" button to add and it toggles to a
+      filled checkmark when selected. The state change is clear and
+      immediate. Simple single-tap interaction — no confirmation
+      needed.
+    apply_to_maxreps: >
+      Use a toggle button on each exercise row: "+" icon in default
+      state, filled checkmark in selected state. Single tap to add,
+      single tap to remove. Provide haptic feedback on state change.
+      Selected exercises should be visually distinct (filled icon with
+      accent background).
+    priority: high
+
+  - id: "custom-exercise-option"
+    what: "Add custom exercise entry at the top of results"
+    like: >
+      The "Add custom exercise" option is placed in its own "Custom"
+      section above the alphabetical list. Easy to find but not
+      intrusive. Solves the case where the user's exercise isn't in
+      the library.
+    apply_to_maxreps: >
+      Include an "Ajouter un exercice personnalisé" option at the top
+      of the exercise library, in its own section above the main list.
+      Use a "+" icon to differentiate it from regular exercise rows.
+      Tapping opens a creation form (name, muscle group, equipment).
+    priority: medium
+
+takeaway: >
+  This is the most complete exercise selection pattern seen so far.
+  The combination of search + filters + alphabetical list + custom
+  exercise creation covers all user scenarios: knowing exactly what
+  you want, browsing by category, and creating something new. The
+  simplicity of the layout keeps it fast despite the feature density.
+
+avoid: >
+  The exercise illustrations remain small and hard to distinguish at
+  this size. For MaxReps, consider whether thumbnails add enough value
+  in the selection view or if muscle group color indicators would be
+  more effective and space-efficient.

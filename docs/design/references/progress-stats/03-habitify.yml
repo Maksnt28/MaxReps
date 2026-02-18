@@ -1,0 +1,35 @@
+source_app: "Habitify"
+screen_type: "progress-stats"
+platform: "iOS"
+
+context: >
+  Progress screen showing multiple card sections: a line chart with
+  weekly data points, a check-in time bar chart, habit streak grids
+  (Read Book, Run), and a daily performance section. Light theme with
+  blue accent color and card containers with left border accents.
+
+elements:
+  - id: "progress-bars"
+    what: "Simple progress/streak grid bars"
+    like: >
+      Basic progress visualization with grid-style streak bars showing
+      daily completion. Simple and functional.
+    apply_to_maxreps: >
+      Note this as a basic reference for streak/consistency
+      visualization. The pattern is too simple for MaxReps — our
+      progress indicators should convey more information (volume,
+      intensity, not just completion).
+    priority: low
+
+takeaway: >
+  A minimal progress visualization reference. The simplicity is noted
+  but MaxReps needs richer data representation for strength training
+  progress. This screen serves mainly as a baseline of what to exceed
+  in terms of information depth.
+
+avoid: >
+  The overall presentation is too simple and lacks the visual polish
+  needed for MaxReps. The card borders on the left feel dated. The
+  charts are basic and lack interactivity cues. MaxReps progress
+  screens should be significantly more refined and data-rich than
+  this example.

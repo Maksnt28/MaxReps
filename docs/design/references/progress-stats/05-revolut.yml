@@ -1,0 +1,76 @@
+source_app: "Revolut"
+screen_type: "progress-stats"
+platform: "iOS"
+
+context: >
+  Analytics dashboard on dark theme showing a main "Spent" card with
+  bar chart and average line, two half-width cards (Income, Net
+  cashflow) with mini bar charts and colored status indicators, and
+  a "Budget" section with progress bar and percentage remaining. All
+  cards use semi-transparent backgrounds.
+
+elements:
+  - id: "transparent-cards"
+    what: "Semi-transparent card backgrounds on dark theme"
+    like: >
+      The cards use a semi-transparent dark background that lets the
+      underlying screen color subtly show through. This creates depth
+      and layering without harsh borders. The transparency makes the
+      cards feel integrated into the page rather than floating on top
+      of it. Combined with the dark theme, it produces a refined,
+      modern aesthetic.
+    apply_to_maxreps: >
+      Implement semi-transparent card backgrounds for stats/analytics
+      cards in MaxReps dark theme. Use rgba backgrounds with low
+      opacity (e.g. rgba(255,255,255,0.05) to rgba(255,255,255,0.08))
+      instead of solid dark card fills. Define this as a Tamagui token
+      (e.g. cardBackgroundTransparent). This adds depth and premium
+      feel to the stats dashboard without adding visual weight.
+    priority: high
+
+  - id: "card-grid-layout"
+    what: "Mix of full-width and half-width stat cards"
+    like: >
+      The layout mixes a full-width primary card (Spent) with two
+      half-width secondary cards (Income, Net cashflow) below. This
+      grid creates visual variety and clear hierarchy — the primary
+      metric gets more space while secondary metrics sit side by side.
+    apply_to_maxreps: >
+      Use a mixed card grid for MaxReps stats dashboard: primary
+      metric as full-width card (e.g. total volume or key lift
+      progression), secondary metrics as half-width cards side by
+      side (e.g. workout frequency, average session duration, PRs
+      this month). This layout works well to establish information
+      hierarchy without scrolling.
+    priority: medium
+
+  - id: "inline-mini-charts"
+    what: "Small bar charts embedded directly in stat cards"
+    like: >
+      Each card contains a small inline chart that provides trend
+      context alongside the numeric value. The charts are compact
+      but legible, with the current period highlighted in white/accent
+      against muted previous periods. The average dashed line on the
+      Spent card adds useful reference context.
+    apply_to_maxreps: >
+      Embed mini trend charts (sparklines or small bar charts) inside
+      stat cards to provide visual context alongside numeric values.
+      Highlight the current period. Consider adding reference lines
+      (average, target) where relevant. Keep charts compact — they
+      support the number, not replace it.
+    priority: medium
+
+takeaway: >
+  The semi-transparent card treatment on dark theme is the primary
+  takeaway. It creates a sophisticated layered aesthetic that should
+  define MaxReps' stats dashboard. The mixed card grid and inline
+  mini charts are secondary but valuable patterns. The specific
+  metrics to display in MaxReps stats cards need further definition
+  but the visual framework from this screen is the reference.
+
+avoid: >
+  The specific financial metrics and color-coding (green for positive,
+  red for negative) are domain-specific. MaxReps should define its
+  own semantic colors for progress indicators (e.g. green for PR,
+  accent for improvement, muted for maintenance). Do not over-fill
+  cards with data — maintain the clean balance seen here.

@@ -1,0 +1,70 @@
+source_app: "Bevel"
+screen_type: "exercise-library"
+platform: "iOS"
+
+context: >
+  Exercise library modal with a search bar at the top, two filter
+  chips ("All groups", "All equipment"), alphabetical section index,
+  and a scrollable list of exercises. Each exercise row shows a small
+  illustration, exercise name, equipment type, and action icons (info
+  and link/add). Arnold Press is currently selected (link icon filled).
+
+elements:
+  - id: "search-bar"
+    what: "Search input at the top of the library"
+    like: >
+      The search bar is prominently placed at the very top, immediately
+      accessible. Simple magnifying glass icon with placeholder text.
+      No unnecessary decoration — just a clean input field ready for
+      typing.
+    apply_to_maxreps: >
+      Place a search bar at the top of the exercise library screen.
+      Keep it simple: magnifying glass icon, placeholder text
+      "Rechercher un exercice". Search should filter results in
+      real-time as the user types.
+    priority: high
+
+  - id: "filter-chips"
+    what: "Horizontal filter chips for muscle group and equipment"
+    like: >
+      Two compact filter chips sit just below the search bar: "All
+      groups" and "All equipment". They act as dropdown triggers with
+      a filter icon prefix and chevron suffix. Clean and space-efficient
+      way to expose filtering without cluttering the UI.
+    apply_to_maxreps: >
+      Add horizontal filter chips below the search bar for muscle group
+      and equipment type. Each chip acts as a dropdown/modal trigger.
+      Show the active filter value in the chip label (e.g. "Chest" or
+      "Barbell" when filtered, "All groups" when unfiltered). Use our
+      Tamagui chip component tokens for consistent styling.
+    priority: high
+
+  - id: "exercise-row"
+    what: "Exercise list row with name, equipment, and illustration"
+    like: >
+      Each row is clean and consistent: small illustration on the left,
+      exercise name as primary text, equipment type as secondary text
+      below. The layout is simple and highly scannable across a long
+      list. Alphabetical ordering with section letter headers helps
+      navigation.
+    apply_to_maxreps: >
+      Use this row layout for the exercise library list. Each row:
+      small thumbnail or icon on the left, exercise name (bold) as
+      primary text, equipment type as secondary text below. Sort
+      alphabetically with sticky letter section headers. Keep rows
+      compact to maximize visible exercises without scrolling.
+    priority: high
+
+takeaway: >
+  This is a well-structured exercise library with the right hierarchy:
+  search first, filters second, then a clean alphabetical list. The
+  simplicity of the display makes browsing hundreds of exercises
+  manageable. The combination of search + filter chips covers both
+  users who know what they're looking for and those who want to browse.
+
+avoid: >
+  The exercise illustrations in the rows are very small and hard to
+  read at this size. For MaxReps, either make thumbnails larger and
+  more legible or replace them with simple muscle group color indicators
+  (chips or dots) which convey the same information more efficiently
+  at small sizes.

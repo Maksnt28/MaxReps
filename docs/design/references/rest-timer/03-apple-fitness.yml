@@ -1,0 +1,57 @@
+source_app: "Apple Fitness"
+screen_type: "rest-timer"
+platform: "iOS"
+
+context: >
+  Compact timer widget displayed as a small dark rounded card pinned
+  to the top of the screen. Shows segment number, multiple time
+  metrics (distance, elapsed time, pace) in a single row with color-
+  coded values. The rest of the screen is empty/available for other
+  app use — the timer persists as a minimal overlay.
+
+elements:
+  - id: "compact-persistent-timer"
+    what: "Small timer card pinned to top, visible outside the app"
+    like: >
+      The timer takes minimal screen space — just a small rounded
+      card at the top. It stays visible even when navigating away
+      from the app, functioning like iOS Live Activities or Dynamic
+      Island. This is critical for gym use: users need to check
+      other apps (music, messages) while their rest timer counts
+      down, then tap the timer to return to the workout app.
+    apply_to_maxreps: >
+      Implement a compact persistent timer mode for MaxReps rest
+      timer. When minimized, display as a small pill/card at the top
+      of the screen showing just the countdown time. Critical: the
+      timer must remain visible when the user leaves the app, using
+      iOS Live Activities API or Dynamic Island integration. Tapping
+      the compact timer should deep-link back to the active workout
+      screen in MaxReps. This is a key gym UX requirement.
+    priority: high
+
+  - id: "expandable-behavior"
+    what: "Timer that can be expanded from compact to full view"
+    like: >
+      The compact format implies it can be expanded to a larger view
+      with more details and controls. This dual-mode approach (compact
+      when backgrounded, expanded when active) is the ideal pattern.
+    apply_to_maxreps: >
+      Support two timer display modes: compact (small pill showing
+      countdown only, always visible) and expanded (larger card or
+      bottom sheet with countdown, +30s button, skip button, and
+      exercise context). User taps compact to expand. Consider
+      allowing the user to toggle between modes during a workout.
+    priority: high
+
+takeaway: >
+  The persistent, compact timer that remains visible outside the app
+  is the most important UX requirement for the MaxReps rest timer.
+  Gym users constantly switch between apps during rest periods. iOS
+  Live Activities / Dynamic Island support should be a priority
+  feature to achieve this behavior natively.
+
+avoid: >
+  The specific multi-metric display (distance, time, pace) is for
+  cardio and not relevant to rest timer. MaxReps compact timer should
+  show only the countdown time and optionally the exercise name for
+  context.

@@ -1,0 +1,67 @@
+source_app: "Hevy"
+screen_type: "workout-summary"
+platform: "iOS"
+
+context: >
+  Workout completion screen showing a shareable summary card for a
+  "Leg day" session. The card lists all exercises with set counts,
+  equipment type in parentheses, and two anatomical body illustrations
+  (front/back) highlighting the muscles worked. Share options are
+  displayed below the card.
+
+elements:
+  - id: "summary-card"
+    what: "Dark rounded card with workout overview"
+    like: >
+      The card layout is clean and minimal — workout name as a bold
+      heading, then a simple list of exercises with set count on the
+      left in accent color. The entire summary fits on one card with
+      no scrolling needed. Great information density.
+    apply_to_maxreps: >
+      Adopt the card-based layout as a core design pattern across
+      the app. Use rounded containers with subtle elevation or
+      background contrast. Workout summaries should fit on a single
+      card: session name as heading, exercises listed with set count
+      prefix in accent color, equipment type as secondary info.
+    priority: high
+
+  - id: "exercise-list-format"
+    what: "Compact exercise list with colored set count"
+    like: >
+      Each exercise is one line: colored set count (e.g. "4x") followed
+      by exercise name and equipment in parentheses. Extremely scannable,
+      no unnecessary details. Minimalist presentation.
+    apply_to_maxreps: >
+      Use this compact format for workout summary views. Set count as
+      a colored prefix, exercise name, equipment type in parentheses.
+      One line per exercise, no thumbnails or extra metadata in this
+      view.
+    priority: high
+
+  - id: "muscle-highlight"
+    what: "Anatomical body figures showing muscles worked"
+    like: >
+      The concept of visually indicating which muscles were targeted
+      during the session is very informative. Front and back body views
+      with highlighted muscle groups give an instant visual summary.
+    apply_to_maxreps: >
+      Implement muscle group visualization on workout summaries, but
+      replace the 3D anatomical figure with a cleaner, more stylized
+      illustration that fits our design language. Use flat/vector-style
+      body outlines with colored overlays matching our Tamagui muscle
+      group color tokens.
+    priority: medium
+
+takeaway: >
+  The card-based layout is the key takeaway here. It's clean, minimal,
+  and instantly readable. The card pattern should become a foundational
+  UI element across the entire MaxReps app — for summaries, program
+  overviews, and anywhere grouped information needs to be displayed.
+  The muscle visualization concept is valuable but needs a better
+  visual execution.
+
+avoid: >
+  The 3D anatomical body illustration style feels dated and out of
+  place in a modern mobile UI. Replace with a flat, stylized
+  alternative. The font choice on this screen is not appealing —
+  use a more modern typeface that aligns with our design system.

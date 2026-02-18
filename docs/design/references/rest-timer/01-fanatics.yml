@@ -1,0 +1,54 @@
+source_app: "Fanatics Live"
+screen_type: "rest-timer"
+platform: "iOS"
+
+context: >
+  Live stream countdown timer displayed as a floating overlay card
+  with semi-transparent dark background. Shows "Show starts Today -
+  7:00 PM" as context, large countdown digits (04:05:21) with unit
+  labels (hrs, min, sec), and a "Saved" action button below. The
+  timer card does not take up the full screen — content is visible
+  behind it.
+
+elements:
+  - id: "floating-timer-card"
+    what: "Semi-transparent timer overlay that doesn't fill the screen"
+    like: >
+      The timer displays as a contained card with a semi-transparent
+      background, floating over the main content. It provides the
+      countdown information without blocking the entire screen. The
+      transparency effect creates visual depth and keeps the user
+      connected to the underlying content.
+    apply_to_maxreps: >
+      Implement the rest timer as a floating card overlay — not a
+      full-screen takeover. Use a semi-transparent dark background
+      (rgba) so the workout content beneath remains partially visible.
+      The timer should be dismissible/collapsible while still counting
+      down. Present as a bottom sheet or floating card that the user
+      can interact with without losing context of their workout.
+    priority: high
+
+  - id: "countdown-display"
+    what: "Large countdown digits with unit labels"
+    like: >
+      The large digits with small unit labels below (hrs, min, sec)
+      are readable at a glance from distance — important for a gym
+      context where the phone might not be in hand.
+    apply_to_maxreps: >
+      Use large, high-contrast countdown digits for the rest timer.
+      Include unit labels (min, sec) below the numbers. Digits should
+      be readable from arm's length. Use a monospaced or tabular
+      number font to prevent layout shift during countdown.
+    priority: high
+
+takeaway: >
+  The non-full-screen, transparent overlay approach is the key insight
+  for the MaxReps rest timer. Users in a gym need to see their timer
+  while still being able to reference their workout data. The floating
+  card pattern achieves this balance.
+
+avoid: >
+  The font weight is too bold/heavy for the countdown digits. MaxReps
+  should use a lighter but still legible weight for the timer numbers.
+  The overall card is slightly too large — for a rest timer (typically
+  just minutes and seconds), it can be more compact.

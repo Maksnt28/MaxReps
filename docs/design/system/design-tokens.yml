@@ -1,0 +1,240 @@
+# =============================================================================
+# MaxReps — Design Tokens
+# =============================================================================
+# Concrete values for Tamagui implementation.
+# Every value here is final and ready to be mapped to Tamagui tokens.
+# =============================================================================
+
+# =============================================================================
+# BACKGROUND
+# =============================================================================
+background:
+  dark:
+    gradientStart: "#08080A"
+    gradientMid: "#0C0C0F"
+    gradientEnd: "#0A0A0D"
+    direction: "168deg"
+  light:
+    gradientStart: "#F4F4F6"
+    gradientMid: "#F9F9FB"
+    gradientEnd: "#FFFFFF"
+    direction: "168deg"
+
+# =============================================================================
+# CARDS
+# =============================================================================
+cards:
+  dark:
+    background: "rgba(255,255,255,0.035)"
+    border: "rgba(255,255,255,0.06)"
+    topEdge: "rgba(255,255,255,0.04)"      # 1px line at top for relief
+    noiseOpacity: 0.018                     # SVG fractalNoise overlay
+    backdropBlur: "16px"
+  light:
+    background: "rgba(255,255,255,0.65)"
+    border: "rgba(0,0,0,0.06)"
+    topEdge: "rgba(0,0,0,0.02)"
+    noiseOpacity: 0.018
+    backdropBlur: "16px"
+  shared:
+    borderRadius: 14
+    paddingDefault: "11px 13px"
+    paddingCompact: "8px 11px"
+    gap: 8                                  # vertical gap between cards
+
+# =============================================================================
+# ACCENT — BLEU ÉLECTRIQUE
+# =============================================================================
+accent:
+  dark:
+    primary: "#3B82F6"
+    background: "rgba(59,130,246,0.06)"     # tinted bg for active elements
+    border: "rgba(59,130,246,0.10)"         # subtle accent border
+  light:
+    primary: "#2563EB"
+    background: "rgba(37,99,235,0.05)"
+    border: "rgba(37,99,235,0.08)"
+
+# =============================================================================
+# SEMANTIC COLORS
+# =============================================================================
+semantic:
+  progress:
+    dark: "#34E8A0"
+    light: "#18905A"
+    usage: "Positive deltas (+kg, +reps), momentum positive, chart curves"
+  regression:
+    dark: "#FF5A6A"
+    light: "#D93D4A"
+    usage: "Negative deltas (−reps, −kg), momentum negative, destructive actions"
+  pr:
+    dark: "#FFD700"
+    light: "#B89800"
+    usage: "New personal record only — badge, accent bar, PR label"
+
+# =============================================================================
+# TEXT
+# =============================================================================
+text:
+  dark:
+    primary: "#E8E8EA"
+    secondary: "#5C5C66"                    # muted labels, metadata
+    dimmed: "#2E2E36"                       # borders, inactive elements
+  light:
+    primary: "#131316"
+    secondary: "#76767E"
+    dimmed: "#C8C8D0"
+
+# =============================================================================
+# COMPLETION CHECKMARK
+# =============================================================================
+checkmark:
+  note: "Neutral — completion is not progression. Never green."
+  dark:
+    background: "#E8E8EA"                   # white check on dark
+    foreground: "#0A0A0E"
+  light:
+    background: "#131316"                   # dark check on light
+    foreground: "#FFFFFF"
+
+# =============================================================================
+# CHIPS & TAGS
+# =============================================================================
+chips:
+  dark:
+    background: "rgba(255,255,255,0.05)"
+    text: "#5C5C66"
+    border: "none"
+  light:
+    background: "rgba(0,0,0,0.04)"
+    text: "#76767E"
+    border: "none"
+  borderRadius: 4
+  padding: "1.5px 6px"
+  fontSize: 7
+  fontWeight: 600
+  textTransform: "uppercase"
+  letterSpacing: 0.4
+
+# =============================================================================
+# SEPARATOR
+# =============================================================================
+separator:
+  neutral:
+    dark: "rgba(255,255,255,0.04)"
+    light: "rgba(0,0,0,0.04)"
+  accent:
+    dark: "rgba(59,130,246,0.18)"           # done/todo divider
+    light: "rgba(37,99,235,0.12)"
+
+# =============================================================================
+# ACCENT BAR (top of highlighted cards)
+# =============================================================================
+accent_bar:
+  height: 2
+  borderRadius: "0 0 2px 2px"
+  opacity: 0.6
+  horizontalInset: "20%"                    # left: 20%, right: 20%
+  note: "Only on active cards (timer) and PR cards. Color matches context."
+
+# =============================================================================
+# SPACING
+# =============================================================================
+spacing:
+  screenPaddingH: 12
+  screenPaddingV: 14
+  cardGap: 8
+  sectionGap: 10
+  minTouchTarget: 44
+
+# =============================================================================
+# BORDER RADIUS
+# =============================================================================
+radius:
+  card: 14
+  button: 12
+  chip: 4
+  check: 4
+  timer: 10
+  activeRow: 8
+  progressDot: 1.5
+
+# =============================================================================
+# TYPOGRAPHY SCALE
+# =============================================================================
+typography:
+  pageTitle:
+    fontSize: 16
+    fontWeight: 800
+  sessionDuration:
+    fontSize: 12
+    fontWeight: 700
+    fontVariantNumeric: "tabular-nums"
+  exerciseName:
+    fontSize: 13
+    fontWeight: 700
+  setWeight:
+    fontSize: 13
+    fontWeight: 700
+    fontVariantNumeric: "tabular-nums"
+  setReps:
+    fontSize: 11
+    fontWeight: 600
+    fontVariantNumeric: "tabular-nums"
+  timerCountdown:
+    fontSize: 14
+    fontWeight: 700
+    fontVariantNumeric: "tabular-nums"
+  delta:
+    fontSize: 8
+    fontWeight: 700
+  chipLabel:
+    fontSize: 7
+    fontWeight: 600
+    textTransform: "uppercase"
+    letterSpacing: 0.4
+  columnHeader:
+    fontSize: 7
+    fontWeight: 400
+    textTransform: "uppercase"
+  lastSession:
+    fontSize: 8
+    fontWeight: 600
+    fontVariantNumeric: "tabular-nums"
+  ghostValue:
+    fontSize: 8
+    fontWeight: 400
+  ctaButton:
+    fontSize: 11.5
+    fontWeight: 700
+  momentumLabel:
+    fontSize: 8
+    fontWeight: 600
+    textTransform: "uppercase"
+    letterSpacing: 0.8
+  momentumValue:
+    fontSize: 9
+    fontWeight: 700
+
+# =============================================================================
+# MUSCLE GROUP COLORS (TBD — needs dedicated session)
+# =============================================================================
+muscle_groups:
+  status: "TBD — colors only appear on chips/filters, not as accent"
+  note: >
+    These colors are used for muscle group chips in the exercise
+    library and filters. They are NOT used in the active workout
+    screen where chips remain neutral grey. Will be defined in a
+    dedicated session.
+  groups:
+    - { name: "Pectoraux", color: "TBD" }
+    - { name: "Dos", color: "TBD" }
+    - { name: "Épaules", color: "TBD" }
+    - { name: "Biceps", color: "TBD" }
+    - { name: "Triceps", color: "TBD" }
+    - { name: "Avant-bras", color: "TBD" }
+    - { name: "Quadriceps", color: "TBD" }
+    - { name: "Ischio-jambiers", color: "TBD" }
+    - { name: "Fessiers", color: "TBD" }
+    - { name: "Mollets", color: "TBD" }
+    - { name: "Abdominaux", color: "TBD" }

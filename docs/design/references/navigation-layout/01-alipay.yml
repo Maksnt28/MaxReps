@@ -1,0 +1,52 @@
+source_app: "Alipay"
+screen_type: "navigation-layout"
+platform: "iOS"
+
+context: >
+  Rewards/travel screen from Alipay showing a prominent card component
+  with rounded corners, taking up most of the screen width. A small
+  header label sits above the card. Below, tabbed content with
+  horizontal category chips and promotional cards.
+
+elements:
+  - id: "card-shape"
+    what: "Large rounded card with generous proportions"
+    like: >
+      The card has well-balanced proportions — large rounded corners,
+      generous padding, and takes up almost the full screen width with
+      comfortable side margins. It feels substantial without being
+      cramped. The card sits below a small contextual header, creating
+      a clean visual hierarchy.
+    apply_to_maxreps: >
+      Use this card proportion as reference for primary content cards
+      in MaxReps (workout summaries, program overviews). Full width
+      minus consistent horizontal margins, generous corner radius
+      (16-20px), comfortable internal padding. Cards should feel
+      spacious and prominent on screen.
+    priority: high
+
+  - id: "card-header"
+    what: "Small header label above the main card"
+    like: >
+      A subtle header sits above the card, providing context without
+      competing for attention. The hierarchy is clear: small label
+      above, large card below. This pattern anchors the card in its
+      section.
+    apply_to_maxreps: >
+      Use small section header labels above primary cards to provide
+      context (e.g. "Programme actif", "Dernière séance", "Prochaine
+      séance"). Keep headers in a smaller, muted font weight to
+      maintain focus on the card content below.
+    priority: medium
+
+takeaway: >
+  The card proportions and spacing set the tone for the entire screen.
+  A well-sized card with generous corner radius and proper margins
+  creates a premium feel. The small header above provides just enough
+  context without visual clutter.
+
+avoid: >
+  The busy interior of this specific card (3D illustrations, gradient
+  backgrounds, multiple CTAs) is too cluttered. MaxReps cards should
+  maintain the exterior proportions but keep internal content clean
+  and minimal.

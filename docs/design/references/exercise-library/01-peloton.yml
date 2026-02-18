@@ -1,0 +1,66 @@
+source_app: "Peloton Strength+"
+screen_type: "exercise-library"
+platform: "iOS"
+
+context: >
+  Muscle group selection/filter screen. Lists muscle groups organized
+  by body region (Upper Body, Core visible). Each row shows an
+  anatomical thumbnail highlighting the specific muscle area, the
+  muscle name, and a checkbox. Three groups selected (Chest, Shoulders,
+  Triceps). A "Select 3" CTA button at the bottom updates dynamically
+  with the selection count.
+
+elements:
+  - id: "muscle-filter-list"
+    what: "Muscle group filter with visual thumbnails and checkboxes"
+    like: >
+      Each muscle group row pairs a small anatomical illustration
+      highlighting the specific muscles with the group name and a
+      checkbox. The visual makes it immediately clear which body area
+      each group refers to — no ambiguity. The illustrations are
+      consistent in style, using highlighted zones on a body outline.
+    apply_to_maxreps: >
+      Implement a muscle group filter screen with this exact pattern:
+      anatomical thumbnail on the left highlighting the specific muscle
+      area, group name as primary text, checkbox on the right. Use our
+      Tamagui color tokens to tint the highlighted muscle zone. Group
+      the list by body region (Upper Body, Lower Body, Core).
+    priority: high
+
+  - id: "section-headers"
+    what: "Body region section grouping (Upper Body, Core)"
+    like: >
+      Muscle groups are organized under clear section headers by body
+      region. Simple and logical hierarchy that makes scanning the
+      full list fast.
+    apply_to_maxreps: >
+      Group muscle filters by body region with sticky section headers:
+      Upper Body, Lower Body, Core. Use bold section titles consistent
+      with our typography scale.
+    priority: medium
+
+  - id: "dynamic-cta"
+    what: "Bottom button showing selection count"
+    like: >
+      The "Select 3" button at the bottom dynamically reflects the
+      number of selected items. Clear feedback on current state without
+      needing to count checkboxes manually.
+    apply_to_maxreps: >
+      Use a sticky bottom CTA button that updates its label dynamically
+      based on selection count (e.g. "Filter by 3 muscle groups"). Disable
+      the button when no selection is made.
+    priority: medium
+
+takeaway: >
+  The combination of visual muscle thumbnails with a checkbox list is
+  the ideal pattern for muscle group filtering. It removes all ambiguity
+  about which muscles belong to which group, especially for beginner
+  users who may not know anatomy terminology. The body region sectioning
+  adds useful structure without complexity.
+
+avoid: >
+  The dark theme with yellow accent checkboxes is Peloton-specific —
+  do not replicate this color scheme. The anatomical illustrations here
+  are somewhat dark and low-contrast on the dark background. Our version
+  should ensure strong contrast between the highlighted muscle zones and
+  the background regardless of theme.

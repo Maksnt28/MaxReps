@@ -1,0 +1,42 @@
+source_app: "Eight Sleep"
+screen_type: "program-builder"
+platform: "iOS"
+
+context: >
+  Home screen showing a temperature control card with stepper buttons,
+  phase tabs (Bedtime, Night, Now), and a subtle gradient background.
+  Below, an alarms card with toggle and schedule info. Dark theme with
+  card-based layout and muted color palette with pinkish gradient
+  accents.
+
+elements:
+  - id: "overall-layout"
+    what: "Card-based dark theme with stacked content sections"
+    like: >
+      The general presentation is appealing — content is organized in
+      clear card sections stacked vertically, with comfortable spacing
+      between them. The dark theme uses subtle gradient washes inside
+      cards that add visual interest without being distracting. The
+      stepper control (+/- buttons with large central value) is clean
+      and satisfying. The uppercase spaced-letter section headers
+      (TEMPERATURE, ALARMS) create a refined, premium feel.
+    apply_to_maxreps: >
+      Reference this screen for overall dark theme card layout polish.
+      Cards with subtle internal gradient or tinted backgrounds can
+      add depth to key sections. Consider uppercase letter-spaced
+      section headers as an option for card titles in the MaxReps
+      design system. The stepper pattern (large value with +/- buttons)
+      is relevant for weight increment controls.
+    priority: medium
+
+takeaway: >
+  A general layout reference for dark theme card presentation. The
+  subtle gradient wash inside cards and the uppercase section headers
+  contribute to a premium aesthetic. The stepper interaction pattern
+  is noted for potential reuse in weight/rep input controls.
+
+avoid: >
+  The font choice on this screen is not appealing — do not replicate
+  the typography. The pinkish gradient tint is brand-specific to
+  Eight Sleep and should not be carried over. MaxReps should use its
+  own accent color tokens for any card gradient treatments.

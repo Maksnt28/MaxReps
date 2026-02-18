@@ -1,0 +1,43 @@
+source_app: "Open"
+screen_type: "rest-timer"
+platform: "iOS"
+
+context: >
+  Full-screen timer display showing "Timer / 3 Minutes" as context
+  in the top left, a close button (X) top right, large centered
+  countdown digits (02:57), and a minimal pause button at the bottom.
+  Pure black background with white text — maximum simplicity.
+
+elements:
+  - id: "fullscreen-timer"
+    what: "Maximally simple full-screen countdown display"
+    like: >
+      The timer is stripped to its absolute essentials: large centered
+      countdown, pause button, close button, and a label showing the
+      total duration. Nothing else. The simplicity makes it readable
+      from across a gym. The full-screen mode could work as an
+      expanded view when the user wants maximum visibility.
+    apply_to_maxreps: >
+      Offer a full-screen expanded timer mode as an option. When the
+      user taps to expand from the compact or card timer, show a
+      full-screen view with: large centered countdown digits, pause
+      button, close/minimize button, +30s and skip buttons, and the
+      current exercise name as context. This mode is useful when the
+      phone is propped up on a bench and needs to be readable from
+      distance. Consider adding the option to expand the compact
+      timer into this full-screen view.
+    priority: medium
+
+takeaway: >
+  The full-screen timer serves as the maximum-visibility mode in a
+  three-tier timer system for MaxReps: compact (pill/Dynamic Island)
+  → card (bottom sheet overlay) → full-screen (expanded for distance
+  readability). Offering all three modes gives users flexibility
+  based on their gym setup.
+
+avoid: >
+  The full-screen mode should not be the default — it blocks all
+  workout content. It should only be available as an explicit
+  expansion option. The pause button design is too minimal and
+  could be hard to tap with sweaty hands — use a larger touch
+  target.
