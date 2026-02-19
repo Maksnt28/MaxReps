@@ -7,6 +7,7 @@ import Ionicons from '@expo/vector-icons/Ionicons'
 import type { Exercise } from '@/hooks/useExercises'
 import type { ActiveExercise } from '@/stores/useWorkoutStore'
 import { useWorkoutStore } from '@/stores/useWorkoutStore'
+import { useRestTimerStore, DEFAULT_REST_SECONDS } from '@/stores/useRestTimerStore'
 import { useOverloadSuggestion } from '@/hooks/useOverloadSuggestion'
 import { getLocalizedExercise } from '@/lib/exercises'
 import { getWeightIncrement } from '@/lib/overload'
@@ -26,6 +27,9 @@ export function ExerciseCard({ activeExercise, exercise, locale }: ExerciseCardP
   const { t } = useTranslation()
   const { addSet, updateSet, removeSet, completeSet, toggleWarmup, removeExercise } =
     useWorkoutStore()
+  const startTimer = useRestTimerStore((s) => s.startTimer)
+  const skipTimer = useRestTimerStore((s) => s.skip)
+  const isTimerRunning = useRestTimerStore((s) => s.isRunning)
 
   const exerciseId = activeExercise.exerciseId
   const sessionId = useWorkoutStore((s) => s.sessionId)
@@ -88,6 +92,17 @@ export function ExerciseCard({ activeExercise, exercise, locale }: ExerciseCardP
   const firstUpcomingIdx = activeExercise.sets.findIndex(
     (s, i) => i > lastCompletedIdx && !s.isCompleted
   )
+
+  function handleCompleteSet(set: typeof activeExercise.sets[number]) {
+    completeSet(exerciseId, set.id)
+    if (!set.isCompleted && !set.isWarmup) {
+      // Completing a working set → start rest timer
+      startTimer(exerciseId, activeExercise.restSeconds ?? DEFAULT_REST_SECONDS)
+    } else if (set.isCompleted && !set.isWarmup && isTimerRunning) {
+      // Uncompleting a working set while timer runs → cancel it
+      skipTimer()
+    }
+  }
 
   function handleRemove() {
     Alert.alert(
@@ -158,7 +173,7 @@ export function ExerciseCard({ activeExercise, exercise, locale }: ExerciseCardP
             set={s}
             isCurrent={s.id === currentSetId}
             onUpdate={(updates) => updateSet(exerciseId, s.id, updates)}
-            onComplete={() => completeSet(exerciseId, s.id)}
+            onComplete={() => handleCompleteSet(s)}
             onToggleWarmup={() => toggleWarmup(exerciseId, s.id)}
             onRemove={() => removeSet(exerciseId, s.id)}
             suggestionType={s.id === indicatorSetId ? suggestion!.type : undefined}

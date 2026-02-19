@@ -3,6 +3,7 @@ import { Alert } from 'react-native'
 import { useTranslation } from 'react-i18next'
 
 import { useWorkoutStore } from '@/stores/useWorkoutStore'
+import { useRestTimerStore } from '@/stores/useRestTimerStore'
 import { useFinishWorkout, useDiscardWorkout } from '@/hooks/useWorkoutMutations'
 import { hapticHeavy } from '@/lib/animations'
 import { StartWorkoutButton } from '@/components/workout/StartWorkoutButton'
@@ -22,6 +23,7 @@ export default function WorkoutScreen() {
     useWorkoutStore()
   const finishWorkout = useFinishWorkout()
   const discardWorkout = useDiscardWorkout()
+  const resetTimer = useRestTimerStore((s) => s.reset)
   const [summary, setSummary] = useState<SummaryData | null>(null)
 
   function handleFinish() {
@@ -48,6 +50,7 @@ export default function WorkoutScreen() {
                 }
               }
               endWorkout()
+              resetTimer()
             },
           },
         ],
@@ -104,6 +107,7 @@ export default function WorkoutScreen() {
         onDone={() => {
           setSummary(null)
           endWorkout()
+          resetTimer()
         }}
       />
     )

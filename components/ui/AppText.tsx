@@ -18,7 +18,7 @@ const presets = {
     fontVariantNumeric: 'tabular-nums',
   },
   timerCountdown: {
-    fontSize: 18,
+    fontSize: 14,
     fontWeight: '700' as const,
     fontVariantNumeric: 'tabular-nums',
   },

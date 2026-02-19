@@ -9,12 +9,14 @@ import { LinearGradient } from 'expo-linear-gradient'
 
 import { useWorkoutStore } from '@/stores/useWorkoutStore'
 import type { ActiveExercise } from '@/stores/useWorkoutStore'
+import { useRestTimerStore } from '@/stores/useRestTimerStore'
 import { useExercises } from '@/hooks/useExercises'
 import { AppText } from '@/components/ui/AppText'
 import { AppButton } from '@/components/ui/AppButton'
 import { colors, backgroundGradient, spacing } from '@/lib/theme'
 import { WorkoutHeader } from './WorkoutHeader'
 import { ExerciseCard } from './ExerciseCard'
+import { RestTimerBandeau } from './RestTimerBandeau'
 
 interface ActiveWorkoutScreenProps {
   onFinish: () => void
@@ -53,6 +55,7 @@ export function ActiveWorkoutScreen({ onFinish }: ActiveWorkoutScreenProps) {
 
   const exercises = useWorkoutStore((s) => s.exercises)
   const startedAt = useWorkoutStore((s) => s.startedAt)
+  const isTimerRunning = useRestTimerStore((s) => s.isRunning)
   const { data: allExercises } = useExercises()
 
   const exerciseMap = useMemo(() => {
@@ -78,6 +81,8 @@ export function ActiveWorkoutScreen({ onFinish }: ActiveWorkoutScreenProps) {
           {startedAt && <WorkoutHeader startedAt={startedAt} onFinish={onFinish} />}
 
           {exercises.length > 0 && <ProgressDots exercises={exercises} />}
+
+          {isTimerRunning && <RestTimerBandeau />}
 
           <ScrollView
             style={{ flex: 1 }}

@@ -106,6 +106,7 @@
     "sessionSubtitle": "Jour {{day}} \u00b7 {{program}}",
     "duration": "dur\u00e9e",
     "rest": "repos",
+    "restTimer": "Minuteur de repos",
     "skip": "Passer",
     "addTime": "+30s",
     "validateSet": "Valider \u00b7 S\u00e9rie {{current}}/{{total}}",

@@ -14,6 +14,7 @@ import {
 } from '@/hooks/usePrograms'
 import { useCreateSession } from '@/hooks/useWorkoutMutations'
 import { useWorkoutStore } from '@/stores/useWorkoutStore'
+import { useRestTimerStore } from '@/stores/useRestTimerStore'
 import { ProgramDayCard } from '@/components/program/ProgramDayCard'
 import { EmptyState } from '@/components/EmptyState'
 import { AppText } from '@/components/ui/AppText'
@@ -39,6 +40,7 @@ export default function ProgramDetailScreen() {
   const startWorkout = useWorkoutStore((s) => s.startWorkout)
   const loadProgramDay = useWorkoutStore((s) => s.loadProgramDay)
   const endWorkout = useWorkoutStore((s) => s.endWorkout)
+  const resetTimer = useRestTimerStore((s) => s.reset)
 
   const [editingName, setEditingName] = useState(false)
   const [nameValue, setNameValue] = useState('')
@@ -94,6 +96,7 @@ export default function ProgramDetailScreen() {
         if (isActive) {
           endWorkout()
         }
+        resetTimer()
         const session = await createSession.mutateAsync({ programDayId: day.id })
         startWorkout(session.id, day.id)
         loadProgramDay(
@@ -101,6 +104,7 @@ export default function ProgramDetailScreen() {
             exerciseId: pe.exercise_id,
             setsTarget: pe.sets_target,
             repsTarget: pe.reps_target,
+            restSeconds: pe.rest_seconds,
           }))
         )
         router.push('/(tabs)/workout')

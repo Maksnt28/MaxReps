@@ -106,6 +106,7 @@
     "sessionSubtitle": "Day {{day}} · {{program}}",
     "duration": "duration",
     "rest": "rest",
+    "restTimer": "Rest timer",
     "skip": "Skip",
     "addTime": "+30s",
     "validateSet": "Validate · Set {{current}}/{{total}}",
