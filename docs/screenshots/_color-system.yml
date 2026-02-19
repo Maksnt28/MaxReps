@@ -1,0 +1,233 @@
+# =============================================================================
+# MaxReps — Color System Rules
+# =============================================================================
+# This file defines WHERE and WHY each color appears.
+# For the actual hex values, see _design-tokens.yml.
+# =============================================================================
+
+# =============================================================================
+# CORE PRINCIPLE
+# =============================================================================
+principle: >
+  The interface is 95% monochrome (black, grey, silver, white).
+  Color appears ONLY to carry a specific meaning. The user learns
+  instinctively: blue = active, green = progressing, red = regressing,
+  gold = record, white/black = neutral completion.
+
+  When a color appears, it signals something. When there is no color,
+  nothing requires attention. This creates a natural visual hierarchy
+  driven entirely by meaning.
+
+# =============================================================================
+# BLEU ÉLECTRIQUE — Interactive / Active
+# =============================================================================
+blue_electric:
+  meaning: "This element is active, interactive, or requires attention NOW"
+  tokens:
+    dark: "#3B82F6"
+    light: "#2563EB"
+
+  used_on:
+    - element: "Timer countdown digits"
+      reason: "The timer is the most time-sensitive active element"
+    - element: "Timer progress ring"
+      reason: "Visual reinforcement of countdown"
+    - element: "Timer +30s button"
+      reason: "Interactive action directly related to the timer"
+    - element: "Current set row background tint"
+      reason: "Identifies which set is being logged right now"
+    - element: "Current set number"
+      reason: "Reinforces active set identification"
+    - element: "Current set weight value"
+      reason: "The primary data the user is about to log"
+    - element: "CTA button (Valider · Série X/Y)"
+      reason: "Primary action — always in accent"
+    - element: "Session duration badge"
+      reason: "Active session indicator"
+    - element: "Progress dots (completed segments)"
+      reason: "Shows session advancement"
+    - element: "Done/todo separator line"
+      reason: "Separates completed sets from upcoming"
+    - element: "Accent bar on timer card"
+      reason: "Identifies the timer card as active"
+    - element: "Timer bandeau background tint"
+      reason: "Distinguishes timer from content cards"
+
+  never_on:
+    - "Exercise names"
+    - "Muscle group chips"
+    - "Section headers"
+    - "Completed set checkmarks"
+    - "Delta values (those use green/red)"
+    - "PR celebrations (those use gold)"
+    - "Static labels and metadata"
+    - "Column headers"
+
+# =============================================================================
+# VERT — Progression
+# =============================================================================
+green_progress:
+  meaning: "You are performing better than last time"
+  tokens:
+    dark: "#34E8A0"
+    light: "#18905A"
+
+  used_on:
+    - element: "Positive delta values (+2.5 kg, +1 rep)"
+      reason: "Direct indication of improvement vs last session"
+    - element: "Momentum bar positive fill"
+      reason: "Global session performance indicator"
+    - element: "Momentum positive percentage"
+      reason: "Numeric confirmation of improvement"
+    - element: "PR card delta value (↑ +2.5 kg)"
+      reason: "Quantifies the record improvement"
+    - element: "Progress chart line and fill"
+      reason: "Historical trend visualization"
+
+  never_on:
+    - "Completed set checkmarks (completion ≠ progression)"
+    - "Exercise names or labels"
+    - "CTA buttons"
+    - "Timer elements"
+    - "Muscle group chips"
+    - "Any decorative element"
+
+  critical_distinction: >
+    Green means MEASURED IMPROVEMENT versus a previous reference
+    point. Simply completing a set is not progression — it's just
+    completion. That's why checkmarks are neutral white/black.
+
+# =============================================================================
+# ROUGE — Regression / Attention
+# =============================================================================
+red_regression:
+  meaning: "Performance decreased or attention is needed"
+  tokens:
+    dark: "#FF5A6A"
+    light: "#D93D4A"
+
+  used_on:
+    - element: "Negative delta values (−1 rep, −2.5 kg)"
+      reason: "Direct indication of regression vs last session"
+    - element: "Momentum bar negative fill"
+      reason: "Global session regression indicator"
+    - element: "Momentum negative percentage"
+      reason: "Numeric confirmation of regression"
+    - element: "Destructive actions (delete set, cancel workout)"
+      reason: "Warning that action is irreversible"
+
+  never_on:
+    - "Failed sets (a failed set at same weight is neutral, not red)"
+    - "Timer expiry (timer uses blue, not red urgency)"
+    - "Error states unrelated to performance"
+    - "Any decorative element"
+
+# =============================================================================
+# OR — Personal Record
+# =============================================================================
+gold_pr:
+  meaning: "A new personal record has been achieved"
+  tokens:
+    dark: "#FFD700"
+    light: "#B89800"
+
+  used_on:
+    - element: "PR label text"
+      reason: "Immediate identification of record"
+    - element: "Accent bar on PR card"
+      reason: "Card-level celebration — gold bar at top"
+    - element: "Trophy emoji accompaniment"
+      reason: "Universal symbol of achievement"
+
+  never_on:
+    - "Any element that is not a confirmed personal record"
+    - "Near-PRs or personal bests that don't break the record"
+    - "CTA buttons"
+    - "Timer elements"
+
+  note: >
+    Gold is the rarest color in the interface. It only appears when
+    a genuine record is broken. This rarity makes it celebratory.
+
+# =============================================================================
+# BLANC / NOIR — Neutral Completion
+# =============================================================================
+neutral_completion:
+  meaning: "Task done. No performance judgment attached."
+  tokens:
+    dark_check_bg: "#E8E8EA"
+    dark_check_fg: "#0A0A0E"
+    light_check_bg: "#131316"
+    light_check_fg: "#FFFFFF"
+
+  used_on:
+    - element: "Completed set checkmark"
+      reason: "The set is done — that's all. Not good, not bad, done."
+
+  rationale: >
+    In previous iterations, completed checkmarks were green. This was
+    wrong: completing a set is not the same as progressing. A user
+    who does the exact same weight and reps as last time has completed
+    the set but hasn't progressed. Green should only mean "you did
+    better than before." The neutral checkmark respects this distinction.
+
+# =============================================================================
+# GRIS — Secondary Information
+# =============================================================================
+grey_secondary:
+  meaning: "Supporting information, not primary data"
+  tokens:
+    dark_muted: "#5C5C66"
+    dark_dimmed: "#2E2E36"
+    light_muted: "#76767E"
+    light_dimmed: "#C8C8D0"
+
+  used_on:
+    - "Muscle group chips (in active workout — neutral, no colored chips)"
+    - "Equipment type labels"
+    - "Column headers (#, POIDS, REPS, Δ)"
+    - "Last session reference text"
+    - "Ghost values in parentheses on upcoming sets"
+    - "Set numbers (non-active)"
+    - "Skip button on timer"
+    - "Session subtitle (Jour 1 · Programme Force)"
+    - "Momentum label"
+    - "Duration label"
+    - "Inactive progress dots"
+    - "Inactive borders and separators"
+
+# =============================================================================
+# COLOR BUDGET PER SCREEN
+# =============================================================================
+# This section defines how many colors should be visible at once.
+# The goal: restraint. If everything is colored, nothing stands out.
+
+color_budget:
+  active_workout_screen:
+    always_present:
+      - "Blue: timer + current set + CTA (3 elements max)"
+      - "Grey: all secondary text and labels"
+      - "White: primary text + completed checkmarks"
+    conditional:
+      - "Green: only if a completed set has positive delta"
+      - "Red: only if a completed set has negative delta"
+      - "Gold: only if a PR was achieved during this session"
+    max_simultaneous_colors: "3-4 (blue + white/grey + one semantic)"
+
+  stats_dashboard:
+    always_present:
+      - "White/Grey: text and labels"
+    conditional:
+      - "Green: progression charts and positive indicators"
+      - "Red: regression indicators"
+      - "Gold: PR badges"
+      - "Blue: interactive filters and selected states"
+    max_simultaneous_colors: "4-5 (more data-rich screen)"
+
+  exercise_library:
+    always_present:
+      - "White/Grey: exercise names and metadata"
+      - "Blue: search bar accent, selected state"
+    conditional:
+      - "Muscle group colors: only in colored filter mode (TBD)"
+    max_simultaneous_colors: "2-3 (minimal color, maximum scannability)"

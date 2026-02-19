@@ -1,0 +1,343 @@
+# =============================================================================
+# MaxReps — Component Anatomy
+# =============================================================================
+# Structure and layers of each key UI component.
+# For token values, see _design-tokens.yml.
+# For color rules, see _color-system.yml.
+# =============================================================================
+
+# =============================================================================
+# TRANSPARENT CARD
+# =============================================================================
+# The foundational container used across the entire app.
+# Every grouped piece of information lives inside a card.
+transparent_card:
+  layers:
+    1_background:
+      dark: "rgba(255,255,255,0.035)"
+      light: "rgba(255,255,255,0.65)"
+      note: "Semi-transparent — background gradient bleeds through"
+    2_backdrop_blur:
+      value: "16px"
+      note: "Creates separation from background without heavy opacity"
+    3_border:
+      dark: "1px solid rgba(255,255,255,0.06)"
+      light: "1px solid rgba(0,0,0,0.06)"
+      note: "Structures the card without boxing it in"
+    4_top_edge_highlight:
+      dark: "1px rgba(255,255,255,0.04) across full width at top"
+      light: "1px rgba(0,0,0,0.02) across full width at top"
+      note: "Subtle relief effect — card feels like it has thickness"
+    5_noise_texture:
+      type: "SVG fractalNoise overlay"
+      opacity: 0.018
+      baseFrequency: 0.85
+      note: "Adds imperceptible materiality. Users won't see it consciously but the card feels more real."
+    6_accent_bar:
+      when: "Only on active cards (timer) and PR cards"
+      height: "2px"
+      position: "Top center, inset 20% from edges"
+      color: "Context-dependent — blue for active, gold for PR"
+      opacity: 0.6
+  sizing:
+    borderRadius: 14
+    paddingDefault: "11px 13px"
+    paddingCompact: "8px 11px"
+    width: "Full width of screen minus horizontal padding"
+
+# =============================================================================
+# SET ROW
+# =============================================================================
+# A single set within an exercise card.
+# The most interacted-with element in the entire app.
+set_row:
+  layout: "Horizontal flex row"
+  elements:
+    - name: "Active indicator"
+      width: "2px"
+      color: "accent (blue) when current, transparent otherwise"
+      height: "14px"
+      borderRadius: "1px"
+    - name: "Set number"
+      width: "14px"
+      alignment: "center"
+      color: "accent when current, muted grey otherwise"
+      fontSize: 10
+      fontWeight: 700
+    - name: "Weight"
+      flex: 1
+      color: "accent when current, primary text otherwise"
+      fontSize: 13
+      fontWeight: 700
+      suffix: "kg"
+      ghost_value: "Last session weight in parentheses on upcoming sets"
+    - name: "Reps"
+      width: "52px"
+      alignment: "right"
+      color: "primary text"
+      fontSize: 11
+      ghost_value: "Last session reps in parentheses on upcoming sets"
+    - name: "Delta"
+      width: "30px"
+      alignment: "right"
+      color: "green if positive, red if negative, hidden if none"
+      fontSize: 8
+      fontWeight: 700
+    - name: "Checkmark"
+      width: "16px"
+      height: "16px"
+      borderRadius: "4px"
+      states:
+        pending: "1.5px border in dimmed color, transparent fill"
+        completed: "Filled with neutral color (white dark/black light), ✓ symbol"
+      note: "NEVER green. See _color-system.yml for rationale."
+
+  states:
+    current:
+      background: "accent background tint (rgba blue ~0.06)"
+      borderRadius: 8
+      margin: "2px -6px (negative to extend tint to card edges)"
+      set_number_color: "accent blue"
+      weight_color: "accent blue"
+    completed:
+      opacity: 0.38
+      checkmark: "filled neutral"
+    upcoming:
+      opacity: 1.0
+      ghost_values: "Last session values in dimmed parentheses"
+
+# =============================================================================
+# DONE/TODO SEPARATOR
+# =============================================================================
+done_todo_separator:
+  description: >
+    A subtle colored line between the last completed set and the
+    next upcoming set. Creates a clear visual break between what's
+    done and what's left.
+  height: "1px"
+  color:
+    dark: "rgba(59,130,246,0.18)"
+    light: "rgba(37,99,235,0.12)"
+  margin: "2px 0"
+
+# =============================================================================
+# COLUMN HEADERS
+# =============================================================================
+column_headers:
+  description: >
+    Tiny labels above the set rows indicating what each column
+    contains. Helps first-time users orient, fades into background
+    for experienced users.
+  labels: ["#", "POIDS", "REPS", "Δ"]
+  fontSize: 7
+  color: "dimmed"
+  textTransform: "uppercase"
+  padding: "2px 6px 1px"
+
+# =============================================================================
+# LAST SESSION CONTEXT
+# =============================================================================
+last_session_line:
+  description: >
+    A single line below the exercise name showing what was done
+    last time. The core of progressive overload visibility.
+  format: "Dernière fois : {weight} kg · {sets}×{reps}"
+  position: "Below exercise name + chip, above column headers"
+  styling:
+    label_color: "dimmed"
+    value_color: "muted"
+    value_fontWeight: 600
+    fontSize: 8
+    separator: "1px bottom border in neutral separator color"
+
+# =============================================================================
+# GHOST VALUES
+# =============================================================================
+ghost_values:
+  description: >
+    Last session's weight and reps shown in parentheses next to
+    the current values on UPCOMING (not completed) sets. The user
+    sees what they did before without leaving the screen.
+  format: "({lastWeight}) and ({lastReps})"
+  styling:
+    color: "dimmed"
+    fontSize: 8
+    fontWeight: 400
+  visibility: "Only on sets that are not yet completed"
+
+# =============================================================================
+# TIMER BANDEAU
+# =============================================================================
+timer_bandeau:
+  description: >
+    Compact inline timer strip — NOT a full card. Takes minimal
+    vertical space while providing all timer controls.
+  layout: "Horizontal flex: ring + countdown + label + spacer + buttons"
+  styling:
+    background: "accent background tint"
+    border: "1px solid accent at ~10% opacity"
+    borderRadius: 10
+    padding: "5px 10px"
+  elements:
+    progress_ring:
+      size: "15px"
+      track: "dimmed color, 1.5px stroke"
+      fill: "accent color, 1.5px stroke, dasharray based on remaining time"
+    countdown:
+      color: "accent"
+      fontSize: 14
+      fontWeight: 700
+    label:
+      text: "repos"
+      color: "muted"
+      fontSize: 8
+    add_button:
+      text: "+30s"
+      background: "accent at ~18% opacity"
+      color: "accent"
+      fontSize: 8
+      borderRadius: 4
+    skip_button:
+      text: "Skip"
+      background: "chip background"
+      color: "muted"
+      fontSize: 8
+      borderRadius: 4
+  accent_bar: true
+  accent_bar_color: "accent blue"
+
+# =============================================================================
+# MOMENTUM BAR
+# =============================================================================
+momentum_bar:
+  description: >
+    Horizontal bar showing real-time performance vs last session.
+    The key innovation that distinguishes MaxReps from competitors.
+  layout: "Horizontal flex: label + bar + percentage"
+  elements:
+    label:
+      text: "Momentum"
+      style: "uppercase, letter-spaced, muted color"
+      fontSize: 8
+    bar:
+      height: "3.5px"
+      borderRadius: 2
+      track: "dimmed color"
+      center_line: "1px muted at 50%, indicates par with last session"
+      fill:
+        positive: "green, extends right from center"
+        negative: "red, extends left from center"
+        width: "proportional to percentage (0-100%)"
+    percentage:
+      fontSize: 9
+      fontWeight: 700
+      color: "green if positive, red if negative"
+      format: "+12% or −8%"
+  calculation: >
+    Compare total volume (weight × reps) of completed sets in current
+    session vs same point in last session. Updated after each set
+    completion.
+
+# =============================================================================
+# PROGRESS DOTS
+# =============================================================================
+progress_dots:
+  description: >
+    Segmented bar showing exercise completion across the full session.
+    Each segment = one exercise.
+  layout: "Horizontal flex with equal-width segments"
+  styling:
+    height: 3
+    borderRadius: 1.5
+    gap: 3
+    completed_color: "accent blue"
+    remaining_color: "rgba(128,128,128,0.15)"
+  behavior: "Fill segments left-to-right as exercises are completed"
+
+# =============================================================================
+# CTA BUTTON
+# =============================================================================
+cta_button:
+  description: >
+    Primary action button at the bottom of the active workout screen.
+    Adapts its label to current context.
+  styling:
+    background: "accent blue"
+    borderRadius: 12
+    padding: "10px 0"
+    text_color: "#FFFFFF"
+    fontSize: 11.5
+    fontWeight: 700
+    top_highlight: "1px rgba(255,255,255,0.15) across full width"
+  contextual_labels:
+    mid_exercise: "Valider · Série {current}/{total}"
+    last_set: "Terminer l'exercice"
+    last_exercise_last_set: "Finir la séance 🎉"
+    timer_running: "disabled/dimmed state — can't validate during rest"
+
+# =============================================================================
+# PR CARD
+# =============================================================================
+pr_card:
+  description: >
+    Appears inline in the workout flow when a personal record is
+    detected on a completed exercise.
+  base: "Standard transparent card"
+  additions:
+    accent_bar: "Gold color (PR token)"
+    header: "Exercise name in uppercase muted + 🏆 PR label in gold"
+    value: "Record weight in large primary text"
+    delta: "Improvement amount in green"
+    detail: "Sets × reps · Record type (poids, 1RM, volume)"
+    chart: "Mini area chart showing historical progression trend"
+  chart:
+    line_color: "green (progress)"
+    fill: "gradient from green 12% to transparent"
+    height: "18-20px"
+    dot: "green circle at latest data point"
+
+# =============================================================================
+# EXERCISE HEADER (within card)
+# =============================================================================
+exercise_header:
+  layout: "Name left, overflow menu right"
+  elements:
+    name:
+      color: "primary text"
+      fontSize: 13
+      fontWeight: 700
+    muscle_chip:
+      background: "chip background (neutral)"
+      color: "muted grey"
+      note: >
+        In the active workout screen, muscle chips are ALWAYS neutral
+        grey. Colored muscle chips only appear in the exercise library
+        and filters. This keeps the workout screen monochrome-first.
+    overflow_menu:
+      icon: "··· (three dots)"
+      color: "muted"
+      actions: "Reorder, replace exercise, add note, remove"
+
+# =============================================================================
+# SESSION HEADER
+# =============================================================================
+session_header:
+  layout: "Two columns — left: title + subtitle, right: duration"
+  left:
+    title:
+      color: "primary text"
+      fontSize: 16
+      fontWeight: 800
+    subtitle:
+      format: "Jour {n} · {program_name}"
+      color: "muted"
+      fontSize: 8.5
+  right:
+    duration:
+      color: "accent blue"
+      fontSize: 12
+      fontWeight: 700
+    label:
+      text: "durée"
+      color: "muted"
+      fontSize: 7

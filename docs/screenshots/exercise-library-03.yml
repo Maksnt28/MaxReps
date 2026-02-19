@@ -1,0 +1,55 @@
+source_app: "Bevel"
+screen_type: "exercise-library"
+platform: "iOS"
+
+context: >
+  Exercise selection screen for creating a superset or circuit. Lists
+  all exercises currently in the workout as individual cards with
+  illustration, exercise name, equipment type, set count, and a
+  checkbox for selection. A "Create" button at the bottom finalizes
+  the grouping.
+
+elements:
+  - id: "exercise-selection-card"
+    what: "Card-based exercise row with checkbox selection"
+    like: >
+      Each exercise is presented as a distinct card with clear
+      boundaries. The layout is simple: small illustration, exercise
+      name (bold), equipment type and set count as secondary text,
+      checkbox on the right. Easy to scan and tap. The card separation
+      makes each item feel like a discrete, selectable unit.
+    apply_to_maxreps: >
+      Use this card-based selection pattern whenever the user needs
+      to pick exercises from a list (superset creation, exercise
+      reordering, bulk actions). Each card: exercise name as primary
+      text, equipment type • set count as secondary text, checkbox on
+      the right. Use Tamagui card tokens with subtle borders for
+      separation.
+    priority: high
+
+  - id: "exercise-metadata"
+    what: "Equipment type and set count as inline secondary info"
+    like: >
+      Below each exercise name, the equipment type and set count are
+      shown on a single line with a dot separator (e.g. "Barbell •
+      3 sets"). Compact and informative without taking extra vertical
+      space.
+    apply_to_maxreps: >
+      Display exercise metadata as a single secondary line using dot
+      separators: "Equipment • X sets". Use a muted text color for
+      this line to maintain visual hierarchy with the exercise name.
+    priority: medium
+
+takeaway: >
+  The simplicity of this selection screen is its strength. No
+  unnecessary complexity — just a list of exercises with checkboxes.
+  The card layout makes each item feel tappable and distinct. This
+  pattern works well for any multi-select exercise interaction in
+  the app.
+
+avoid: >
+  The "Create" button appears greyed out even though no selection has
+  been made, which could confuse users about whether the feature is
+  available. For MaxReps, clearly differentiate between disabled state
+  (no selection) and active state with distinct visual treatment and
+  consider adding a selection count to the button label.

@@ -1,6 +1,12 @@
-import { YStack, XStack, Text, Button } from 'tamagui'
+import { YStack, XStack } from 'tamagui'
 import { useTranslation } from 'react-i18next'
 import Ionicons from '@expo/vector-icons/Ionicons'
+
+import { AppText } from '@/components/ui/AppText'
+import { AppButton } from '@/components/ui/AppButton'
+import { AppCard } from '@/components/ui/AppCard'
+import { Divider } from '@/components/ui/Divider'
+import { colors } from '@/lib/theme'
 
 interface WorkoutSummaryProps {
   durationSeconds: number
@@ -19,9 +25,9 @@ function formatDuration(seconds: number): string {
 
 function SummaryRow({ label, value }: { label: string; value: string }) {
   return (
-    <XStack justifyContent="space-between" alignItems="center">
-      <Text color="$gray10" fontSize={15}>{label}</Text>
-      <Text color="$color" fontSize={17} fontWeight="600">{value}</Text>
+    <XStack justifyContent="space-between" alignItems="center" paddingVertical={4}>
+      <AppText preset="caption" color={colors.gray8}>{label}</AppText>
+      <AppText preset="exerciseName">{value}</AppText>
     </XStack>
   )
 }
@@ -36,36 +42,35 @@ export function WorkoutSummary({
   const { t } = useTranslation()
 
   return (
-    <YStack flex={1} alignItems="center" justifyContent="center" backgroundColor="$background" padding="$4" gap="$6">
-      <YStack alignItems="center" gap="$3">
-        <Ionicons name="checkmark-circle" size={64} color="#4CAF50" />
-        <Text color="$color" fontSize={24} fontWeight="700">
+    <YStack flex={1} alignItems="center" justifyContent="center" backgroundColor={colors.gray1} padding={20} gap={24}>
+      <YStack alignItems="center" gap={12}>
+        <Ionicons name="checkmark-circle" size={64} color={colors.gray11} />
+        <AppText preset="pageTitle">
           {t('workout.summary.title')}
-        </Text>
+        </AppText>
       </YStack>
 
-      <YStack width="100%" maxWidth={300} gap="$3">
+      <AppCard style={{ width: '100%', maxWidth: 300 }}>
         <SummaryRow label={t('workout.summary.duration')} value={formatDuration(durationSeconds)} />
+        <Divider />
         <SummaryRow label={t('workout.summary.exercises')} value={String(exerciseCount)} />
+        <Divider />
         <SummaryRow label={t('workout.summary.sets')} value={String(setsCount)} />
+        <Divider />
         <SummaryRow
           label={t('workout.summary.totalVolume')}
           value={`${Math.round(totalVolumeKg).toLocaleString()} kg`}
         />
-      </YStack>
+      </AppCard>
 
-      <Button
-        size="$5"
-        backgroundColor="$color"
+      <AppButton
+        variant="primary"
         onPress={onDone}
+        fullWidth
         accessibilityLabel={t('workout.summary.done')}
-        width="100%"
-        maxWidth={300}
       >
-        <Text color="$background" fontSize={17} fontWeight="700">
-          {t('workout.summary.done')}
-        </Text>
-      </Button>
+        {t('workout.summary.done')}
+      </AppButton>
     </YStack>
   )
 }

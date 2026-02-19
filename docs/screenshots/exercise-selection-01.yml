@@ -1,0 +1,38 @@
+source_app: "Culture Trip"
+screen_type: "exercise-selection"
+platform: "iOS"
+
+context: >
+  Explore screen from a travel app showing a search bar overlaid on
+  an illustrated cityscape header. The search bar features a colored
+  magnifying glass icon (purple) with the search query text. Below,
+  horizontal filter chips for content categories and a card-based
+  content feed.
+
+elements:
+  - id: "search-bar-accent"
+    what: "Search bar with colored magnifying glass icon"
+    like: >
+      The search bar has a subtle but effective design detail: the
+      magnifying glass icon uses an accent color instead of the
+      default grey. This small touch makes the search bar feel more
+      intentional and branded. The icon draws the eye to the search
+      input without being distracting.
+    apply_to_maxreps: >
+      Apply an accent color to the magnifying glass icon in our
+      exercise search bar. Use our primary brand color from Tamagui
+      tokens for the icon while keeping the input text and placeholder
+      in standard neutral tones. This adds a touch of personality to
+      an otherwise utilitarian component.
+    priority: medium
+
+takeaway: >
+  A small design detail — coloring the search icon — can elevate a
+  standard search bar and reinforce brand identity. Worth adopting as
+  a subtle polish element across all search inputs in MaxReps.
+
+avoid: >
+  The specific purple color used here is not relevant. Use MaxReps'
+  own brand accent color. Do not replicate the illustrated header
+  or the overall layout of this screen — only the search bar accent
+  detail is of interest.

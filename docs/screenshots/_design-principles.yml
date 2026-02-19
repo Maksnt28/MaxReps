@@ -1,0 +1,200 @@
+# =============================================================================
+# MaxReps — Design Principles
+# =============================================================================
+# Philosophy and high-level direction.
+# For implementation details, see:
+#   _design-tokens.yml    → Concrete values (hex, px, opacity)
+#   _color-system.yml     → Color usage rules and semantics
+#   _component-anatomy.yml → Component structure and layers
+# =============================================================================
+
+app: MaxReps
+platform: iOS
+language: fr
+target_user: French intermediate strength training enthusiasts
+
+# =============================================================================
+# DESIGN DIRECTION
+# =============================================================================
+design_direction:
+  overall_feel: >
+    Monochrome-first. Clean, focused, gym-ready. The interface lives
+    in black, grey, silver, and white. Color appears ONLY to carry
+    meaning — progression, regression, records, active state. Every
+    pixel earns its place. No decoration.
+  quality_benchmark: "Commercial App Store quality — Strong and Hevy tier."
+  color_philosophy: >
+    Color = information, not decoration. The UI is 95% neutral. When
+    color appears, it means something specific and the user learns
+    this instinctively. Blue = interactive/active. Green = you're
+    progressing. Red = attention/regression. Gold = new record.
+    White = neutral completion.
+  theme:
+    primary: "Dark mode"
+    secondary: "Light mode (supported, designed second)"
+    dark_approach: >
+      Never flat black. Subtle gradient from near-black to dark
+      charcoal. Cards are transparent glass over the background.
+    light_approach: >
+      Off-white gradient background. Cards are semi-opaque white
+      glass. Same color semantics, adjusted saturation for contrast.
+
+# =============================================================================
+# INNOVATION — WHAT DISTINGUISHES MAXREPS
+# =============================================================================
+innovation:
+  momentum_indicator:
+    description: >
+      Real-time performance comparison during the active workout.
+      A horizontal bar showing +/−% versus the last session. No
+      competitor does this. It makes progressive overload visible
+      live, not just in post-workout stats.
+    placement: "Top of active workout screen, below progress dots"
+    priority: high
+
+  contextual_last_session:
+    description: >
+      Last session values are always visible — as a summary line
+      under the exercise name, and as ghost values in parentheses
+      on upcoming sets. The user never leaves the logging screen
+      to check history. They always know what to beat.
+    priority: high
+
+  contextual_cta:
+    description: >
+      The main action button adapts to context. "Valider · Série
+      3/4" during sets. "Terminer l'exercice" on last set.
+      "Finir la séance 🎉" on last exercise. Every tap has context.
+    priority: high
+
+  progress_dots:
+    description: >
+      Segmented bar at the top showing completed/remaining exercises.
+      Gives a sense of global session progress at a glance.
+    priority: medium
+
+# =============================================================================
+# INFORMATION DENSITY PHILOSOPHY
+# =============================================================================
+information_density:
+  principle: >
+    Each screen has one primary job. Active workout = logging tool.
+    Stats = progress insight. Library = exercise discovery. Never
+    mix purposes.
+  active_workout: >
+    Weight, reps, completion state, and delta vs last session per
+    set row. Last session context visible inline. No exercise
+    thumbnails, no graphs, no notes inline. Those live elsewhere.
+  stats_dashboard: >
+    One card = one insight. Each card tells a single story with one
+    primary metric, one supporting visualization, and minimal
+    secondary text.
+  exercise_library: >
+    Search first, filters second, then a clean alphabetical list.
+    Maximum exercises visible without scrolling.
+
+# =============================================================================
+# TYPOGRAPHY
+# =============================================================================
+typography:
+  approach: "Clear hierarchy, large numbers for weight/reps, readable at a glance"
+  french_text_note: >
+    French text runs ~15-20% longer than English — account for this
+    in all layouts, especially buttons, chips, and card titles. Test
+    with longest expected French strings.
+  number_rendering: >
+    All numeric values (weight, reps, timer, stats) use tabular
+    numbers (fontVariantNumeric: tabular-nums) to prevent layout
+    shift during updates.
+
+# =============================================================================
+# SPACING & TOUCH
+# =============================================================================
+spacing:
+  approach: "Generous touch targets (44pt minimum), comfortable density"
+  gym_context: >
+    Users interact with sweaty hands, often mid-set — fat finger
+    tolerance matters. Weight/rep input fields and set completion
+    buttons need extra-large touch targets.
+
+# =============================================================================
+# MOTION & FEEDBACK
+# =============================================================================
+motion:
+  approach: >
+    Subtle, purposeful. Confirm actions, celebrate PRs, nothing
+    decorative. Every animation serves a functional purpose.
+  haptic_feedback:
+    - trigger: "Set completed"
+      type: "Light impact"
+    - trigger: "PR achieved"
+      type: "Success notification + subtle animation"
+    - trigger: "Timer expired"
+      type: "Strong notification (works when phone is face-down)"
+    - trigger: "Weight stepper tap"
+      type: "Light impact per step, stronger on long-press"
+    - trigger: "Exercise added/removed"
+      type: "Light impact"
+
+# =============================================================================
+# KEY INTERACTIONS
+# =============================================================================
+rest_timer:
+  description: >
+    Three-tier timer system. In-app default is a compact tinted
+    bandeau (not a full card) to save vertical space. Expandable
+    to full-screen for distance readability.
+  tiers:
+    - mode: "Compact bandeau"
+      display: "Tinted accent-bg strip inline with workout content"
+      behavior: "Default in-app. Countdown, +30s, skip. Minimal height."
+      priority: high
+    - mode: "Live Activity"
+      display: "iOS Live Activities / Dynamic Island"
+      behavior: "Visible outside app. Tap to return. Countdown only."
+      priority: high
+    - mode: "Full-screen"
+      display: "Expanded large countdown for distance readability"
+      behavior: "Tap to expand from bandeau. Phone on bench use case."
+      priority: medium
+
+pr_celebration:
+  description: >
+    Personal records are a core motivational driver. PR detection
+    and celebration should be a first-class experience.
+  elements:
+    - "Gold accent bar on top of PR card"
+    - "Trophy emoji + PR label in gold"
+    - "Progress delta in green"
+    - "Mini chart showing progression trend"
+    - "Haptic success notification"
+    - "PR summary in workout completion screen"
+
+# =============================================================================
+# GYM CONTEXT REQUIREMENTS
+# =============================================================================
+gym_context:
+  screen_auto_lock: "Prevent auto-lock during active workout session"
+  readability: >
+    All critical information (weight, reps, timer) must be readable
+    at arm's length in both dim and bright gym lighting conditions.
+  audio_haptic: >
+    Timer expiry must use both haptic and optional audio cue,
+    effective when phone is face-down on a bench or in a pocket.
+  offline: >
+    Aspirational — not Phase 1. CLAUDE.md defines cloud-first,
+    online-required architecture. Full offline sync deferred to
+    a future phase. Original spec text preserved for reference:
+    "Core workout logging must work fully offline. Sync when
+    connection is available."
+
+# =============================================================================
+# DESIGN PRIORITIES (ordered)
+# =============================================================================
+priorities:
+  - "Speed of logging (minimize taps to complete a set)"
+  - "Glanceability (see workout state in <1 second)"
+  - "Progressive overload visibility (always show last performance + momentum)"
+  - "Gym-proof interactions (sweaty hands, dim lighting, arm's length)"
+  - "Celebration of progress (PRs, streaks, volume milestones)"
+  - "Contextual intelligence (CTA adapts, last session always visible)"

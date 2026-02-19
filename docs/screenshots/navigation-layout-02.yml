@@ -1,0 +1,57 @@
+source_app: "WHOOP"
+screen_type: "navigation-layout"
+platform: "iOS"
+
+context: >
+  Home/overview screen from WHOOP showing a dark theme with subtle
+  gradient tones. Top navigation with day selector, horizontal tab
+  bar (Overview, Sleep, Recovery, Strain), a circular data widget,
+  an onboarding card with colored border, and a bottom tab bar. A
+  floating action button (+) sits in the bottom right corner.
+
+elements:
+  - id: "dark-theme-gradient"
+    what: "Dark background with subtle gradient treatment"
+    like: >
+      The dark theme uses very subtle gradient shifts rather than a
+      flat black background. There are hints of dark blue and charcoal
+      that give the screen depth without being distracting. The gradient
+      is barely perceptible but makes the interface feel more refined
+      and less stark than pure black.
+    apply_to_maxreps: >
+      For MaxReps dark theme, use subtle gradient backgrounds instead
+      of flat black. Apply a very slight gradient from dark charcoal
+      to near-black, or incorporate faint blue/cool undertones. Define
+      these as Tamagui background tokens (e.g. backgroundGradientStart,
+      backgroundGradientEnd) for consistency. The gradient should be
+      barely noticeable — just enough to add depth.
+    priority: high
+
+  - id: "bottom-tab-bar"
+    what: "Dark bottom navigation bar with icon + label tabs"
+    like: >
+      The bottom tab bar blends seamlessly with the dark theme. Icons
+      are outlined in inactive state, with the active tab using a
+      subtle highlight. The bar itself has a slightly elevated
+      background compared to the screen content, creating a natural
+      boundary.
+    apply_to_maxreps: >
+      Design the MaxReps bottom tab bar to integrate smoothly with
+      the dark theme. Use a slightly lighter dark shade for the tab
+      bar background to differentiate from screen content. Outlined
+      icons for inactive tabs, filled or accent-colored for active.
+      Keep labels below icons.
+    priority: medium
+
+takeaway: >
+  The subtle gradient approach to dark themes is the key insight.
+  It elevates a dark interface from feeling flat and cheap to feeling
+  refined and premium. This should be the foundation of MaxReps' dark
+  mode — never pure flat black, always with a hint of depth through
+  barely perceptible gradients.
+
+avoid: >
+  The onboarding overlay and tooltip arrow pattern is not relevant.
+  The overall screen is quite information-dense with multiple data
+  widgets — MaxReps should not replicate this density on its home
+  screen.

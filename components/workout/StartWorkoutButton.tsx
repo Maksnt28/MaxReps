@@ -1,10 +1,14 @@
 import { Alert } from 'react-native'
-import { YStack, Text, Button, Spinner } from 'tamagui'
+import { SafeAreaView } from 'react-native-safe-area-context'
+import { YStack } from 'tamagui'
 import { useTranslation } from 'react-i18next'
 import Ionicons from '@expo/vector-icons/Ionicons'
 
 import { useWorkoutStore } from '@/stores/useWorkoutStore'
 import { useCreateSession } from '@/hooks/useWorkoutMutations'
+import { AppText } from '@/components/ui/AppText'
+import { AppButton } from '@/components/ui/AppButton'
+import { colors } from '@/lib/theme'
 
 export function StartWorkoutButton() {
   const { t } = useTranslation()
@@ -21,35 +25,35 @@ export function StartWorkoutButton() {
   }
 
   return (
-    <YStack flex={1} alignItems="center" justifyContent="center" backgroundColor="$background" gap="$4">
-      <YStack
-        width={80}
-        height={80}
-        borderRadius="$6"
-        backgroundColor="$backgroundHover"
-        alignItems="center"
-        justifyContent="center"
-      >
-        <Ionicons name="barbell-outline" size={40} color="#888" />
+    <SafeAreaView style={{ flex: 1, backgroundColor: colors.gray1 }} edges={['top']}>
+      <YStack paddingHorizontal={16} paddingTop={16} paddingBottom={8}>
+        <AppText fontSize={28} fontWeight="800" color={colors.gray12}>
+          {t('tabs.workout')}
+        </AppText>
       </YStack>
-      <Text color="$gray10" fontSize={15}>
-        {t('workout.startSubtitle')}
-      </Text>
-      <Button
-        size="$5"
-        backgroundColor="$color"
-        onPress={handleStart}
-        disabled={createSession.isPending}
-        accessibilityLabel={t('workout.startWorkout')}
-      >
-        {createSession.isPending ? (
-          <Spinner size="small" color="$background" />
-        ) : (
-          <Text color="$background" fontSize={17} fontWeight="700">
-            {t('workout.startWorkout')}
-          </Text>
-        )}
-      </Button>
-    </YStack>
+      <YStack flex={1} alignItems="center" justifyContent="center" gap={16}>
+        <YStack
+          width={80}
+          height={80}
+          borderRadius={16}
+          backgroundColor={colors.gray3}
+          alignItems="center"
+          justifyContent="center"
+        >
+          <Ionicons name="barbell-outline" size={40} color={colors.gray7} />
+        </YStack>
+        <AppText preset="caption" color={colors.gray8}>
+          {t('workout.startSubtitle')}
+        </AppText>
+        <AppButton
+          variant="primary"
+          onPress={handleStart}
+          loading={createSession.isPending}
+          accessibilityLabel={t('workout.startWorkout')}
+        >
+          {t('workout.startWorkout')}
+        </AppButton>
+      </YStack>
+    </SafeAreaView>
   )
 }

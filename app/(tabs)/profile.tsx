@@ -1,10 +1,14 @@
 import { useEffect, useState } from 'react'
 import { Alert } from 'react-native'
-import { YStack, Text, Button, Spinner } from 'tamagui'
+import { SafeAreaView } from 'react-native-safe-area-context'
+import { YStack } from 'tamagui'
 import { useTranslation } from 'react-i18next'
 import { signOut } from '@/lib/auth'
 import { supabase } from '@/lib/supabase'
 import { useUserStore } from '@/stores/useUserStore'
+import { AppText } from '@/components/ui/AppText'
+import { AppButton } from '@/components/ui/AppButton'
+import { colors } from '@/lib/theme'
 
 export default function ProfileScreen() {
   const { t } = useTranslation()
@@ -60,22 +64,29 @@ export default function ProfileScreen() {
   }
 
   return (
-    <YStack flex={1} alignItems="center" justifyContent="center" backgroundColor="$background" gap="$4" paddingHorizontal="$6">
-      <Text color="$color" fontSize={20} fontWeight="600">
-        {displayName ?? t('tabs.profile')}
-      </Text>
+    <SafeAreaView style={{ flex: 1, backgroundColor: colors.gray1 }} edges={['top']}>
+      <YStack flex={1} backgroundColor={colors.gray1}>
+        <YStack paddingHorizontal={16} paddingTop={16} paddingBottom={8}>
+          <AppText fontSize={28} fontWeight="800" color={colors.gray12}>
+            {t('tabs.profile')}
+          </AppText>
+        </YStack>
+        <YStack flex={1} alignItems="center" justifyContent="center" gap={16} paddingHorizontal={24}>
+          <AppText preset="exerciseName" color={colors.gray11}>
+            {displayName ?? t('tabs.profile')}
+          </AppText>
 
-      <Button
-        size="$4"
-        width="100%"
-        theme="red"
-        disabled={loading}
-        onPress={handleSignOut}
-        accessibilityLabel={t('auth.signOut')}
-        icon={loading ? <Spinner /> : undefined}
-      >
-        {t('auth.signOut')}
-      </Button>
-    </YStack>
+          <AppButton
+            variant="destructive"
+            onPress={handleSignOut}
+            disabled={loading}
+            loading={loading}
+            accessibilityLabel={t('auth.signOut')}
+          >
+            {t('auth.signOut')}
+          </AppButton>
+        </YStack>
+      </YStack>
+    </SafeAreaView>
   )
 }

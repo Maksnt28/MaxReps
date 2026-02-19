@@ -1,0 +1,40 @@
+source_app: "Hevy"
+screen_type: "progress-stats"
+platform: "iOS"
+
+context: >
+  Monthly report screen showing personal records section with a trophy
+  badge icon ("2 new PRs"), exercise details with PR type (Weight and
+  1RM), and a workout days calendar log with streak counter and fire
+  icon below.
+
+elements:
+  - id: "pr-badge"
+    what: "Personal record celebration badge with trophy icon"
+    like: >
+      The PR badge is visually rewarding — a yellow trophy icon with
+      "2 new PRs" in bold text. The individual PR details below show
+      the exercise name, PR type, and value in accent color. It's a
+      clear, celebratory moment that makes achieving a personal record
+      feel significant.
+    apply_to_maxreps: >
+      Implement a PR badge/celebration component in MaxReps. When a
+      user sets a new personal record, display a prominent badge with
+      an icon (trophy or medal), the count of new PRs, and a list of
+      specific records broken (exercise name, PR type, value). Use
+      accent color for PR values. This should appear in workout
+      summaries and monthly/weekly reports. Add a subtle animation
+      or haptic when a PR is achieved during a live workout.
+    priority: high
+
+takeaway: >
+  The PR badge creates a rewarding micro-moment that reinforces
+  progressive overload motivation. This is a critical engagement
+  feature for a strength training app — celebrating PRs should be
+  a first-class experience in MaxReps.
+
+avoid: >
+  The calendar log and streak counter below are standard patterns
+  but not the focus here. The overall screen layout is functional
+  but visually flat — the PR badge itself is the only element worth
+  extracting.

@@ -1,0 +1,79 @@
+source_app: "Bevel"
+screen_type: "progress-stats"
+platform: "iOS"
+
+context: >
+  Fitness dashboard showing "Last 30 days" with stacked cards: a
+  GitHub-style activity heatmap calendar (color-coded by activity
+  count), an "Activity Summary" card with total hours, date range,
+  change indicator, and a line chart, and a "Strain Performance"
+  card with percentage value, status label, and a multi-colored
+  oscillating chart. Dark theme with well-spaced card layout.
+
+elements:
+  - id: "dashboard-cards"
+    what: "Stacked stat cards with clear content and right-sized data"
+    like: >
+      Each card presents exactly the right amount of information —
+      no more, no less. The activity heatmap shows workout frequency
+      at a glance. The activity summary card shows total time with a
+      trend line and change indicator. The strain card shows a single
+      percentage with status. Each card tells one story clearly
+      without overwhelming.
+    apply_to_maxreps: >
+      Use this card-per-metric approach for the MaxReps stats
+      dashboard. Each card should tell one clear story: workout
+      frequency card (heatmap or calendar), volume progression card
+      (total volume + trend chart), strength progression card (key
+      lifts + line chart), consistency card (streak or completion
+      rate). Keep each card focused on a single insight with one
+      primary metric, one supporting visualization, and minimal
+      secondary text.
+    priority: high
+
+  - id: "activity-heatmap"
+    what: "GitHub-style activity calendar with color-coded intensity"
+    like: >
+      The heatmap calendar shows two months side by side with cells
+      colored by activity count (grey for none, green shades for 1,
+      2, 3+ activities). Includes a legend at the bottom. Gives an
+      instant visual sense of training consistency and frequency
+      patterns over time.
+    apply_to_maxreps: >
+      Implement a workout frequency heatmap for MaxReps. Display a
+      month or two-month calendar grid with cells colored by workout
+      count per day. Use our Tamagui accent color at varying opacities
+      for intensity levels (none, 1 workout, 2+). Include a simple
+      legend. This is a powerful motivation tool for consistency.
+    priority: high
+
+  - id: "summary-card-structure"
+    what: "Metric card with title, value, date range, change indicator, and chart"
+    like: >
+      The Activity Summary card has a perfect structure: icon + title
+      at top, large primary value (22h 0m), date range below, change
+      indicator on the right (+5h 39m with up arrow), and a line chart
+      taking the bottom half. The arrow link to detailed view is
+      unobtrusive. Everything a user needs to understand their trend
+      at a glance.
+    apply_to_maxreps: >
+      Use this card structure as the template for MaxReps stat cards:
+      icon + title (top left), detail arrow (top right), large primary
+      metric, date range, change indicator with directional arrow and
+      value, chart in the lower portion. Apply to: total volume card,
+      workout frequency card, estimated 1RM progression card.
+    priority: high
+
+takeaway: >
+  This is the best stats dashboard reference across all screenshots.
+  The cards are perfectly balanced — each one delivers a clear insight
+  with just enough data and visualization. The heatmap, the summary
+  card structure, and the overall stacked layout should directly
+  inform the MaxReps stats dashboard design.
+
+avoid: >
+  The multi-colored oscillating chart on the Strain Performance card
+  may be confusing without clear axis labels. Ensure MaxReps charts
+  always have readable axis labels and tooltips. The "Last 30 days"
+  as the only time range visible — MaxReps should offer switchable
+  time ranges as seen in other references.

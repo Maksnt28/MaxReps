@@ -1,0 +1,73 @@
+source_app: "Runna"
+screen_type: "onboarding-setup"
+platform: "iOS"
+
+context: >
+  Advanced customization settings screen on a dark theme. A toggle
+  enables "Advanced Customisation" which reveals a card containing
+  multiple slider controls. Each slider has a bold label, a descriptive
+  subtitle, the current value displayed in accent color, and a stepped
+  slider track. A "Save" CTA button at the bottom.
+
+elements:
+  - id: "settings-card"
+    what: "Contained card grouping related settings"
+    like: >
+      All advanced settings are grouped inside a single card container
+      with a subtle border, visually communicating that these options
+      belong together. The card has a toggle at the top to enable/
+      disable the entire group. Clean separation from the rest of the
+      screen content.
+    apply_to_maxreps: >
+      Use card containers to group related settings. A master toggle
+      at the top of the card can enable/disable the group (e.g.
+      "Personnalisation avancée" toggle that reveals progression
+      settings, rest timer defaults, or notification preferences).
+      Use Tamagui card tokens with a subtle border on dark theme.
+    priority: medium
+
+  - id: "slider-with-labels"
+    what: "Stepped slider with title, description, and current value"
+    like: >
+      Each slider control has a strong information hierarchy: bold
+      parameter name, muted description explaining what it controls,
+      and the current selected value displayed in accent color aligned
+      to the right. The slider track has visible step markers. The
+      overall layout is clean and each parameter is easy to understand
+      and adjust.
+    apply_to_maxreps: >
+      Use this slider pattern for any adjustable numeric settings in
+      MaxReps: rest timer defaults, weight increment preferences,
+      RPE thresholds. Each slider row: bold label, muted description
+      below, current value in accent color on the right, stepped
+      slider below. Define step markers for discrete values. Use
+      Tamagui accent color tokens for the active value display.
+    priority: high
+
+  - id: "dark-theme-presentation"
+    what: "Overall dark theme aesthetic with accent highlights"
+    like: >
+      The dark background with teal/green accent color for active
+      values creates a clean, modern look. The card has a subtle
+      border that's visible without being heavy. Text hierarchy is
+      well-managed with white for primary, grey for secondary, and
+      accent for values.
+    apply_to_maxreps: >
+      Apply this text hierarchy pattern in MaxReps dark theme:
+      white/light for primary labels, muted grey for descriptions,
+      accent color for active values and current states. Ensure
+      card borders are visible but subtle on dark backgrounds
+      using a slightly lighter dark tone.
+    priority: medium
+
+takeaway: >
+  The overall presentation of settings and configuration options on
+  this screen is well-executed. The combination of card grouping,
+  clear information hierarchy per parameter, and accent-colored
+  values makes complex settings feel approachable. The toggle-to-
+  reveal pattern is smart for progressive disclosure.
+
+avoid: >
+  The specific teal/green accent color is Runna's brand — use
+  MaxReps' own accent color. The slider implementation may need
+  haptic feedback at each step to feel premium on mobile.

@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { FlatList, RefreshControl } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { YStack, Spinner, Text, Button } from 'tamagui'
+import { YStack, Spinner } from 'tamagui'
 import { useTranslation } from 'react-i18next'
 import { useRouter } from 'expo-router'
 
@@ -10,34 +10,23 @@ import { useDebouncedValue } from '@/hooks/useDebouncedValue'
 import { useExerciseStore } from '@/stores/useExerciseStore'
 import { filterExercises } from '@/lib/exercises'
 import { SearchBar } from '@/components/SearchBar'
-import { FilterChips } from '@/components/FilterChips'
+import { FilterButtons } from '@/components/FilterButtons'
 import {
   ExerciseListItem,
   EXERCISE_LIST_ITEM_HEIGHT,
 } from '@/components/ExerciseListItem'
 import { EmptyState } from '@/components/EmptyState'
+import { AppText } from '@/components/ui/AppText'
+import { AppButton } from '@/components/ui/AppButton'
+import { colors, spacing } from '@/lib/theme'
 
 const MUSCLE_GROUPS = [
-  'chest',
-  'back',
-  'shoulders',
-  'biceps',
-  'triceps',
-  'quads',
-  'hamstrings',
-  'glutes',
-  'calves',
-  'abs',
+  'chest', 'back', 'shoulders', 'biceps', 'triceps',
+  'quads', 'hamstrings', 'glutes', 'calves', 'abs',
 ] as const
 
 const EQUIPMENT = [
-  'barbell',
-  'dumbbell',
-  'cable',
-  'machine',
-  'bodyweight',
-  'bands',
-  'kettlebell',
+  'barbell', 'dumbbell', 'cable', 'machine', 'bodyweight', 'bands', 'kettlebell',
 ] as const
 
 export default function ExercisesScreen() {
@@ -53,7 +42,6 @@ export default function ExercisesScreen() {
   const [searchInput, setSearchInput] = useState(filters.search)
   const debouncedSearch = useDebouncedValue(searchInput, 150)
 
-  // Sync debounced search to store
   useEffect(() => {
     setSearch(debouncedSearch)
   }, [debouncedSearch, setSearch])
@@ -69,9 +57,9 @@ export default function ExercisesScreen() {
 
   if (isLoading) {
     return (
-      <SafeAreaView style={{ flex: 1, backgroundColor: '#000' }} edges={['top']}>
+      <SafeAreaView style={{ flex: 1, backgroundColor: colors.gray1 }} edges={['top']}>
         <YStack flex={1} alignItems="center" justifyContent="center">
-          <Spinner size="large" color="$color" />
+          <Spinner size="large" color={colors.gray11} />
         </YStack>
       </SafeAreaView>
     )
@@ -79,34 +67,35 @@ export default function ExercisesScreen() {
 
   if (error) {
     return (
-      <SafeAreaView style={{ flex: 1, backgroundColor: '#000' }} edges={['top']}>
-        <YStack flex={1} alignItems="center" justifyContent="center" gap="$3">
-          <Text color="$color" fontSize={16}>
-            {t('common.error')}
-          </Text>
-          <Button onPress={() => refetch()} accessibilityLabel={t('common.retry')}>
+      <SafeAreaView style={{ flex: 1, backgroundColor: colors.gray1 }} edges={['top']}>
+        <YStack flex={1} alignItems="center" justifyContent="center" gap={12}>
+          <AppText preset="body">{t('common.error')}</AppText>
+          <AppButton variant="secondary" onPress={() => refetch()} accessibilityLabel={t('common.retry')}>
             {t('common.retry')}
-          </Button>
+          </AppButton>
         </YStack>
       </SafeAreaView>
     )
   }
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#000' }} edges={['top']}>
-      <YStack flex={1} backgroundColor="$background">
+    <SafeAreaView style={{ flex: 1, backgroundColor: colors.gray1 }} edges={['top']}>
+      <YStack flex={1} backgroundColor={colors.gray1}>
+        <YStack paddingHorizontal={16} paddingTop={16} paddingBottom={8}>
+          <AppText fontSize={28} fontWeight="800" color={colors.gray12}>
+            {t('tabs.exercises')}
+          </AppText>
+        </YStack>
         <SearchBar value={searchInput} onChangeText={setSearchInput} />
-        <FilterChips
-          options={[...MUSCLE_GROUPS]}
-          selected={filters.muscleGroup}
-          onSelect={setMuscleGroup}
-          labelKey={(v) => t(`exercises.muscles.${v}`)}
-        />
-        <FilterChips
-          options={[...EQUIPMENT]}
-          selected={filters.equipment}
-          onSelect={setEquipment}
-          labelKey={(v) => t(`exercises.equipment.${v}`)}
+        <FilterButtons
+          muscleGroup={filters.muscleGroup}
+          equipment={filters.equipment}
+          onSelectMuscle={setMuscleGroup}
+          onSelectEquipment={setEquipment}
+          muscleOptions={[...MUSCLE_GROUPS]}
+          equipmentOptions={[...EQUIPMENT]}
+          muscleLabelKey={(v) => t(`exercises.muscles.${v}`)}
+          equipmentLabelKey={(v) => t(`exercises.equipment.${v}`)}
         />
         <FlatList
           data={filteredExercises}
@@ -135,11 +124,13 @@ export default function ExercisesScreen() {
             <RefreshControl
               refreshing={false}
               onRefresh={() => refetch()}
-              tintColor="#fff"
+              tintColor={colors.gray11}
             />
           }
           contentContainerStyle={
-            filteredExercises.length === 0 ? { flexGrow: 1 } : undefined
+            filteredExercises.length === 0
+              ? { flexGrow: 1 }
+              : { paddingHorizontal: spacing.screenPaddingH, gap: spacing.cardGap, paddingTop: 4, paddingBottom: 100 }
           }
         />
       </YStack>

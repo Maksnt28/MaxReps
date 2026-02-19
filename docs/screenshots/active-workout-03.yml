@@ -1,0 +1,70 @@
+source_app: "Fitbod"
+screen_type: "workout-overview"
+platform: "iOS"
+
+context: >
+  Workout overview screen for a "Chest, Back, Abs" session. Shows
+  three small anatomical muscle group thumbnails with 100% completion
+  indicators, an "Add an exercise" button, a warm-up section, and
+  exercise cards with thumbnails (Dumbbell Fly, Dumbbell Bench Press).
+  A superset section groups related exercises. "Start Workout" CTA
+  button at bottom right.
+
+elements:
+  - id: "muscle-group-thumbnails"
+    what: "Small anatomical diagrams showing targeted muscle groups"
+    like: >
+      The row of small muscle group illustrations at the top is
+      excellent. Each thumbnail highlights a specific muscle area
+      (chest, back, abs) with a percentage indicator below. It gives
+      an instant visual understanding of which body parts the workout
+      targets without taking up too much space.
+    apply_to_maxreps: >
+      Implement a compact row of muscle group indicators at the top
+      of workout and program overview screens. Use small stylized
+      body outline thumbnails with highlighted muscle areas and
+      optional intensity/volume indicators. Keep them small and
+      horizontally scrollable if needed. Use our Tamagui color tokens
+      to color-code each muscle group consistently.
+    priority: high
+
+  - id: "exercise-summary-row"
+    what: "Exercise card with photo, name, sets/reps/weight summary"
+    like: >
+      Each exercise shows its key parameters on one line below the
+      name: "4 sets • 15 reps • 12.5 lb". This dot-separated format
+      is very scannable and gives all essential info at a glance.
+    apply_to_maxreps: >
+      Use this compact summary format for exercise rows in program
+      and workout overview screens. Display: exercise name as primary
+      text, then "X sets • Y reps • Z kg" as secondary text. Use
+      dot separators for readability.
+    priority: medium
+
+  - id: "superset-grouping"
+    what: "Visual grouping of exercises into a superset block"
+    like: >
+      The superset section clearly groups related exercises together
+      with a label ("Superset") and round count ("4 ROUNDS"). Makes
+      the workout structure immediately understandable.
+    apply_to_maxreps: >
+      Support visual superset grouping in workout views. Use a
+      distinct container or indent to group superset exercises, with
+      a label and round count. This is a future feature but the UI
+      pattern should be considered in the card layout system design.
+    priority: low
+
+takeaway: >
+  The muscle group thumbnail row at the top is the standout element.
+  It solves the problem of showing workout targeting at a glance
+  without cluttering the exercise list. This is the best approach
+  seen so far for muscle visualization — small, compact, informative,
+  and not intrusive.
+
+avoid: >
+  The exercise photo thumbnails (actual photos of someone performing
+  the exercise) are large and take up significant vertical space.
+  For MaxReps, prefer compact illustrations or icons over real photos
+  in list views to save space and maintain a cleaner aesthetic. The
+  dark theme with red accents is specific to Fitbod's brand — do not
+  replicate this color scheme.

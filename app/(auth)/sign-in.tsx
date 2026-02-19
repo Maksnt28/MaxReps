@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react'
 import { Platform } from 'react-native'
-import { YStack, XStack, Text, Button, Spinner, Theme } from 'tamagui'
+import { YStack, XStack, Spinner, Theme, Button } from 'tamagui'
 import { useTranslation } from 'react-i18next'
 import Ionicons from '@expo/vector-icons/Ionicons'
 import * as AppleAuthentication from 'expo-apple-authentication'
 import { signInWithGoogle, signInWithApple, type AuthResult } from '@/lib/auth'
+import { AppText } from '@/components/ui/AppText'
+import { colors } from '@/lib/theme'
 
 export default function SignInScreen() {
   const { t } = useTranslation()
@@ -32,8 +34,6 @@ export default function SignInScreen() {
     if (result.type === 'error') {
       setError(result.message)
     }
-    // 'success' → onAuthStateChange in root layout handles navigation
-    // 'cancelled' → stay on screen, no message
 
     setLoading(null)
   }
@@ -43,16 +43,16 @@ export default function SignInScreen() {
       flex={1}
       justifyContent="center"
       alignItems="center"
-      backgroundColor="$background"
-      paddingHorizontal="$6"
-      gap="$4"
+      backgroundColor={colors.gray1}
+      paddingHorizontal={24}
+      gap={16}
     >
-      <Text color="$color" fontSize={36} fontWeight="800">
+      <AppText preset="pageTitle" color={colors.accent} fontSize={36}>
         MaxReps
-      </Text>
-      <Text color="$gray10" fontSize={16} marginBottom="$8">
+      </AppText>
+      <AppText preset="body" color={colors.gray8} marginBottom={32}>
         {t('auth.tagline')}
-      </Text>
+      </AppText>
 
       <Theme name="light">
         <Button
@@ -94,15 +94,15 @@ export default function SignInScreen() {
 
       {error && (
         <XStack
-          backgroundColor="$red2"
-          borderRadius="$3"
-          paddingHorizontal="$4"
-          paddingVertical="$3"
+          backgroundColor="rgba(255,90,106,0.1)"
+          borderRadius={12}
+          paddingHorizontal={16}
+          paddingVertical={12}
           width="100%"
         >
-          <Text color="$red10" fontSize={14}>
+          <AppText preset="caption" color={colors.regression}>
             {error}
-          </Text>
+          </AppText>
         </XStack>
       )}
     </YStack>

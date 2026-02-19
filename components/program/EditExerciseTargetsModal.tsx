@@ -1,8 +1,11 @@
 import { useState } from 'react'
-import { Sheet, YStack, XStack, Text, Input, Button } from 'tamagui'
+import { Sheet, YStack, XStack, Input } from 'tamagui'
 import { useTranslation } from 'react-i18next'
 
 import type { ProgramExerciseWithExercise } from '@/hooks/usePrograms'
+import { AppText } from '@/components/ui/AppText'
+import { AppButton } from '@/components/ui/AppButton'
+import { colors } from '@/lib/theme'
 
 interface EditExerciseTargetsModalProps {
   exercise: ProgramExerciseWithExercise | null
@@ -82,86 +85,115 @@ export function EditExerciseTargetsModal({
       dismissOnSnapToBottom
     >
       <Sheet.Overlay />
-      <Sheet.Frame padding="$4" gap="$3">
-        <Text color="$color" fontSize={18} fontWeight="600">
+      <Sheet.Frame
+        padding={16}
+        gap={12}
+        backgroundColor={colors.gray2}
+        borderTopLeftRadius={16}
+        borderTopRightRadius={16}
+      >
+        <AppText preset="pageTitle">
           {t('programs.editTargets')}
-        </Text>
+        </AppText>
 
-        <XStack gap="$3">
-          <YStack flex={1} gap="$1">
-            <Text color="$gray10" fontSize={13}>{t('programs.sets')}</Text>
+        <XStack gap={12}>
+          <YStack flex={1} gap={4}>
+            <AppText preset="label" color={colors.gray7}>{t('programs.sets')}</AppText>
             <Input
               value={setsTarget}
               onChangeText={setSetsTarget}
               keyboardType="number-pad"
+              backgroundColor={colors.gray3}
+              borderWidth={1}
+              borderColor={colors.gray5}
+              color={colors.gray11}
               accessibilityLabel={t('programs.sets')}
             />
           </YStack>
-          <YStack flex={1} gap="$1">
-            <Text color="$gray10" fontSize={13}>{t('programs.reps')}</Text>
+          <YStack flex={1} gap={4}>
+            <AppText preset="label" color={colors.gray7}>{t('programs.reps')}</AppText>
             <Input
               value={repsTarget}
               onChangeText={setRepsTarget}
               keyboardType="number-pad"
+              backgroundColor={colors.gray3}
+              borderWidth={1}
+              borderColor={colors.gray5}
+              color={colors.gray11}
               accessibilityLabel={t('programs.reps')}
             />
           </YStack>
         </XStack>
 
-        <XStack gap="$3">
-          <YStack flex={1} gap="$1">
-            <Text color="$gray10" fontSize={13}>{t('programs.targetRPE')}</Text>
+        <XStack gap={12}>
+          <YStack flex={1} gap={4}>
+            <AppText preset="label" color={colors.gray7}>{t('programs.targetRPE')}</AppText>
             <Input
               value={rpeTarget}
               onChangeText={setRpeTarget}
               keyboardType="number-pad"
               placeholder="—"
+              backgroundColor={colors.gray3}
+              borderWidth={1}
+              borderColor={colors.gray5}
+              color={colors.gray11}
+              placeholderTextColor={colors.gray6 as any}
               accessibilityLabel={t('programs.targetRPE')}
             />
           </YStack>
-          <YStack flex={1} gap="$1">
-            <Text color="$gray10" fontSize={13}>{t('programs.restSeconds')}</Text>
+          <YStack flex={1} gap={4}>
+            <AppText preset="label" color={colors.gray7}>{t('programs.restSeconds')}</AppText>
             <Input
               value={restSeconds}
               onChangeText={setRestSeconds}
               keyboardType="number-pad"
               placeholder="—"
+              backgroundColor={colors.gray3}
+              borderWidth={1}
+              borderColor={colors.gray5}
+              color={colors.gray11}
+              placeholderTextColor={colors.gray6 as any}
               accessibilityLabel={t('programs.restSeconds')}
             />
           </YStack>
         </XStack>
 
-        <YStack gap="$1">
-          <Text color="$gray10" fontSize={13}>{t('workout.notes')}</Text>
+        <YStack gap={4}>
+          <AppText preset="label" color={colors.gray7}>{t('workout.notes')}</AppText>
           <Input
             value={notes}
             onChangeText={setNotes}
             placeholder="—"
+            backgroundColor={colors.gray3}
+            borderWidth={1}
+            borderColor={colors.gray5}
+            color={colors.gray11}
+            placeholderTextColor={colors.gray6 as any}
             accessibilityLabel={t('workout.notes')}
           />
         </YStack>
 
-        <XStack gap="$3" marginTop="$2">
-          <Button
-            flex={1}
-            variant="outlined"
-            onPress={onClose}
-            accessibilityLabel={t('common.cancel')}
-          >
-            {t('common.cancel')}
-          </Button>
-          <Button
-            flex={1}
-            backgroundColor="$color"
-            onPress={handleSave}
-            disabled={!isValid || isPending}
-            opacity={!isValid || isPending ? 0.5 : 1}
-            accessibilityLabel={t('common.save')}
-          >
-            <Text color="$background" fontWeight="600">
+        <XStack gap={12} marginTop={8}>
+          <YStack flex={1}>
+            <AppButton
+              variant="secondary"
+              onPress={onClose}
+              accessibilityLabel={t('common.cancel')}
+            >
+              {t('common.cancel')}
+            </AppButton>
+          </YStack>
+          <YStack flex={1}>
+            <AppButton
+              variant="primary"
+              onPress={handleSave}
+              disabled={!isValid || isPending}
+              loading={isPending}
+              accessibilityLabel={t('common.save')}
+            >
               {t('common.save')}
-            </Text>
-          </Button>
+            </AppButton>
+          </YStack>
         </XStack>
       </Sheet.Frame>
     </Sheet>

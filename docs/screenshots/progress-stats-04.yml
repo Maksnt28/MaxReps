@@ -1,0 +1,44 @@
+source_app: "Spotify for Creators"
+screen_type: "progress-stats"
+platform: "iOS"
+
+context: >
+  Analytics overview screen with tab navigation (Overview, Discovery,
+  Audience), time range pills (7 Days, 30 Days, 90 Days), summary
+  stat cards in a horizontal row, a large key metric in accent color,
+  and an area chart with dual data series (Starts as dashed line,
+  Streams as solid line with filled area). Interactive data point
+  with date tooltip on touch.
+
+elements:
+  - id: "area-chart"
+    what: "Dual-series area chart with interactive tooltip"
+    like: >
+      The chart is visually elegant — a smooth area fill with gradient
+      opacity under the primary line, a secondary dashed line for
+      comparison, and an interactive touch point that shows the exact
+      date and value. The chart feels premium with its smooth curves
+      and subtle gradient fill. The legend below is simple and clear.
+    apply_to_maxreps: >
+      Use this chart style for MaxReps progression graphs. Smooth
+      line with gradient area fill in accent color for the primary
+      metric (e.g. weight lifted, estimated 1RM). Optional dashed
+      line for comparison data (e.g. previous period, target).
+      Interactive touch: show exact date, value, and exercise details
+      on tap. Include a simple legend when multiple series are shown.
+      Use a charting library that supports smooth curves and gradient
+      fills (e.g. react-native-chart-kit or victory-native).
+    priority: high
+
+takeaway: >
+  The chart presentation is the sole focus here. The smooth area
+  chart with gradient fill, interactive data points, and dual-series
+  comparison is the gold standard for MaxReps progression
+  visualization. This level of chart polish elevates the entire
+  stats experience.
+
+avoid: >
+  The summary stat cards at the top are horizontally scrollable and
+  partially cut off on the left — ensure MaxReps stat cards are
+  fully visible without horizontal scrolling. The purple accent color
+  is Spotify-specific.

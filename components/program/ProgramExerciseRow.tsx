@@ -1,11 +1,14 @@
 import { Pressable, TouchableOpacity } from 'react-native'
-import { XStack, YStack, Text } from 'tamagui'
+import { XStack, YStack } from 'tamagui'
 import { useTranslation } from 'react-i18next'
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { useReorderableDrag, useIsActive } from 'react-native-reorderable-list'
 
 import type { ProgramExerciseWithExercise } from '@/hooks/usePrograms'
 import { getLocalizedExercise } from '@/lib/exercises'
+import { AppCard } from '@/components/ui/AppCard'
+import { AppText } from '@/components/ui/AppText'
+import { colors } from '@/lib/theme'
 
 interface ProgramExerciseRowProps {
   exercise: ProgramExerciseWithExercise
@@ -35,57 +38,54 @@ export function ProgramExerciseRow({
   }
 
   return (
-    <Pressable
-      onPress={onPress}
-      accessibilityLabel={`${name}, ${targetsText}`}
-      accessibilityRole="button"
+    <YStack
+      paddingHorizontal={12}
+      paddingVertical={4}
+      opacity={isActive ? 0.8 : 1}
     >
-      <XStack
-        paddingVertical="$3"
-        paddingHorizontal="$3"
-        gap="$2"
-        alignItems="center"
-        borderBottomWidth={1}
-        borderBottomColor="$borderColor"
-        opacity={isActive ? 0.8 : 1}
-        backgroundColor={isActive ? '$backgroundHover' : undefined}
+      <AppCard
+        onPress={onPress}
+        accessibilityLabel={`${name}, ${targetsText}`}
+        accessibilityRole="button"
+        variant="interactive"
+        compact
       >
-        <Pressable
-          onLongPress={drag}
-          delayLongPress={150}
-          accessibilityLabel={t('programs.reorderExercise')}
-          hitSlop={4}
-        >
-          <Ionicons name="reorder-three-outline" size={24} color="#888" />
-        </Pressable>
-        <YStack gap="$0.5" flex={1}>
-          <Text color="$color" fontSize={15} fontWeight="500" numberOfLines={1}>
-            {name}
-          </Text>
-          <XStack gap="$2" alignItems="center">
-            <Text color="$gray10" fontSize={13} fontWeight="600">
-              {targetsText}
-            </Text>
-            {extras.length > 0 && (
-              <>
-                <Text color="$gray10" fontSize={10}>
-                  {'\u00B7'}
-                </Text>
-                <Text color="$gray10" fontSize={12}>
-                  {extras.join(' \u00B7 ')}
-                </Text>
-              </>
-            )}
-          </XStack>
-        </YStack>
-        <TouchableOpacity
-          onPress={onRemove}
-          accessibilityLabel={t('programs.removeExercise')}
-          hitSlop={6}
-        >
-          <Ionicons name="close-circle-outline" size={20} color="#888" />
-        </TouchableOpacity>
-      </XStack>
-    </Pressable>
+        <XStack gap={8} alignItems="center">
+          <Pressable
+            onLongPress={drag}
+            delayLongPress={150}
+            accessibilityLabel={t('programs.reorderExercise')}
+            hitSlop={4}
+          >
+            <Ionicons name="reorder-three-outline" size={24} color={colors.gray6} />
+          </Pressable>
+          <YStack gap={2} flex={1}>
+            <AppText preset="exerciseName" numberOfLines={1}>
+              {name}
+            </AppText>
+            <XStack gap={8} alignItems="center">
+              <AppText preset="lastSession" color={colors.gray8}>
+                {targetsText}
+              </AppText>
+              {extras.length > 0 && (
+                <>
+                  <AppText preset="caption" color={colors.gray6}>·</AppText>
+                  <AppText preset="caption" color={colors.gray8}>
+                    {extras.join(' · ')}
+                  </AppText>
+                </>
+              )}
+            </XStack>
+          </YStack>
+          <TouchableOpacity
+            onPress={onRemove}
+            accessibilityLabel={t('programs.removeExercise')}
+            hitSlop={6}
+          >
+            <Ionicons name="close-circle-outline" size={20} color={colors.gray6} />
+          </TouchableOpacity>
+        </XStack>
+      </AppCard>
+    </YStack>
   )
 }

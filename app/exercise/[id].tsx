@@ -1,46 +1,37 @@
-import { ScrollView } from 'react-native'
-import { YStack, XStack, Text, Spinner } from 'tamagui'
-import { useLocalSearchParams, Stack } from 'expo-router'
+import { ScrollView, View, TouchableOpacity, StyleSheet } from 'react-native'
+import { YStack, XStack, Spinner } from 'tamagui'
+import { useLocalSearchParams, useRouter } from 'expo-router'
 import { useTranslation } from 'react-i18next'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import Ionicons from '@expo/vector-icons/Ionicons'
 
 import { useExercise } from '@/hooks/useExercises'
 import { getLocalizedExercise } from '@/lib/exercises'
-
-function Badge({ label }: { label: string }) {
-  return (
-    <XStack
-      backgroundColor="$backgroundHover"
-      paddingHorizontal="$2.5"
-      paddingVertical="$1.5"
-      borderRadius="$3"
-    >
-      <Text color="$color" fontSize={13} fontWeight="500">
-        {label}
-      </Text>
-    </XStack>
-  )
-}
+import { AppText } from '@/components/ui/AppText'
+import { Badge } from '@/components/ui/Badge'
+import { colors, headerButtonStyles, headerButtonIcon } from '@/lib/theme'
 
 export default function ExerciseDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>()
   const { t, i18n } = useTranslation()
+  const router = useRouter()
+  const insets = useSafeAreaInsets()
   const locale = i18n.language
 
   const { data: exercise, isLoading, error } = useExercise(id)
 
   if (isLoading) {
     return (
-      <YStack flex={1} alignItems="center" justifyContent="center" backgroundColor="$background">
-        <Spinner size="large" color="$color" />
+      <YStack flex={1} alignItems="center" justifyContent="center" backgroundColor={colors.gray1}>
+        <Spinner size="large" color={colors.gray11} />
       </YStack>
     )
   }
 
   if (error || !exercise) {
     return (
-      <YStack flex={1} alignItems="center" justifyContent="center" backgroundColor="$background">
-        <Text color="$color">{t('common.error')}</Text>
+      <YStack flex={1} alignItems="center" justifyContent="center" backgroundColor={colors.gray1}>
+        <AppText preset="body">{t('common.error')}</AppText>
       </YStack>
     )
   }
@@ -53,72 +44,94 @@ export default function ExerciseDetailScreen() {
   const secondaryMuscles = exercise.muscle_secondary ?? []
 
   return (
-    <>
-      <Stack.Screen options={{ headerTitle: name }} />
+    <View style={[styles.container, { paddingTop: insets.top }]}>
+      {/* Custom header */}
+      <View style={styles.header}>
+        <TouchableOpacity
+          onPress={() => router.back()}
+          accessibilityLabel={t('common.goBack')}
+          hitSlop={8}
+          style={headerButtonStyles.navButton}
+        >
+          <Ionicons name="chevron-back" size={headerButtonIcon.size} color={headerButtonIcon.color} />
+        </TouchableOpacity>
+      </View>
+
       <ScrollView
-        style={{ flex: 1, backgroundColor: '#000' }}
+        style={{ flex: 1 }}
         contentContainerStyle={{ paddingBottom: 40 }}
       >
-        <YStack padding="$4" gap="$5">
+        <YStack padding={16} gap={20}>
           {/* Animation placeholder */}
-          <YStack alignItems="center" paddingVertical="$6">
+          <YStack alignItems="center" paddingVertical={24}>
             <YStack
               width={100}
               height={100}
-              borderRadius="$6"
-              backgroundColor="$backgroundHover"
+              borderRadius={24}
+              backgroundColor={colors.gray3}
               alignItems="center"
               justifyContent="center"
             >
-              <Ionicons name="body-outline" size={48} color="#888" />
+              <Ionicons name="body-outline" size={48} color={colors.gray7} />
             </YStack>
           </YStack>
 
           {/* Exercise name */}
-          <Text
-            color="$color"
-            fontSize={26}
-            fontWeight="700"
+          <AppText
+            preset="pageTitle"
             textAlign="center"
             accessibilityRole="header"
           >
             {name}
-          </Text>
+          </AppText>
 
           {/* Badge row */}
-          <XStack justifyContent="center" gap="$2" flexWrap="wrap">
-            <Badge label={muscleLabel} />
-            <Badge label={equipmentLabel} />
-            <Badge label={difficultyLabel} />
+          <XStack justifyContent="center" gap={8} flexWrap="wrap">
+            <Badge variant="label">{muscleLabel}</Badge>
+            <Badge variant="label">{equipmentLabel}</Badge>
+            <Badge variant="label">{difficultyLabel}</Badge>
           </XStack>
 
           {/* Secondary muscles */}
           {secondaryMuscles.length > 0 && (
-            <YStack gap="$2">
-              <Text color="$gray10" fontSize={14} fontWeight="600" textTransform="uppercase">
+            <YStack gap={8}>
+              <AppText preset="label" color={colors.gray7} textTransform="uppercase">
                 {t('exercises.secondaryMuscles')}
-              </Text>
-              <Text color="$color" fontSize={15}>
+              </AppText>
+              <AppText preset="body">
                 {secondaryMuscles
                   .map((m) => t(`exercises.muscles.${m}`))
                   .join(', ')}
-              </Text>
+              </AppText>
             </YStack>
           )}
 
           {/* Form cues */}
           {cues && (
-            <YStack gap="$2">
-              <Text color="$gray10" fontSize={14} fontWeight="600" textTransform="uppercase">
+            <YStack gap={8}>
+              <AppText preset="label" color={colors.gray7} textTransform="uppercase">
                 {t('exercises.formCues')}
-              </Text>
-              <Text color="$color" fontSize={15} lineHeight={22}>
+              </AppText>
+              <AppText preset="body" lineHeight={22}>
                 {cues}
-              </Text>
+              </AppText>
             </YStack>
           )}
         </YStack>
       </ScrollView>
-    </>
+    </View>
   )
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: colors.gray1,
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    height: 52,
+    paddingHorizontal: 12,
+  },
+})

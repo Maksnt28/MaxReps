@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 
 import { useWorkoutStore } from '@/stores/useWorkoutStore'
 import { useFinishWorkout, useDiscardWorkout } from '@/hooks/useWorkoutMutations'
+import { hapticHeavy } from '@/lib/animations'
 import { StartWorkoutButton } from '@/components/workout/StartWorkoutButton'
 import { ActiveWorkoutScreen } from '@/components/workout/ActiveWorkoutScreen'
 import { WorkoutSummary } from '@/components/workout/WorkoutSummary'
@@ -76,6 +77,7 @@ export default function WorkoutScreen() {
                 .filter((s) => !s.isWarmup)
                 .reduce((sum, s) => sum + (s.weightKg ?? 0) * (s.reps ?? 0), 0)
 
+              hapticHeavy()
               setSummary({
                 durationSeconds: result.durationSeconds,
                 exerciseCount: exercises.length,

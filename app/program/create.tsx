@@ -1,13 +1,21 @@
 import { useState } from 'react'
-import { YStack, Text, Input, Button } from 'tamagui'
+import { View, TouchableOpacity, StyleSheet } from 'react-native'
+import { YStack } from 'tamagui'
 import { useTranslation } from 'react-i18next'
 import { useRouter } from 'expo-router'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import Ionicons from '@expo/vector-icons/Ionicons'
 
 import { useCreateProgram } from '@/hooks/usePrograms'
+import { AppText } from '@/components/ui/AppText'
+import { AppInput } from '@/components/ui/AppInput'
+import { AppButton } from '@/components/ui/AppButton'
+import { colors, headerButtonStyles, headerButtonIcon } from '@/lib/theme'
 
 export default function CreateProgramScreen() {
   const { t } = useTranslation()
   const router = useRouter()
+  const insets = useSafeAreaInsets()
   const createProgram = useCreateProgram()
 
   const [name, setName] = useState('')
@@ -21,16 +29,26 @@ export default function CreateProgramScreen() {
   }
 
   return (
-    <YStack flex={1} backgroundColor="$background" padding="$4" gap="$4">
-      <Text color="$color" fontSize={24} fontWeight="700">
-        {t('programs.create')}
-      </Text>
+    <View style={[styles.container, { paddingTop: insets.top }]}>
+      {/* Custom header */}
+      <View style={styles.header}>
+        <TouchableOpacity
+          onPress={() => router.back()}
+          accessibilityLabel={t('common.goBack')}
+          hitSlop={8}
+          style={headerButtonStyles.navButton}
+        >
+          <Ionicons name="chevron-back" size={headerButtonIcon.size} color={headerButtonIcon.color} />
+        </TouchableOpacity>
+      </View>
 
-      <YStack gap="$2">
-        <Text color="$gray10" fontSize={14}>
-          {t('programs.name')}
-        </Text>
-        <Input
+      <YStack flex={1} padding={16} gap={16}>
+        <AppText preset="pageTitle">
+          {t('programs.create')}
+        </AppText>
+
+        <AppInput
+          label={t('programs.name')}
           value={name}
           onChangeText={setName}
           placeholder={t('programs.namePlaceholder')}
@@ -38,19 +56,30 @@ export default function CreateProgramScreen() {
           maxLength={100}
           accessibilityLabel={t('programs.name')}
         />
-      </YStack>
 
-      <Button
-        backgroundColor="$color"
-        onPress={handleCreate}
-        disabled={!isValid || createProgram.isPending}
-        opacity={!isValid || createProgram.isPending ? 0.5 : 1}
-        accessibilityLabel={t('programs.create')}
-      >
-        <Text color="$background" fontWeight="600">
+        <AppButton
+          variant="primary"
+          onPress={handleCreate}
+          disabled={!isValid || createProgram.isPending}
+          loading={createProgram.isPending}
+          accessibilityLabel={t('programs.create')}
+        >
           {t('programs.create')}
-        </Text>
-      </Button>
-    </YStack>
+        </AppButton>
+      </YStack>
+    </View>
   )
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: colors.gray1,
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    height: 52,
+    paddingHorizontal: 12,
+  },
+})

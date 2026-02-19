@@ -162,59 +162,78 @@ radius:
 # =============================================================================
 # TYPOGRAPHY SCALE
 # =============================================================================
+# Original reference sizes from spec in comments. Implemented values below
+# are iOS-scaled (~1.3x) for readability on device.
+# Font: Inter (Regular 400, Medium 500, SemiBold 600, Bold 700, ExtraBold 800)
 typography:
+  # Tier 1 — Primary data
   pageTitle:
-    fontSize: 16
+    fontSize: 20              # ref: 16
     fontWeight: 800
-  sessionDuration:
-    fontSize: 12
+    lineHeight: 26
+  setWeight:
+    fontSize: 16              # ref: 13
     fontWeight: 700
     fontVariantNumeric: "tabular-nums"
-  exerciseName:
-    fontSize: 13
+  timerCountdown:
+    fontSize: 18              # ref: 14
     fontWeight: 700
-  setWeight:
-    fontSize: 13
+    fontVariantNumeric: "tabular-nums"
+  ctaButton:
+    fontSize: 16              # ref: 11.5
+    fontWeight: 700
+
+  # Tier 2 — Secondary
+  exerciseName:
+    fontSize: 15              # ref: 13
+    fontWeight: 700
+  sessionDuration:
+    fontSize: 14              # ref: 12
     fontWeight: 700
     fontVariantNumeric: "tabular-nums"
   setReps:
-    fontSize: 11
+    fontSize: 14              # ref: 11
     fontWeight: 600
     fontVariantNumeric: "tabular-nums"
-  timerCountdown:
-    fontSize: 14
-    fontWeight: 700
+
+  # Tier 3 — Tertiary
+  lastSession:
+    fontSize: 12              # ref: 8
+    fontWeight: 600
     fontVariantNumeric: "tabular-nums"
   delta:
-    fontSize: 8
+    fontSize: 11              # ref: 8
     fontWeight: 700
+  ghostValue:
+    fontSize: 12              # ref: 8
+    fontWeight: 400
+
+  # Tier 4 — Labels & chips
+  columnHeader:
+    fontSize: 10              # ref: 7
+    fontWeight: 400
+    textTransform: "uppercase"
   chipLabel:
-    fontSize: 7
+    fontSize: 10              # ref: 7
     fontWeight: 600
     textTransform: "uppercase"
     letterSpacing: 0.4
-  columnHeader:
-    fontSize: 7
+
+  # General presets (not in original spec)
+  body:
+    fontSize: 16
     fontWeight: 400
-    textTransform: "uppercase"
-  lastSession:
-    fontSize: 8
-    fontWeight: 600
-    fontVariantNumeric: "tabular-nums"
-  ghostValue:
-    fontSize: 8
+  caption:
+    fontSize: 13
     fontWeight: 400
-  ctaButton:
-    fontSize: 11.5
-    fontWeight: 700
-  momentumLabel:
-    fontSize: 8
+  label:
+    fontSize: 11
     fontWeight: 600
     textTransform: "uppercase"
-    letterSpacing: 0.8
-  momentumValue:
-    fontSize: 9
-    fontWeight: 700
+
+  # Deferred — momentum bar feature
+  # momentumLabel: { fontSize: 8, fontWeight: 600, textTransform: uppercase, letterSpacing: 0.8 }
+  # momentumValue: { fontSize: 9, fontWeight: 700 }
 
 # =============================================================================
 # MUSCLE GROUP COLORS (TBD — needs dedicated session)

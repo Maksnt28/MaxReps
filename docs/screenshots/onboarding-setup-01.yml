@@ -1,0 +1,74 @@
+source_app: "How We Feel"
+screen_type: "onboarding-setup"
+platform: "iOS"
+
+context: >
+  Onboarding/check-in screen with multiple question sections stacked
+  vertically. Each section has a question label, then selectable chip
+  options in a wrap layout. Some chips are selected (highlighted with
+  accent border/fill). Sections are separated by thin dividers.
+  Numeric input fields for exercise and sleep duration at the bottom.
+  A "Save" CTA button at the bottom of the screen.
+
+elements:
+  - id: "multi-section-layout"
+    what: "Vertically stacked question sections with chip selections"
+    like: >
+      The presentation flow is well-structured — each question occupies
+      its own section, separated by dividers, with selectable options
+      displayed as chips in a wrapping layout. The progression from
+      top to bottom feels natural. Multiple questions fit on one
+      screen without scrolling, which keeps the onboarding feeling
+      fast and lightweight.
+    apply_to_maxreps: >
+      Use this multi-section layout pattern for MaxReps onboarding
+      screens that collect multiple data points. Stack question sections
+      vertically with clear dividers between them. Use selectable chips
+      for categorical choices (e.g. training goals, experience level,
+      available equipment). Keep sections compact enough to fit 3-4
+      questions per screen.
+    priority: high
+
+  - id: "selectable-chips"
+    what: "Wrap-layout chips with selected/unselected states"
+    like: >
+      The chips wrap naturally across multiple lines and have clear
+      visual states — selected items are highlighted while unselected
+      remain muted. The "+" chip at the end allows adding custom
+      options. The interaction model is simple: tap to toggle.
+    apply_to_maxreps: >
+      Implement selectable chip components for onboarding choices.
+      Use a flex-wrap layout so chips flow naturally across lines.
+      Define clear selected (accent border + fill) and unselected
+      (muted border, no fill) states using Tamagui tokens. Include
+      a "+" chip for user-defined additions where relevant.
+    priority: high
+
+  - id: "numeric-input"
+    what: "Compact numeric input with unit label"
+    like: >
+      The numeric inputs (60 minutes, 8 hours) are compact inline
+      fields with the unit displayed as a label next to the input.
+      Clean and fast to interact with — no modals or pickers needed.
+    apply_to_maxreps: >
+      Use compact inline numeric inputs for onboarding data like
+      training frequency, session duration, years of experience.
+      Display the unit label next to the input field. Keep inputs
+      minimal — small bordered box with the number, unit as adjacent
+      text.
+    priority: medium
+
+takeaway: >
+  The multi-section, single-screen approach to onboarding is the key
+  pattern here. Collecting several data points on one screen with
+  clear visual separation keeps the flow fast. The chip-based
+  selection is intuitive and space-efficient for categorical choices.
+
+avoid: >
+  The font styling is weak — section titles lack visual hierarchy
+  and don't stand out enough from the option chips. For MaxReps,
+  ensure question/section titles have strong typographic weight
+  (larger size, bolder weight) to clearly separate them from the
+  selectable options. The chip texture and border style (thin gold
+  outlines) feels dated — use our Tamagui design tokens for a more
+  modern chip treatment.

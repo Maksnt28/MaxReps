@@ -1,0 +1,68 @@
+source_app: "Bevel"
+screen_type: "workout-template-editor"
+platform: "iOS"
+
+context: >
+  Workout template creation/editing screen for a "Full Body Workout"
+  with 10 exercises and 25 sets. Two exercises visible: Ab Roller
+  (timed sets at 0:30) and Squat (rep-based sets at 10 reps). Each
+  exercise displayed as a card with inline set rows, plus options
+  for superset and adding sets.
+
+elements:
+  - id: "exercise-card"
+    what: "Card-based exercise block with inline set editing"
+    like: >
+      Each exercise lives in its own card container with clear
+      boundaries. The layout is clean and easy to manipulate — exercise
+      name and category at the top, then set rows below. The card
+      pattern makes it obvious where one exercise ends and the next
+      begins.
+    apply_to_maxreps: >
+      Use card containers for each exercise block in workout creation
+      and editing views. Each card should have: exercise header (name +
+      category), inline set rows, and action buttons (superset, add set)
+      at the bottom of the card. Use Tamagui card tokens for consistent
+      styling.
+    priority: high
+
+  - id: "set-row-layout"
+    what: "Horizontal set row with weight and reps/time fields"
+    like: >
+      Each set is a single horizontal row with clear input fields for
+      weight (kg) and reps or time. The layout is intuitive and easy
+      to edit inline. The fire icon for set status and the minus button
+      for deletion are well-placed.
+    apply_to_maxreps: >
+      Adopt this horizontal set row structure for workout editing.
+      Each row: status indicator, weight input with unit label, reps
+      or time input with unit label, delete button. Support both
+      rep-based and time-based set types within the same view.
+    priority: high
+
+  - id: "workout-header"
+    what: "Workout title with exercise/set count summary"
+    like: >
+      The header shows the workout name with a subtitle summarizing
+      total exercises and sets (e.g. "10 exercises, 25 sets"). Gives
+      an instant overview of workout volume without scrolling.
+    apply_to_maxreps: >
+      Include an exercise and set count summary below the workout
+      title in template editing views. Update this count dynamically
+      as exercises and sets are added or removed.
+    priority: medium
+
+takeaway: >
+  The card-based exercise layout is clear and easy to interact with.
+  The inline set editing with horizontal rows is the right pattern
+  for workout creation. However, this screen lacks important
+  information for a complete training overview — there's no indication
+  of target muscle groups, rest periods, or exercise notes that would
+  help the user understand the full picture of their workout plan.
+
+avoid: >
+  The small exercise thumbnail images (Ab Roller, Squat illustrations)
+  don't add much value and feel like wasted space. For MaxReps, avoid
+  inline exercise thumbnails in the editing view — instead, indicate
+  muscle groups through colored tags or chips which are more space-
+  efficient and informative.

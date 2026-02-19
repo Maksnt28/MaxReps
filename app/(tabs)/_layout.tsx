@@ -1,29 +1,31 @@
 import { Tabs } from 'expo-router'
 import { useTranslation } from 'react-i18next'
 import Ionicons from '@expo/vector-icons/Ionicons'
+import { colors } from '@/lib/theme'
+import { CustomTabBar } from '@/components/ui/CustomTabBar'
 
 export default function TabLayout() {
   const { t } = useTranslation()
 
   return (
     <Tabs
+      tabBar={(props) => <CustomTabBar {...props} />}
       screenOptions={{
-        tabBarActiveTintColor: '#fff',
-        tabBarInactiveTintColor: '#888',
-        tabBarStyle: {
-          backgroundColor: '#111',
-          borderTopColor: '#222',
-        },
         headerStyle: {
-          backgroundColor: '#111',
+          backgroundColor: colors.gray1,
         },
-        headerTintColor: '#fff',
+        headerTintColor: colors.gray12,
+        headerTitleStyle: {
+          fontFamily: 'Inter-Bold',
+          fontSize: 17,
+        },
       }}
     >
       <Tabs.Screen
         name="index"
         options={{
           title: t('tabs.home'),
+          headerShown: false,
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="home-outline" size={size} color={color} />
           ),
@@ -34,6 +36,7 @@ export default function TabLayout() {
         name="workout"
         options={{
           title: t('tabs.workout'),
+          headerShown: false,
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="barbell-outline" size={size} color={color} />
           ),
@@ -66,6 +69,7 @@ export default function TabLayout() {
         name="profile"
         options={{
           title: t('tabs.profile'),
+          headerShown: false,
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="person-outline" size={size} color={color} />
           ),

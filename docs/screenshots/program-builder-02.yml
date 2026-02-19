@@ -1,0 +1,44 @@
+source_app: "Gymshark Training and Fitness"
+screen_type: "program-builder"
+platform: "iOS"
+
+context: >
+  New workout creation screen. Shows an exercise card for "Weighted
+  Planks" with a brand logo, a table-style set editor (SET, REPS,
+  WEIGHT columns), an "Add Set" button, and a "Create Superset"
+  option. A drag handle at the top of the card suggests reordering.
+  Two action buttons at the bottom: "Add Exercises" and "Save Workout".
+
+elements:
+  - id: "workout-builder-structure"
+    what: "Exercise card with table-style set editor and action buttons"
+    like: >
+      The overall structure is a useful reference: exercise displayed
+      as a card with a drag handle for reordering, set data presented
+      in a table format with column headers (SET, REPS, WEIGHT), and
+      dual action buttons at the bottom for adding exercises or saving.
+      The "Create Superset" option is positioned at the card level.
+    apply_to_maxreps: >
+      Use this as a structural reference for the MaxReps program
+      builder. Key patterns to note: drag handle at top of exercise
+      cards for reordering, tabular set layout with clear column
+      headers, "Add Set" button within each exercise card, superset
+      creation option at card level, and dual bottom actions (add
+      more vs save). Adapt the visual treatment to match MaxReps
+      design tokens.
+    priority: medium
+
+takeaway: >
+  A baseline reference for workout/program builder screens. The
+  structure is functional but the visual execution is not inspiring.
+  The key structural elements (drag handle, tabular sets, card-level
+  actions, bottom dual CTAs) are worth noting for MaxReps program
+  builder architecture.
+
+avoid: >
+  The typography is unappealing — heavy uppercase throughout feels
+  rigid and unfriendly. The dark input fields within the dark card
+  create poor contrast and readability. The overall aesthetic is
+  too dark and monochromatic. For MaxReps, ensure input fields have
+  clear contrast against card backgrounds, and use a mix of font
+  weights for better hierarchy rather than relying on uppercase.

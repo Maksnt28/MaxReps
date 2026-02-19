@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
-import { Alert } from 'react-native'
-import { YStack, XStack, Text, Button } from 'tamagui'
+import { Alert, Pressable } from 'react-native'
+import { YStack, XStack } from 'tamagui'
 import { useTranslation } from 'react-i18next'
 import Ionicons from '@expo/vector-icons/Ionicons'
 
@@ -10,6 +10,10 @@ import { useWorkoutStore } from '@/stores/useWorkoutStore'
 import { useOverloadSuggestion } from '@/hooks/useOverloadSuggestion'
 import { getLocalizedExercise } from '@/lib/exercises'
 import { getWeightIncrement } from '@/lib/overload'
+import { AppCard } from '@/components/ui/AppCard'
+import { AppText } from '@/components/ui/AppText'
+import { Divider } from '@/components/ui/Divider'
+import { colors } from '@/lib/theme'
 import { SetRow } from './SetRow'
 
 interface ExerciseCardProps {
@@ -60,9 +64,30 @@ export function ExerciseCard({ activeExercise, exercise, locale }: ExerciseCardP
     return null
   })()
 
+  // Find first incomplete non-warmup set (current set)
+  const currentSetId = activeExercise.sets.find(
+    (s) => !s.isWarmup && !s.isCompleted
+  )?.id ?? null
+
   const increment = exercise?.muscle_primary
     ? getWeightIncrement(exercise.muscle_primary)
     : 2.5
+
+  const muscleLabel = exercise
+    ? t(`exercises.muscles.${exercise.muscle_primary}`)
+    : ''
+
+  // Find done/todo separator index
+  const lastCompletedIdx = (() => {
+    let idx = -1
+    activeExercise.sets.forEach((s, i) => {
+      if (s.isCompleted) idx = i
+    })
+    return idx
+  })()
+  const firstUpcomingIdx = activeExercise.sets.findIndex(
+    (s, i) => i > lastCompletedIdx && !s.isCompleted
+  )
 
   function handleRemove() {
     Alert.alert(
@@ -80,88 +105,87 @@ export function ExerciseCard({ activeExercise, exercise, locale }: ExerciseCardP
   }
 
   return (
-    <YStack
-      backgroundColor="$backgroundHover"
-      borderRadius="$4"
-      padding="$3"
-      gap="$2"
-    >
-      {/* Header: exercise name + remove */}
-      <XStack alignItems="center" justifyContent="space-between">
-        <Text
-          color="$color"
-          fontSize={17}
-          fontWeight="600"
-          flex={1}
-          numberOfLines={1}
-          accessibilityRole="header"
-        >
-          {name}
-        </Text>
-        <Button
-          size="$2"
-          chromeless
+    <AppCard blur>
+      {/* Header: exercise name + muscle chip + overflow */}
+      <XStack alignItems="center" justifyContent="space-between" marginBottom={4}>
+        <YStack flex={1} gap={2}>
+          <AppText preset="exerciseName" numberOfLines={1} accessibilityRole="header">
+            {name}
+          </AppText>
+          {muscleLabel ? (
+            <AppText preset="caption" color={colors.gray7}>{muscleLabel}</AppText>
+          ) : null}
+        </YStack>
+        <Pressable
           onPress={handleRemove}
           accessibilityLabel={t('workout.removeExercise')}
+          hitSlop={8}
         >
-          <Ionicons name="trash-outline" size={18} color="#888" />
-        </Button>
+          <Ionicons name="trash-outline" size={18} color={colors.gray6} />
+        </Pressable>
       </XStack>
 
       {/* Column headers */}
-      <XStack alignItems="center" gap="$2" paddingHorizontal="$2">
-        <XStack width={32} justifyContent="center">
-          <Text color="$gray10" fontSize={11} fontWeight="600">
-            {t('workout.set')}
-          </Text>
+      <XStack alignItems="center" gap={8} paddingHorizontal={8} marginBottom={2}>
+        <XStack width={28} justifyContent="center">
+          <AppText preset="columnHeader" color={colors.gray7}>
+            #
+          </AppText>
         </XStack>
-        <Text flex={1} color="$gray10" fontSize={11} fontWeight="600" textAlign="center">
+        <AppText preset="columnHeader" color={colors.gray7} flex={1} textAlign="center">
           {t('workout.weight')}
-        </Text>
-        <Text flex={1} color="$gray10" fontSize={11} fontWeight="600" textAlign="center">
+        </AppText>
+        <AppText preset="columnHeader" color={colors.gray7} flex={1} textAlign="center">
           {t('workout.reps')}
-        </Text>
-        <Text width={56} color="$gray10" fontSize={11} fontWeight="600" textAlign="center">
+        </AppText>
+        <AppText preset="columnHeader" color={colors.gray7} width={50} textAlign="center">
           {t('workout.rpe')}
-        </Text>
+        </AppText>
         <XStack width={28} />
-        <XStack width={24} />
+        <XStack width={20} />
       </XStack>
 
+      <Divider />
+
       {/* Set rows */}
-      {activeExercise.sets.map((s) => (
-        <SetRow
-          key={s.id}
-          set={s}
-          onUpdate={(updates) => updateSet(exerciseId, s.id, updates)}
-          onComplete={() => completeSet(exerciseId, s.id)}
-          onToggleWarmup={() => toggleWarmup(exerciseId, s.id)}
-          onRemove={() => removeSet(exerciseId, s.id)}
-          suggestionType={s.id === indicatorSetId ? suggestion!.type : undefined}
-          suggestionHint={
-            s.id === indicatorSetId
-              ? suggestion!.type === 'increase'
-                ? t('workout.overload.increase', { increment })
-                : t('workout.overload.deload')
-              : undefined
-          }
-        />
+      {activeExercise.sets.map((s, i) => (
+        <YStack key={s.id}>
+          {/* Done/todo separator */}
+          {i === firstUpcomingIdx && lastCompletedIdx >= 0 && (
+            <Divider variant="accent" marginVertical={4} />
+          )}
+          <SetRow
+            set={s}
+            isCurrent={s.id === currentSetId}
+            onUpdate={(updates) => updateSet(exerciseId, s.id, updates)}
+            onComplete={() => completeSet(exerciseId, s.id)}
+            onToggleWarmup={() => toggleWarmup(exerciseId, s.id)}
+            onRemove={() => removeSet(exerciseId, s.id)}
+            suggestionType={s.id === indicatorSetId ? suggestion!.type : undefined}
+            suggestionHint={
+              s.id === indicatorSetId
+                ? suggestion!.type === 'increase'
+                  ? t('workout.overload.increase', { increment })
+                  : t('workout.overload.deload')
+                : undefined
+            }
+          />
+        </YStack>
       ))}
 
       {/* Add set button */}
-      <Button
-        size="$3"
-        chromeless
+      <Pressable
         onPress={() => addSet(exerciseId)}
         accessibilityLabel={t('workout.addSet')}
+        style={{ paddingVertical: 8 }}
       >
-        <XStack alignItems="center" gap="$1.5">
-          <Ionicons name="add-circle-outline" size={18} color="#888" />
-          <Text color="$gray10" fontSize={14}>
+        <XStack alignItems="center" justifyContent="center" gap={6}>
+          <Ionicons name="add-circle-outline" size={16} color={colors.gray7} />
+          <AppText preset="caption" color={colors.gray7}>
             {t('workout.addSet')}
-          </Text>
+          </AppText>
         </XStack>
-      </Button>
-    </YStack>
+      </Pressable>
+    </AppCard>
   )
 }

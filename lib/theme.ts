@@ -1,3 +1,5 @@
+import { StyleSheet } from 'react-native'
+
 // =============================================================================
 // MaxReps — Design Tokens
 // =============================================================================
@@ -157,6 +159,36 @@ export const shadows = {
     shadowOpacity: 0.6,
     shadowRadius: 24,
   },
+} as const
+
+// ── Header Button Styles ─────────────────────────────────
+// Single source of truth for all navigation and action buttons in headers.
+export const headerButtonStyles = StyleSheet.create({
+  navButton: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: 'rgba(255,255,255,0.10)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  actionButton: {
+    height: 32,
+    paddingHorizontal: 14,
+    borderRadius: 16,
+    backgroundColor: accent.accent,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 0,
+    borderColor: 'transparent',
+    shadowOpacity: 0,
+    elevation: 0,
+  },
+})
+
+export const headerButtonIcon = {
+  size: 18,
+  color: gray.gray11,
 } as const
 
 // ── Flat color map for Tamagui theme override ────────────

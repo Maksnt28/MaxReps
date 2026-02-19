@@ -1,4 +1,8 @@
-import { YStack, Text, Button } from 'tamagui'
+import { YStack } from 'tamagui'
+
+import { AppText } from '@/components/ui/AppText'
+import { AppButton } from '@/components/ui/AppButton'
+import { colors } from '@/lib/theme'
 
 interface EmptyStateProps {
   title: string
@@ -14,22 +18,21 @@ export function EmptyState({
   actionLabel,
 }: EmptyStateProps) {
   return (
-    <YStack flex={1} alignItems="center" justifyContent="center" padding="$6" gap="$3">
-      <Text color="$color" fontSize={18} fontWeight="600" textAlign="center">
+    <YStack flex={1} alignItems="center" justifyContent="center" padding={24} gap={12}>
+      <AppText preset="pageTitle" textAlign="center">
         {title}
-      </Text>
-      <Text color="$gray10" fontSize={14} textAlign="center">
+      </AppText>
+      <AppText preset="body" color={colors.gray8} textAlign="center">
         {message}
-      </Text>
+      </AppText>
       {onAction && actionLabel && (
-        <Button
-          marginTop="$2"
-          size="$4"
+        <AppButton
+          variant="primary"
           onPress={onAction}
           accessibilityLabel={actionLabel}
         >
           {actionLabel}
-        </Button>
+        </AppButton>
       )}
     </YStack>
   )

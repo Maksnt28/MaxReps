@@ -6,11 +6,15 @@ import { StatusBar } from 'expo-status-bar'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { TamaguiProvider, YStack, Spinner } from 'tamagui'
+import { useFonts } from 'expo-font'
+import * as SplashScreen from 'expo-splash-screen'
 import type { Session } from '@supabase/supabase-js'
 
 import tamaguiConfig from '@/tamagui.config'
 import { supabase } from '@/lib/supabase'
 import { useUserStore } from '@/stores/useUserStore'
+
+SplashScreen.preventAutoHideAsync()
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -42,6 +46,14 @@ export default function RootLayout() {
   const [session, setSession] = useState<Session | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const { setUser, clearUser } = useUserStore()
+
+  const [fontsLoaded] = useFonts({
+    'Inter-Regular': require('../assets/fonts/Inter-Regular.ttf'),
+    'Inter-Medium': require('../assets/fonts/Inter-Medium.ttf'),
+    'Inter-SemiBold': require('../assets/fonts/Inter-SemiBold.ttf'),
+    'Inter-Bold': require('../assets/fonts/Inter-Bold.ttf'),
+    'Inter-ExtraBold': require('../assets/fonts/Inter-ExtraBold.ttf'),
+  })
 
   const syncUserProfile = useCallback(async (s: Session) => {
     try {
@@ -98,7 +110,13 @@ export default function RootLayout() {
 
   useProtectedRoute(session, isLoading)
 
-  if (isLoading) {
+  useEffect(() => {
+    if (!isLoading && fontsLoaded) {
+      SplashScreen.hideAsync()
+    }
+  }, [isLoading, fontsLoaded])
+
+  if (isLoading || !fontsLoaded) {
     return (
       <GestureHandlerRootView style={{ flex: 1 }}>
         <TamaguiProvider config={tamaguiConfig} defaultTheme="dark">

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
-import { Text } from 'tamagui'
+import { AppText } from '@/components/ui/AppText'
+import { colors } from '@/lib/theme'
 
 interface WorkoutTimerProps {
   startedAt: string
@@ -31,8 +32,8 @@ export function WorkoutTimer({ startedAt }: WorkoutTimerProps) {
   }, [startedAt])
 
   return (
-    <Text color="$color" fontSize={18} fontWeight="700" fontVariant={['tabular-nums']}>
+    <AppText preset="sessionDuration" color={colors.accent}>
       {formatElapsed(elapsed)}
-    </Text>
+    </AppText>
   )
 }

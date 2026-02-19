@@ -1,17 +1,19 @@
-import { XStack, YStack, Text } from 'tamagui'
+import { XStack, YStack } from 'tamagui'
 import Ionicons from '@expo/vector-icons/Ionicons'
-import { Pressable } from 'react-native'
 import { useTranslation } from 'react-i18next'
 
 import type { Exercise } from '@/hooks/useExercises'
 import { getLocalizedExercise } from '@/lib/exercises'
+import { AppCard } from '@/components/ui/AppCard'
+import { AppText } from '@/components/ui/AppText'
+import { colors } from '@/lib/theme'
 
 const MUSCLE_ICONS: Record<string, keyof typeof Ionicons.glyphMap> = {
   chest: 'body-outline',
   back: 'body-outline',
   shoulders: 'body-outline',
-  biceps: 'arm-left-outline' as keyof typeof Ionicons.glyphMap,
-  triceps: 'arm-left-outline' as keyof typeof Ionicons.glyphMap,
+  biceps: 'fitness-outline',
+  triceps: 'fitness-outline',
   quads: 'walk-outline',
   hamstrings: 'walk-outline',
   glutes: 'walk-outline',
@@ -43,51 +45,44 @@ export function ExerciseListItem({
   const equipmentLabel = t(`exercises.equipment.${exercise.equipment}`)
 
   return (
-    <Pressable
+    <AppCard
+      variant="interactive"
+      compact
       onPress={onPress}
       accessibilityLabel={`${name}, ${muscleLabel}`}
       accessibilityRole="button"
     >
-      <XStack
-        height={EXERCISE_LIST_ITEM_HEIGHT}
-        alignItems="center"
-        paddingHorizontal="$3"
-        gap="$3"
-        borderBottomWidth={1}
-        borderBottomColor="$borderColor"
-      >
+      <XStack alignItems="center" gap={12}>
         <YStack
           width={44}
           height={44}
-          borderRadius="$3"
-          backgroundColor="$backgroundHover"
+          borderRadius={12}
+          backgroundColor={colors.gray3}
           alignItems="center"
           justifyContent="center"
         >
           <Ionicons
             name={getMuscleIcon(exercise.muscle_primary)}
             size={22}
-            color="#888"
+            color={colors.gray7}
           />
         </YStack>
-        <YStack flex={1} gap="$1">
-          <Text color="$color" fontSize={16} fontWeight="500" numberOfLines={1}>
+        <YStack flex={1} gap={2}>
+          <AppText preset="exerciseName" numberOfLines={1}>
             {name}
-          </Text>
-          <XStack gap="$2" alignItems="center">
-            <Text color="$gray10" fontSize={12}>
+          </AppText>
+          <XStack gap={8} alignItems="center">
+            <AppText preset="caption" color={colors.gray8}>
               {muscleLabel}
-            </Text>
-            <Text color="$gray10" fontSize={10}>
-              {'·'}
-            </Text>
-            <Text color="$gray10" fontSize={12}>
+            </AppText>
+            <AppText preset="caption" color={colors.gray6}>·</AppText>
+            <AppText preset="caption" color={colors.gray8}>
               {equipmentLabel}
-            </Text>
+            </AppText>
           </XStack>
         </YStack>
-        <Ionicons name="chevron-forward" size={18} color="#555" />
+        <Ionicons name="chevron-forward" size={18} color={colors.gray6} />
       </XStack>
-    </Pressable>
+    </AppCard>
   )
 }
