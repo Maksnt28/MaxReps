@@ -20,6 +20,11 @@
     "title": "MaxReps",
     "welcome": "Ready to train"
   },
+  "profile": {
+    "language": "Language",
+    "languageEn": "English",
+    "languageFr": "Français"
+  },
   "auth": {
     "tagline": "Track your lifts. Beat your PRs.",
     "signInGoogle": "Continue with Google",
@@ -167,5 +172,58 @@
     "editTargets": "Edit Targets",
     "startWorkoutError": "Failed to start workout. Please try again.",
     "dayDefault": "Day {{number}}"
+  },
+  "progress": {
+    "title": "Progress",
+    "empty": {
+      "title": "No data yet",
+      "message": "Complete your first workout to see your progress.",
+      "cta": "Start a workout"
+    },
+    "timeRange": {
+      "1W": "1W",
+      "1M": "1M",
+      "3M": "3M",
+      "6M": "6M",
+      "1Y": "1Y"
+    },
+    "stats": {
+      "workouts": "Workouts",
+      "volume": "Volume",
+      "prs": "PRs",
+      "avgDuration": "Avg Duration"
+    },
+    "volume": {
+      "title": "Volume"
+    },
+    "strength": {
+      "title": "Strength"
+    },
+    "frequency": {
+      "title": "Activity"
+    },
+    "records": {
+      "title": "Personal Records",
+      "empty": "No PRs yet",
+      "improvement": "+{{delta}} kg"
+    },
+    "delta": {
+      "up": "+{{value}}%",
+      "down": "{{value}}%",
+      "noChange": "—"
+    },
+    "heatmap": {
+      "less": "Less",
+      "more": "More"
+    },
+    "exercisePicker": {
+      "label": "Select exercise"
+    },
+    "est1rm": "Est. 1RM",
+    "tooltipDate": "{{date}}",
+    "tooltipVolume": "{{value}} kg",
+    "tooltipWeight": "{{value}} kg",
+    "minutes": "{{value}} min",
+    "retry": "Couldn't load data — tap to retry"
   }
 }

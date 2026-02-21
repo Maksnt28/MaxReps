@@ -27,7 +27,7 @@ export default function TabLayout() {
           title: t('tabs.home'),
           headerShown: false,
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="home-outline" size={size} color={color} />
+            <Ionicons name="stats-chart-outline" size={size} color={color} />
           ),
           tabBarAccessibilityLabel: t('tabs.home'),
         }}

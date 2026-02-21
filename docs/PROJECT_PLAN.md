@@ -173,6 +173,33 @@ Minimalist, practical, one-handed mobile use. Dark mode default (gym lighting). 
 
 Code-first with Tamagui design tokens. Figma reserved for 3 complex screen layouts (workout logger, program builder, analytics dashboard). Competitor screenshots (Strong, Hevy, Alpha Progression) as visual references for Claude Code. Dark theme via CSS variables / Tamagui tokens — light mode achievable later by swapping token values.
 
+### Home Screen (Accueil)
+
+The Home tab is the app's landing screen — what users see every time they open MaxReps. It serves as a **progress dashboard** that motivates continued training.
+
+**MVP (Phase 1):**
+- Progress dashboard with 5 sections: summary stats (2×2 grid), volume chart, strength progression chart, workout frequency heatmap, recent PRs
+- Time range selector (1W, 1M, 3M, 6M, 1Y)
+- Interactive chart tooltips
+- Loading skeletons, error states, empty state ("Complete your first workout" CTA)
+
+**Home Screen Enhancements — Phased Rollout:**
+
+Enhancements are built progressively as the features they depend on come online.
+
+| Phase | Enhancement | Description | Depends on |
+|-------|------------|-------------|------------|
+| Phase 1 (post-Onboarding) | Quick-start workout | "Start today's workout" button when a program day is scheduled | Programs (done) |
+| Phase 1 (post-Onboarding) | Upcoming workout preview | Next scheduled program day with exercise list preview | Programs (done) |
+| Phase 1 (post-Onboarding) | Weekly summary widget | Compact card: sessions this week vs target, volume trend arrow | Charts hooks (done) |
+| Phase 1 (pre-launch polish) | Streak & consistency | Current streak (consecutive training weeks), longest streak, calendar dots | Workout history (done) |
+| Phase 1 (pre-launch polish) | Milestone celebrations | "100th workout!", "1 year of training", "Bench press: 100 kg club" | Workout history (done) |
+| Phase 2 (post-AI) | Personalized suggestions | "You haven't trained legs in 8 days" or "Bench press is due for a PR attempt" | AI layer |
+| Phase 2 (post-AI) | Rest day intelligence | "Rest day — next session: Push Day tomorrow" when no workout is scheduled | AI layer + schedule |
+| Phase 3+ (post-launch) | Motivational quote | Rotating daily training quotes (optional, toggle in settings) | None (low priority) |
+
+> All enhancements are additive — each is an independent card/widget above or below the progress charts. None require architectural changes to the dashboard.
+
 ### Onboarding
 
 5 screens, target ≤90 seconds median completion, ≥85% completion rate:

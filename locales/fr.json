@@ -20,6 +20,11 @@
     "title": "MaxReps",
     "welcome": "Pr\u00eat \u00e0 t'entra\u00eener"
   },
+  "profile": {
+    "language": "Langue",
+    "languageEn": "English",
+    "languageFr": "Français"
+  },
   "auth": {
     "tagline": "Suis tes s\u00e9ries. Bats tes records.",
     "signInGoogle": "Continuer avec Google",
@@ -167,5 +172,58 @@
     "editTargets": "Modifier les objectifs",
     "startWorkoutError": "Échec du démarrage. Réessayez.",
     "dayDefault": "Jour {{number}}"
+  },
+  "progress": {
+    "title": "Progression",
+    "empty": {
+      "title": "Aucune donnée",
+      "message": "Terminez votre premier entraînement pour voir vos progrès.",
+      "cta": "Commencer un entraînement"
+    },
+    "timeRange": {
+      "1W": "1S",
+      "1M": "1M",
+      "3M": "3M",
+      "6M": "6M",
+      "1Y": "1A"
+    },
+    "stats": {
+      "workouts": "Séances",
+      "volume": "Volume",
+      "prs": "Records",
+      "avgDuration": "Durée moy."
+    },
+    "volume": {
+      "title": "Volume"
+    },
+    "strength": {
+      "title": "Force"
+    },
+    "frequency": {
+      "title": "Activité"
+    },
+    "records": {
+      "title": "Records personnels",
+      "empty": "Aucun record",
+      "improvement": "+{{delta}} kg"
+    },
+    "delta": {
+      "up": "+{{value}}%",
+      "down": "{{value}}%",
+      "noChange": "—"
+    },
+    "heatmap": {
+      "less": "Moins",
+      "more": "Plus"
+    },
+    "exercisePicker": {
+      "label": "Sélectionner un exercice"
+    },
+    "est1rm": "1RM est.",
+    "tooltipDate": "{{date}}",
+    "tooltipVolume": "{{value}} kg",
+    "tooltipWeight": "{{value}} kg",
+    "minutes": "{{value}} min",
+    "retry": "Chargement échoué — appuyez pour réessayer"
   }
 }

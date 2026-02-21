@@ -1,32 +1,26 @@
-# Review: Design System & Visual Polish
+# Review: Home Screen — Merge Progress Dashboard + Missing Tests
 
-> **Date:** 2026-02-18
-> **Status:** review-round-6
+> **Date:** 2026-02-19
+> **Status:** review-round-8 (final)
 > **Reviewer:** Review pane (independent Claude Code session)
 
 ## Summary Verdict
-**READY — no remaining issues**
 
-All round 4 critiques (2 critical, 5 improvements, 4 questions) and round 5 minor notes (5 items) have been addressed. The plan has been through 6 review rounds and is tight.
+**READY** — no remaining issues. Approve and execute.
 
-### Round 5 minor notes — resolution check:
+All 3 improvements and 2 minor notes from round 7 have been addressed with concrete changes:
 
-| Note | Resolution |
-|---|---|
-| Context said "18 screens" | Now says "18 route files (12 screens, 6 layouts)" ✅ |
-| Step 10's `_design-tokens.yml` not in Files Summary | Added as row 53, total updated to 53 ✅ |
-| Step 5.5 didn't account for C1 failure | Now says "8 or 9 wrappers (depending on C1 outcome)" ✅ |
-| Step 6k had no inline C1 dependency note | Conditional note added below 6k ✅ |
-| Pre-Sprint missing theme files | Now includes `lib/theme.ts` + `tamagui.config.ts` ✅ |
+| Round 7 Issue | Resolution in Plan |
+|--------------|-------------------|
+| **I1** Test count wrong (35→28) | Fixed to "28 (19 formulas + 9 PR)" and total target ~154 |
+| **I2** Hook tests need pure extraction | New Step 4: extract into `lib/chartTransforms.ts` before testing |
+| **I3** Tab icon should change | Step 2 updated: `home-outline` → `stats-chart-outline` |
+| **N1** Volume includes warmups | Step 4 adds `.eq('is_warmup', false)` fix |
+| **N2** Tab/header label mismatch | Acknowledged as intentional — correct UX decision |
 
-### Plan strengths:
-- **Scope discipline:** Clear deferred features table with reasoning. No feature creep.
-- **Conditional paths:** C1 verification gate with clean fallback (drop 3h + 6k, keep `Alert.alert`).
-- **Commit granularity:** Per sub-step, with 6a flagged as the hardest single deliverable.
-- **Data plumbing documented:** Ghost values and last session line data sources specified (6a, 6b).
-- **Accessibility decision made:** `$gray7` bumped to `#74747E` (~4.1:1 contrast), gray scale shifted.
-- **Integration checkpoint:** Step 5.5 smoke test catches issues before the 33-file retrofit.
-- **File count verified:** 53 unique files (16 CREATE + 37 MODIFY), deduplicated, no double-counting.
+The plan is tight and surgical — 8 steps for a well-defined migration with no architectural risk. The pure function extraction (Step 4) is the right pattern, matching the existing `prDetection.ts` / `prDetection.test.ts` precedent.
+
+---
 
 ## Critical Issues (must fix)
 
@@ -36,10 +30,10 @@ None.
 
 None.
 
-## Minor Notes
+## Minor Notes (nice to have)
 
-None.
+None — all prior notes addressed.
 
 ## Questions for the Author
 
-None. Plan is approved for execution.
+None. Ship it.
