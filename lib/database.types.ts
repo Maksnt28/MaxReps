@@ -227,40 +227,55 @@ export type Database = {
       }
       users: {
         Row: {
+          age: number | null
           created_at: string
           display_name: string | null
           equipment: string[] | null
           experience_level: string | null
-          goal: string | null
+          goals: string[] | null
+          height_cm: number | null
           id: string
+          is_onboarded: boolean
           limitations: string[] | null
           locale: string | null
           schedule: Json | null
+          sex: string | null
           updated_at: string
+          weight_kg: number | null
         }
         Insert: {
+          age?: number | null
           created_at?: string
           display_name?: string | null
           equipment?: string[] | null
           experience_level?: string | null
-          goal?: string | null
+          goals?: string[] | null
+          height_cm?: number | null
           id?: string
+          is_onboarded?: boolean
           limitations?: string[] | null
           locale?: string | null
           schedule?: Json | null
+          sex?: string | null
           updated_at?: string
+          weight_kg?: number | null
         }
         Update: {
+          age?: number | null
           created_at?: string
           display_name?: string | null
           equipment?: string[] | null
           experience_level?: string | null
-          goal?: string | null
+          goals?: string[] | null
+          height_cm?: number | null
           id?: string
+          is_onboarded?: boolean
           limitations?: string[] | null
           locale?: string | null
           schedule?: Json | null
+          sex?: string | null
           updated_at?: string
+          weight_kg?: number | null
         }
         Relationships: []
       }

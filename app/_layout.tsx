@@ -1,4 +1,4 @@
-import '@/lib/i18n'
+import i18n from '@/lib/i18n'
 
 import { useCallback, useEffect, useState } from 'react'
 import { Stack, useRouter, useSegments } from 'expo-router'
@@ -12,7 +12,8 @@ import type { Session } from '@supabase/supabase-js'
 
 import tamaguiConfig from '@/tamagui.config'
 import { supabase } from '@/lib/supabase'
-import { useUserStore } from '@/stores/useUserStore'
+import { useUserStore, type UserRow } from '@/stores/useUserStore'
+import type { ExperienceLevel, Goal, Sex } from '@/lib/types'
 import { getTargetRoute } from '@/lib/routeGuard'
 
 SplashScreen.preventAutoHideAsync()
@@ -78,15 +79,24 @@ export default function RootLayout() {
       }
 
       if (data) {
+        const row = data as UserRow
+        const locale = (row.locale as 'en' | 'fr') ?? 'en'
         setUser({
-          id: data.id,
-          displayName: data.display_name,
-          experienceLevel: data.experience_level as 'beginner' | 'intermediate' | 'advanced' | null,
-          goal: data.goal as 'strength' | 'hypertrophy' | 'general_fitness' | 'body_recomp' | null,
-          equipment: data.equipment ?? [],
-          locale: (data.locale as 'en' | 'fr') ?? 'en',
-          isOnboarded: (data as any).is_onboarded ?? false,
+          id: row.id,
+          displayName: row.display_name,
+          experienceLevel: row.experience_level as ExperienceLevel | null,
+          goals: (row.goals as Goal[]) ?? [],
+          equipment: row.equipment ?? [],
+          locale,
+          isOnboarded: row.is_onboarded ?? false,
+          limitations: row.limitations ?? [],
+          daysPerWeek: row.schedule?.days_per_week ?? null,
+          sex: (row.sex as Sex | null) ?? null,
+          age: row.age ?? null,
+          heightCm: row.height_cm ?? null,
+          weightKg: row.weight_kg ?? null,
         })
+        i18n.changeLanguage(locale)
       }
     } catch (e) {
       console.warn('syncUserProfile: unexpected error', e)

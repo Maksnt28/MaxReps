@@ -7,7 +7,7 @@ import Ionicons from '@expo/vector-icons/Ionicons'
 import { AppText } from '@/components/ui/AppText'
 import { AppButton } from '@/components/ui/AppButton'
 import { ProgressDots } from '@/components/onboarding/ProgressDots'
-import { SelectionCard } from '@/components/onboarding/SelectionCard'
+import { SelectionCard } from '@/components/ui/SelectionCard'
 import { useOnboardingStore } from '@/stores/useOnboardingStore'
 import { colors, headerButtonStyles, headerButtonIcon } from '@/lib/theme'
 

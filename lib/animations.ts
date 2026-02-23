@@ -45,6 +45,10 @@ export function hapticHeavy() {
   Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy)
 }
 
+export function hapticSelection() {
+  Haptics.selectionAsync()
+}
+
 export function hapticNotification(type: Haptics.NotificationFeedbackType = Haptics.NotificationFeedbackType.Success) {
   Haptics.notificationAsync(type)
 }

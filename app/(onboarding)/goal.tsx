@@ -7,7 +7,7 @@ import Ionicons from '@expo/vector-icons/Ionicons'
 import { AppText } from '@/components/ui/AppText'
 import { AppButton } from '@/components/ui/AppButton'
 import { ProgressDots } from '@/components/onboarding/ProgressDots'
-import { SelectionCard } from '@/components/onboarding/SelectionCard'
+import { SelectionCard } from '@/components/ui/SelectionCard'
 import { useOnboardingStore } from '@/stores/useOnboardingStore'
 import { colors, headerButtonStyles, headerButtonIcon } from '@/lib/theme'
 
@@ -16,6 +16,12 @@ const GOALS = [
   { key: 'hypertrophy', value: 'hypertrophy' },
   { key: 'generalFitness', value: 'general_fitness' },
   { key: 'bodyRecomp', value: 'body_recomp' },
+  { key: 'powerlifting', value: 'powerlifting' },
+  { key: 'weightLoss', value: 'weight_loss' },
+  { key: 'endurance', value: 'endurance' },
+  { key: 'athleticPerformance', value: 'athletic_performance' },
+  { key: 'calisthenics', value: 'calisthenics' },
+  { key: 'flexibility', value: 'flexibility' },
 ] as const
 
 export default function GoalScreen() {
@@ -45,17 +51,18 @@ export default function GoalScreen() {
             {t('onboarding.goal.subtitle')}
           </AppText>
 
-          <YStack gap={12}>
+          <View style={styles.grid}>
             {GOALS.map(({ key, value }) => (
-              <SelectionCard
-                key={key}
-                label={t(`onboarding.goal.${key}`)}
-                description={t(`onboarding.goal.${key}Desc`)}
-                selected={goal === value}
-                onPress={() => setGoal(value)}
-              />
+              <View key={key} style={styles.gridItem}>
+                <SelectionCard
+                  compact
+                  label={t(`onboarding.goal.${key}`)}
+                  selected={goal === value}
+                  onPress={() => setGoal(value)}
+                />
+              </View>
             ))}
-          </YStack>
+          </View>
         </View>
 
         <View style={styles.footer}>
@@ -87,6 +94,14 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     justifyContent: 'center',
+  },
+  grid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 10,
+  },
+  gridItem: {
+    width: '48%',
   },
   footer: {
     paddingBottom: 16,

@@ -8,7 +8,7 @@ import Ionicons from '@expo/vector-icons/Ionicons'
 import { AppText } from '@/components/ui/AppText'
 import { AppButton } from '@/components/ui/AppButton'
 import { ProgressDots } from '@/components/onboarding/ProgressDots'
-import { SelectionCard } from '@/components/onboarding/SelectionCard'
+import { SelectionCard } from '@/components/ui/SelectionCard'
 import { useOnboardingStore } from '@/stores/useOnboardingStore'
 import { useUserStore } from '@/stores/useUserStore'
 import { supabase } from '@/lib/supabase'
@@ -35,7 +35,7 @@ export default function EquipmentScreen() {
     // Only include non-null fields in the update payload
     const payload: Record<string, unknown> = { is_onboarded: true }
     if (experienceLevel) payload.experience_level = experienceLevel
-    if (goal) payload.goal = goal
+    if (goal) payload.goals = [goal]
     if (equip.length > 0) payload.equipment = equip
 
     if (!userId) {
@@ -56,7 +56,7 @@ export default function EquipmentScreen() {
     }
 
     // Sync both stores
-    setUser({ experienceLevel, goal, equipment: equip, isOnboarded: true })
+    setUser({ experienceLevel, goals: goal ? [goal] : [], equipment: equip, isOnboarded: true })
     reset()
     // No router.replace — guard handles the redirect to /(tabs)
   }

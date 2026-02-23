@@ -1,7 +1,5 @@
 import { create } from 'zustand'
-
-type ExperienceLevel = 'beginner' | 'intermediate' | 'advanced'
-type Goal = 'strength' | 'hypertrophy' | 'general_fitness' | 'body_recomp'
+import type { ExperienceLevel, Goal } from '@/lib/types'
 
 interface OnboardingState {
   experienceLevel: ExperienceLevel | null
