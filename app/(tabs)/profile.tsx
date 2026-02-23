@@ -39,6 +39,7 @@ export default function ProfileScreen() {
             goal: data.goal as 'strength' | 'hypertrophy' | 'general_fitness' | 'body_recomp' | null,
             equipment: data.equipment ?? [],
             locale: (data.locale as 'en' | 'fr') ?? 'en',
+            isOnboarded: (data as any).is_onboarded ?? false,
           })
         }
       } catch {

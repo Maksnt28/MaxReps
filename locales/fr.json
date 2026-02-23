@@ -31,7 +31,8 @@
     "signInApple": "Continuer avec Apple",
     "signOut": "Se d\u00e9connecter",
     "signOutConfirm": "\u00cates-vous s\u00fbr de vouloir vous d\u00e9connecter ?",
-    "sessionExpired": "Session expir\u00e9e. Veuillez vous reconnecter."
+    "sessionExpired": "Session expir\u00e9e. Veuillez vous reconnecter.",
+    "timeout": "La connexion a expir\u00e9. Veuillez r\u00e9essayer."
   },
   "exercises": {
     "searchPlaceholder": "Rechercher des exercices",
@@ -225,5 +226,54 @@
     "tooltipWeight": "{{value}} kg",
     "minutes": "{{value}} min",
     "retry": "Chargement échoué — appuyez pour réessayer"
+  },
+  "onboarding": {
+    "welcome": {
+      "title": "Ton entraînement, boosté",
+      "subtitle": "Tout ce qu'il te faut pour progresser plus vite.",
+      "feature1Title": "Suivi intelligent",
+      "feature1Desc": "Enregistre tes séries en quelques secondes avec des suggestions automatiques.",
+      "feature2Title": "Surcharge progressive",
+      "feature2Desc": "Recommandations de poids et de répétitions pour continuer à progresser.",
+      "feature3Title": "Progrès clairs",
+      "feature3Desc": "Graphiques, records et tendances pour toujours savoir où tu en es.",
+      "cta": "Commencer"
+    },
+    "experience": {
+      "title": "Quel est ton niveau ?",
+      "subtitle": "Cela nous aide à personnaliser ton expérience.",
+      "beginner": "Débutant",
+      "beginnerDesc": "Nouveau en musculation ou moins de 6 mois.",
+      "intermediate": "Intermédiaire",
+      "intermediateDesc": "6 mois à 2 ans d'entraînement régulier.",
+      "advanced": "Avancé",
+      "advancedDesc": "2+ ans avec programmation structurée."
+    },
+    "goal": {
+      "title": "Quel est ton objectif principal ?",
+      "subtitle": "Tu pourras toujours le changer plus tard.",
+      "strength": "Force",
+      "strengthDesc": "Soulever plus lourd. Focus sur les mouvements composés.",
+      "hypertrophy": "Hypertrophie",
+      "hypertrophyDesc": "Construire du muscle. Entraînement à volume élevé.",
+      "generalFitness": "Forme générale",
+      "generalFitnessDesc": "Rester actif et en bonne santé. Approche équilibrée.",
+      "bodyRecomp": "Recomposition",
+      "bodyRecompDesc": "Perdre du gras et construire du muscle simultanément."
+    },
+    "equipment": {
+      "title": "Quel équipement as-tu ?",
+      "subtitle": "Sélectionne tout ce qui s'applique. On filtrera les exercices pour toi.",
+      "barbell": "Barre",
+      "dumbbell": "Haltère",
+      "cable": "Câble",
+      "machine": "Machine",
+      "bodyweight": "Poids du corps",
+      "bands": "Élastiques",
+      "kettlebell": "Kettlebell",
+      "error": "Échec de l'enregistrement. Réessayez."
+    },
+    "continue": "Continuer",
+    "skip": "Passer"
   }
 }

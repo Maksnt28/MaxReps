@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Platform } from 'react-native'
 import { YStack, XStack, Spinner, Theme, Button } from 'tamagui'
 import { useTranslation } from 'react-i18next'
@@ -20,22 +20,45 @@ export default function SignInScreen() {
     }
   }, [])
 
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
   async function handleSignIn(provider: 'google' | 'apple') {
     setLoading(provider)
     setError(null)
 
-    let result: AuthResult
-    if (provider === 'google') {
-      result = await signInWithGoogle()
-    } else {
-      result = await signInWithApple()
+    // 15s timeout safeguard — resets UI if auth flow hangs
+    let timedOut = false
+    timeoutRef.current = setTimeout(() => {
+      timedOut = true
+      console.log('[AUTH] timeout: 15s exceeded, resetting loading state')
+      setLoading(null)
+      setError(t('auth.timeout'))
+    }, 15_000)
+
+    try {
+      let result: AuthResult
+      if (provider === 'google') {
+        result = await signInWithGoogle()
+      } else {
+        result = await signInWithApple()
+      }
+
+      if (timeoutRef.current) clearTimeout(timeoutRef.current)
+
+      // If timeout already fired, don't overwrite its error
+      if (timedOut) return
+
+      if (result.type === 'error') {
+        setError(result.message)
+      }
+    } catch (e) {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current)
+      if (!timedOut) {
+        setError(e instanceof Error ? e.message : 'Unknown error')
+      }
     }
 
-    if (result.type === 'error') {
-      setError(result.message)
-    }
-
-    setLoading(null)
+    if (!timedOut) setLoading(null)
   }
 
   return (
@@ -47,7 +70,7 @@ export default function SignInScreen() {
       paddingHorizontal={24}
       gap={16}
     >
-      <AppText preset="pageTitle" color={colors.accent} fontSize={36}>
+      <AppText preset="pageTitle" color={colors.accent} fontSize={36} lineHeight={46}>
         MaxReps
       </AppText>
       <AppText preset="body" color={colors.gray8} marginBottom={32}>

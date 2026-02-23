@@ -13,6 +13,7 @@ import type { Session } from '@supabase/supabase-js'
 import tamaguiConfig from '@/tamagui.config'
 import { supabase } from '@/lib/supabase'
 import { useUserStore } from '@/stores/useUserStore'
+import { getTargetRoute } from '@/lib/routeGuard'
 
 SplashScreen.preventAutoHideAsync()
 
@@ -25,21 +26,22 @@ const queryClient = new QueryClient({
   },
 })
 
-function useProtectedRoute(session: Session | null, isLoading: boolean) {
+function useProtectedRoute(
+  session: Session | null,
+  isLoading: boolean
+) {
   const segments = useSegments()
   const router = useRouter()
+  const isOnboarded = useUserStore((s) => s.isOnboarded)
 
   useEffect(() => {
     if (isLoading) return
 
-    const inAuthGroup = segments[0] === '(auth)'
-
-    if (!session && !inAuthGroup) {
-      router.replace('/(auth)/sign-in')
-    } else if (session && inAuthGroup) {
-      router.replace('/(tabs)')
+    const target = getTargetRoute(!!session, isOnboarded, segments[0])
+    if (target) {
+      router.replace(target as any)
     }
-  }, [session, segments, isLoading, router])
+  }, [session, segments, isLoading, isOnboarded, router])
 }
 
 export default function RootLayout() {
@@ -57,11 +59,18 @@ export default function RootLayout() {
 
   const syncUserProfile = useCallback(async (s: Session) => {
     try {
-      const { data, error } = await supabase
+      const queryPromise = supabase
         .from('users')
         .select('*')
         .eq('id', s.user.id)
         .single()
+
+      // 8s timeout — prevents app from hanging on expired/broken sessions
+      const timeoutPromise = new Promise<never>((_, reject) =>
+        setTimeout(() => reject(new Error('syncUserProfile timed out')), 8000)
+      )
+
+      const { data, error } = await Promise.race([queryPromise, timeoutPromise])
 
       if (error) {
         console.warn('syncUserProfile: fetch failed', error.message)
@@ -76,6 +85,7 @@ export default function RootLayout() {
           goal: data.goal as 'strength' | 'hypertrophy' | 'general_fitness' | 'body_recomp' | null,
           equipment: data.equipment ?? [],
           locale: (data.locale as 'en' | 'fr') ?? 'en',
+          isOnboarded: (data as any).is_onboarded ?? false,
         })
       }
     } catch (e) {
@@ -84,21 +94,21 @@ export default function RootLayout() {
   }, [setUser])
 
   useEffect(() => {
-    // Check initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    // Check initial session — await sync before marking loaded
+    supabase.auth.getSession().then(async ({ data: { session } }) => {
       setSession(session)
-      if (session) syncUserProfile(session)
+      if (session) await syncUserProfile(session)
       setIsLoading(false)
     })
 
-    // Listen for auth state changes
+    // Listen for auth state changes — fire-and-forget sync to avoid blocking navigation
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (_event, session) => {
         setSession(session)
 
         if (session) {
-          // Fire-and-forget — errors caught inside syncUserProfile
-          syncUserProfile(session)
+          // Don't await — prevents hanging when Supabase client races during token exchange
+          syncUserProfile(session).catch(() => {})
         } else {
           clearUser()
         }
@@ -135,6 +145,7 @@ export default function RootLayout() {
         <TamaguiProvider config={tamaguiConfig} defaultTheme="dark">
           <Stack screenOptions={{ headerShown: false }}>
             <Stack.Screen name="(auth)" />
+            <Stack.Screen name="(onboarding)" />
             <Stack.Screen name="(tabs)" />
             <Stack.Screen name="exercise" />
             <Stack.Screen name="workout" />

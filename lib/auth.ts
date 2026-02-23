@@ -16,14 +16,28 @@ const SUPABASE_URL = process.env.EXPO_PUBLIC_SUPABASE_URL ?? ''
 /** Verify the Supabase server is reachable before attempting OAuth. */
 async function checkConnectivity(): Promise<boolean> {
   try {
+    const controller = new AbortController()
+    const timeout = setTimeout(() => controller.abort(), 5000)
     const res = await fetch(`${SUPABASE_URL}/auth/v1/health`, {
       method: 'GET',
       headers: { apikey: process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY ?? '' },
+      signal: controller.signal,
     })
+    clearTimeout(timeout)
     return res.ok
   } catch {
     return false
   }
+}
+
+/** Race a promise against a timeout. */
+function withTimeout<T>(promise: Promise<T>, ms: number, label: string): Promise<T> {
+  return Promise.race([
+    promise,
+    new Promise<never>((_, reject) =>
+      setTimeout(() => reject(new Error(`${label} timed out after ${ms / 1000}s`)), ms)
+    ),
+  ])
 }
 
 /** Run the OAuth browser session and extract session tokens. */
@@ -37,7 +51,11 @@ async function attemptOAuthSession(oauthUrl: string): Promise<AuthResult> {
   // PKCE flow: authorization code in query params
   const code = url.searchParams.get('code')
   if (code) {
-    const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code)
+    const { error: exchangeError } = await withTimeout(
+      supabase.auth.exchangeCodeForSession(code),
+      10_000,
+      'exchangeCodeForSession'
+    )
     if (exchangeError) return { type: 'error', message: exchangeError.message }
     return { type: 'success' }
   }
@@ -48,10 +66,14 @@ async function attemptOAuthSession(oauthUrl: string): Promise<AuthResult> {
   const refreshToken = params.get('refresh_token')
 
   if (accessToken && refreshToken) {
-    const { error: sessionError } = await supabase.auth.setSession({
-      access_token: accessToken,
-      refresh_token: refreshToken,
-    })
+    const { error: sessionError } = await withTimeout(
+      supabase.auth.setSession({
+        access_token: accessToken,
+        refresh_token: refreshToken,
+      }),
+      10_000,
+      'setSession'
+    )
     if (sessionError) return { type: 'error', message: sessionError.message }
     return { type: 'success' }
   }
@@ -60,9 +82,8 @@ async function attemptOAuthSession(oauthUrl: string): Promise<AuthResult> {
 }
 
 /**
- * Google Sign-In via Supabase OAuth (browser-based flow).
- * Includes pre-flight connectivity check and uses ephemeral browser sessions
- * to avoid stale SafariViewService state (Xcode beta simulator workaround).
+ * Google Sign-In via Supabase OAuth (browser-based PKCE flow).
+ * Includes pre-flight connectivity check with 5s timeout.
  */
 export async function signInWithGoogle(): Promise<AuthResult> {
   try {
@@ -82,9 +103,6 @@ export async function signInWithGoogle(): Promise<AuthResult> {
 
     if (error) return { type: 'error', message: error.message }
     if (!data.url) return { type: 'error', message: 'No OAuth URL returned' }
-
-    // Dismiss any lingering browser session before starting a new one
-    await WebBrowser.dismissAuthSession()
 
     return await attemptOAuthSession(data.url)
   } catch (e) {

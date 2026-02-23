@@ -31,7 +31,8 @@
     "signInApple": "Continue with Apple",
     "signOut": "Sign out",
     "signOutConfirm": "Are you sure you want to sign out?",
-    "sessionExpired": "Session expired. Please sign in again."
+    "sessionExpired": "Session expired. Please sign in again.",
+    "timeout": "Sign-in timed out. Please try again."
   },
   "exercises": {
     "searchPlaceholder": "Search exercises",
@@ -225,5 +226,54 @@
     "tooltipWeight": "{{value}} kg",
     "minutes": "{{value}} min",
     "retry": "Couldn't load data — tap to retry"
+  },
+  "onboarding": {
+    "welcome": {
+      "title": "Your training, supercharged",
+      "subtitle": "Everything you need to get stronger, faster.",
+      "feature1Title": "Smart Tracking",
+      "feature1Desc": "Log sets in seconds with auto-suggestions from your history.",
+      "feature2Title": "Progressive Overload",
+      "feature2Desc": "Automatic weight and rep recommendations to keep you progressing.",
+      "feature3Title": "Clear Progress",
+      "feature3Desc": "Charts, PRs, and trends so you always know where you stand.",
+      "cta": "Get Started"
+    },
+    "experience": {
+      "title": "What's your level?",
+      "subtitle": "This helps us tailor your experience.",
+      "beginner": "Beginner",
+      "beginnerDesc": "New to lifting or less than 6 months.",
+      "intermediate": "Intermediate",
+      "intermediateDesc": "6 months to 2 years of consistent training.",
+      "advanced": "Advanced",
+      "advancedDesc": "2+ years with structured programming."
+    },
+    "goal": {
+      "title": "What's your main goal?",
+      "subtitle": "You can always change this later.",
+      "strength": "Strength",
+      "strengthDesc": "Lift heavier. Focus on compound movements.",
+      "hypertrophy": "Hypertrophy",
+      "hypertrophyDesc": "Build muscle. Higher volume training.",
+      "generalFitness": "General Fitness",
+      "generalFitnessDesc": "Stay active and healthy. Balanced approach.",
+      "bodyRecomp": "Body Recomp",
+      "bodyRecompDesc": "Lose fat and build muscle simultaneously."
+    },
+    "equipment": {
+      "title": "What equipment do you have?",
+      "subtitle": "Select all that apply. We'll filter exercises for you.",
+      "barbell": "Barbell",
+      "dumbbell": "Dumbbell",
+      "cable": "Cable",
+      "machine": "Machine",
+      "bodyweight": "Bodyweight",
+      "bands": "Bands",
+      "kettlebell": "Kettlebell",
+      "error": "Failed to save. Please try again."
+    },
+    "continue": "Continue",
+    "skip": "Skip"
   }
 }
