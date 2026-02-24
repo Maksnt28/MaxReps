@@ -1,9 +1,8 @@
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { Platform } from 'react-native'
 import { YStack, XStack, Spinner, Theme, Button } from 'tamagui'
 import { useTranslation } from 'react-i18next'
 import Ionicons from '@expo/vector-icons/Ionicons'
-import * as AppleAuthentication from 'expo-apple-authentication'
 import { signInWithGoogle, signInWithApple, type AuthResult } from '@/lib/auth'
 import { AppText } from '@/components/ui/AppText'
 import { colors } from '@/lib/theme'
@@ -12,13 +11,6 @@ export default function SignInScreen() {
   const { t } = useTranslation()
   const [loading, setLoading] = useState<'google' | 'apple' | null>(null)
   const [error, setError] = useState<string | null>(null)
-  const [appleAvailable, setAppleAvailable] = useState(false)
-
-  useEffect(() => {
-    if (Platform.OS === 'ios') {
-      AppleAuthentication.isAvailableAsync().then(setAppleAvailable)
-    }
-  }, [])
 
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
@@ -30,7 +22,6 @@ export default function SignInScreen() {
     let timedOut = false
     timeoutRef.current = setTimeout(() => {
       timedOut = true
-      console.log('[AUTH] timeout: 15s exceeded, resetting loading state')
       setLoading(null)
       setError(t('auth.timeout'))
     }, 15_000)
@@ -95,7 +86,7 @@ export default function SignInScreen() {
           {t('auth.signInGoogle')}
         </Button>
 
-        {appleAvailable && (
+        {Platform.OS === 'ios' && (
           <Button
             size="$5"
             width="100%"

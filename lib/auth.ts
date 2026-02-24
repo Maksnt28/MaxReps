@@ -1,7 +1,5 @@
 import { makeRedirectUri } from 'expo-auth-session'
 import * as WebBrowser from 'expo-web-browser'
-import * as AppleAuthentication from 'expo-apple-authentication'
-import * as Crypto from 'expo-crypto'
 import { supabase } from './supabase'
 
 const redirectTo = makeRedirectUri({ scheme: 'maxreps', path: 'auth/callback' })
@@ -81,20 +79,16 @@ async function attemptOAuthSession(oauthUrl: string): Promise<AuthResult> {
   return { type: 'error', message: 'No auth code or tokens in callback URL' }
 }
 
-/**
- * Google Sign-In via Supabase OAuth (browser-based PKCE flow).
- * Includes pre-flight connectivity check with 5s timeout.
- */
-export async function signInWithGoogle(): Promise<AuthResult> {
+/** Browser-based OAuth sign-in with pre-flight connectivity check. */
+async function signInWithOAuth(provider: 'google' | 'apple'): Promise<AuthResult> {
   try {
-    // Pre-flight: verify server is reachable before opening browser
     const reachable = await checkConnectivity()
     if (!reachable) {
       return { type: 'error', message: 'Cannot reach authentication server. Check your network connection.' }
     }
 
     const { data, error } = await supabase.auth.signInWithOAuth({
-      provider: 'google',
+      provider,
       options: {
         redirectTo,
         skipBrowserRedirect: true,
@@ -110,47 +104,8 @@ export async function signInWithGoogle(): Promise<AuthResult> {
   }
 }
 
-/**
- * Apple Sign-In via native sheet (expo-apple-authentication).
- * Uses signInWithIdToken to exchange the Apple identity token with Supabase.
- */
-export async function signInWithApple(): Promise<AuthResult> {
-  try {
-    const nonce = Crypto.randomUUID()
-    const hashedNonce = await Crypto.digestStringAsync(
-      Crypto.CryptoDigestAlgorithm.SHA256,
-      nonce
-    )
-
-    const credential = await AppleAuthentication.signInAsync({
-      requestedScopes: [
-        AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
-        AppleAuthentication.AppleAuthenticationScope.EMAIL,
-      ],
-      nonce: hashedNonce,
-    })
-
-    if (!credential.identityToken) {
-      return { type: 'error', message: 'No identity token from Apple' }
-    }
-
-    const { error } = await supabase.auth.signInWithIdToken({
-      provider: 'apple',
-      token: credential.identityToken,
-      nonce,
-    })
-
-    if (error) return { type: 'error', message: error.message }
-
-    return { type: 'success' }
-  } catch (e: unknown) {
-    // User cancelled the native Apple sheet
-    if (e && typeof e === 'object' && 'code' in e && e.code === 'ERR_REQUEST_CANCELED') {
-      return { type: 'cancelled' }
-    }
-    return { type: 'error', message: e instanceof Error ? e.message : 'Unknown error' }
-  }
-}
+export const signInWithGoogle = () => signInWithOAuth('google')
+export const signInWithApple = () => signInWithOAuth('apple')
 
 /**
  * Sign out the current user.

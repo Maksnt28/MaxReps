@@ -14,14 +14,5 @@
       "distribution": "internal"
     },
     "production": {}
-  },
-  "submit": {
-    "production": {
-      "ios": {
-        "appleId": "",
-        "ascAppId": "",
-        "appleTeamId": ""
-      }
-    }
   }
 }

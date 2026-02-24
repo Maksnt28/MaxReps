@@ -9,8 +9,10 @@
     "web": "expo start --web",
     "lint": "expo lint app lib stores hooks components",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run",
-    "test:watch": "vitest"
+    "test": "vitest run --project unit",
+    "test:watch": "vitest --project unit",
+    "test:unit": "vitest run --project unit",
+    "test:rls": "vitest run --project integration"
   },
   "dependencies": {
     "@expo/vector-icons": "^15.0.3",
@@ -30,6 +32,7 @@
     "expo-blur": "~15.0.8",
     "expo-constants": "~18.0.13",
     "expo-crypto": "~15.0.8",
+    "expo-dev-client": "~6.0.20",
     "expo-font": "~14.0.11",
     "expo-haptics": "~15.0.8",
     "expo-image": "~3.0.11",
