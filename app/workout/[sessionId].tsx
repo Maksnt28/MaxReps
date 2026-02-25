@@ -1,11 +1,15 @@
-import { Pressable, ScrollView, ActivityIndicator } from 'react-native'
+import { Alert, Pressable, ScrollView, ActivityIndicator } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { YStack, XStack } from 'tamagui'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import { useTranslation } from 'react-i18next'
+import { useQueryClient } from '@tanstack/react-query'
 import Ionicons from '@expo/vector-icons/Ionicons'
 
 import { useWorkoutSession, type SessionExercise, type SessionSet } from '@/hooks/useWorkoutSession'
+import { useCreateSession, useDiscardWorkout } from '@/hooks/useWorkoutMutations'
+import { useWorkoutStore } from '@/stores/useWorkoutStore'
+import { useRestTimerStore } from '@/stores/useRestTimerStore'
 import { AppText } from '@/components/ui/AppText'
 import { AppCard } from '@/components/ui/AppCard'
 import { colors, semantic, headerButtonStyles, headerButtonIcon } from '@/lib/theme'
@@ -16,8 +20,76 @@ export default function SessionDetailScreen() {
   const router = useRouter()
   const { t, i18n } = useTranslation()
   const locale = i18n.language
+  const queryClient = useQueryClient()
 
-  const { data: session, isLoading, isError } = useWorkoutSession(sessionId!)
+  const { data: sessionData, isLoading, isError } = useWorkoutSession(sessionId!)
+  const createSession = useCreateSession()
+  const discardWorkout = useDiscardWorkout()
+
+  const currentSessionId = useWorkoutStore((s) => s.sessionId)
+  const isActive = useWorkoutStore((s) => s.isActive)
+  const startWorkout = useWorkoutStore((s) => s.startWorkout)
+  const loadProgramDay = useWorkoutStore((s) => s.loadProgramDay)
+  const endWorkout = useWorkoutStore((s) => s.endWorkout)
+  const resetTimer = useRestTimerStore((s) => s.reset)
+
+  async function doRepeatWorkout() {
+    if (!sessionData) return
+    try {
+      const newSession = await createSession.mutateAsync({
+        programDayId: sessionData.programDayId ?? undefined,
+      })
+      startWorkout(newSession.id, sessionData.programDayId ?? undefined)
+      loadProgramDay(
+        sessionData.exercises.map((ex) => ({
+          exerciseId: ex.exerciseId,
+          setsTarget: ex.sets.filter((s) => !s.isWarmup).length,
+          repsTarget: null,
+          restSeconds: null,
+        }))
+      )
+      queryClient.invalidateQueries({ queryKey: ['month-sessions'] })
+      router.replace('/(tabs)/workout')
+    } catch {
+      Alert.alert(t('common.error'))
+    }
+  }
+
+  function handleRepeat() {
+    if (!sessionData || sessionData.exercises.length === 0) return
+
+    if (isActive) {
+      Alert.alert(
+        t('workout.repeatConfirmTitle'),
+        t('workout.repeatConfirmMessage'),
+        [
+          { text: t('common.cancel'), style: 'cancel' },
+          {
+            text: t('workout.repeatConfirmAction'),
+            style: 'destructive',
+            onPress: async () => {
+              try {
+                if (currentSessionId) {
+                  await discardWorkout.mutateAsync(currentSessionId)
+                }
+                endWorkout()
+                resetTimer()
+                doRepeatWorkout()
+              } catch {
+                Alert.alert(t('common.error'))
+              }
+            },
+          },
+        ]
+      )
+    } else {
+      resetTimer()
+      doRepeatWorkout()
+    }
+  }
+
+  // Alias for consistent naming in JSX below
+  const session = sessionData
 
   if (isLoading) {
     return (
@@ -85,10 +157,27 @@ export default function SessionDetailScreen() {
             <AppText preset="exerciseName" color={colors.gray12}>
               {formattedDate}
             </AppText>
+            {session.programDayName && (
+              <AppText preset="caption" color={colors.gray8} fontWeight="600">
+                {session.programDayName}
+              </AppText>
+            )}
             <AppText preset="caption" color={colors.gray7}>
               {formattedTime}
             </AppText>
           </YStack>
+          <Pressable
+            onPress={handleRepeat}
+            style={headerButtonStyles.navButton}
+            disabled={session.exercises.length === 0 || createSession.isPending}
+            accessibilityLabel={t('workout.repeatWorkout')}
+          >
+            <Ionicons
+              name="repeat"
+              size={headerButtonIcon.size}
+              color={session.exercises.length === 0 ? colors.gray5 : headerButtonIcon.color}
+            />
+          </Pressable>
         </XStack>
 
         {/* Summary bar */}

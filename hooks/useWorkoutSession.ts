@@ -26,6 +26,7 @@ export interface SessionDetail {
   durationSeconds: number | null
   notes: string | null
   programDayId: string | null
+  programDayName: string | null
   exercises: SessionExercise[]
 }
 
@@ -36,7 +37,7 @@ export function useWorkoutSession(sessionId: string) {
       // Fetch session
       const { data: session, error } = await supabase
         .from('workout_sessions')
-        .select('id, started_at, finished_at, duration_seconds, notes, program_day_id')
+        .select('id, started_at, finished_at, duration_seconds, notes, program_day_id, program_days(name)')
         .eq('id', sessionId)
         .single()
 
@@ -82,6 +83,7 @@ export function useWorkoutSession(sessionId: string) {
         exercise.sets.sort((a, b) => a.setNumber - b.setNumber)
       }
 
+      const programDay = (session as any).program_days as { name: string } | null
       return {
         id: session.id,
         startedAt: session.started_at,
@@ -89,6 +91,7 @@ export function useWorkoutSession(sessionId: string) {
         durationSeconds: session.duration_seconds,
         notes: session.notes,
         programDayId: session.program_day_id,
+        programDayName: programDay?.name ?? null,
         exercises: [...exerciseMap.values()],
       } satisfies SessionDetail
     },

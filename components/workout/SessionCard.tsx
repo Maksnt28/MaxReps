@@ -45,6 +45,13 @@ export function SessionCard({ session, exerciseNames, onPress }: SessionCardProp
           )}
         </XStack>
 
+        {/* Program day name */}
+        {session.programDayName && (
+          <AppText preset="caption" color={colors.gray8} fontWeight="600">
+            {session.programDayName}
+          </AppText>
+        )}
+
         {/* Exercise names */}
         {exerciseNames.length > 0 && (
           <AppText preset="caption" color={colors.gray7} numberOfLines={2}>

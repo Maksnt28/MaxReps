@@ -5,6 +5,7 @@ import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 import { XStack, YStack } from 'tamagui'
 import { useTranslation } from 'react-i18next'
 import { signOut } from '@/lib/auth'
+import { saveLocale } from '@/lib/i18n'
 import { supabase } from '@/lib/supabase'
 import { useUserStore, type UserRow } from '@/stores/useUserStore'
 import { useUpdateProfile, parseLimitations, formatLimitations } from '@/hooks/useUpdateProfile'
@@ -324,6 +325,9 @@ export default function ProfileScreen() {
         restSecondsSuccess: localRestSecondsSuccess,
         restSecondsFailure: localRestSecondsFailure,
       }
+
+      // Persist locale to AsyncStorage for fast cold-start
+      if (localLocale !== locale) saveLocale(localLocale)
 
       // Show brief success confirmation before hiding save bar
       hapticNotification()

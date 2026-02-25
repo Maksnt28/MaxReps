@@ -34,7 +34,7 @@ export function useFinishWorkout() {
       queryClient.invalidateQueries({ queryKey: ['personal-records'] })
       queryClient.invalidateQueries({ queryKey: ['progress-stats'] })
       queryClient.invalidateQueries({ queryKey: ['recent-exercises'] })
-      queryClient.invalidateQueries({ queryKey: ['workout-sessions'] })
+      queryClient.invalidateQueries({ queryKey: ['month-sessions'] })
     },
     mutationFn: async (params: {
       sessionId: string
@@ -91,10 +91,18 @@ export function useFinishWorkout() {
 
       const prKeys = detectPRs(completedSets, historyMap)
 
-      // Only mark ONE set per exercise as PR (the first matching set)
+      // Only mark ONE set per exercise as PR — the heaviest PR weight
+      const bestPrWeight = new Map<string, number>()
+      for (const key of prKeys) {
+        const [exerciseId, weightStr] = key.split(':')
+        const weight = Number(weightStr)
+        if (weight > (bestPrWeight.get(exerciseId) ?? 0)) {
+          bestPrWeight.set(exerciseId, weight)
+        }
+      }
       const prMarked = new Set<string>()
       const sets = completedSets.map((s) => {
-        const isPr = prKeys.has(`${s.exerciseId}:${s.weightKg}`) && !prMarked.has(s.exerciseId)
+        const isPr = bestPrWeight.get(s.exerciseId) === s.weightKg && !prMarked.has(s.exerciseId)
         if (isPr) prMarked.add(s.exerciseId)
         return {
           session_id: params.sessionId,

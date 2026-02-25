@@ -10,6 +10,7 @@ export interface SessionSummary {
   durationSeconds: number | null
   notes: string | null
   programDayId: string | null
+  programDayName: string | null
   exerciseIds: string[]
   exerciseCount: number
   setCount: number
@@ -23,7 +24,7 @@ export function useWorkoutSessions() {
     queryFn: async ({ pageParam = 0 }) => {
       const { data: sessions, error } = await supabase
         .from('workout_sessions')
-        .select('id, started_at, finished_at, duration_seconds, notes, program_day_id')
+        .select('id, started_at, finished_at, duration_seconds, notes, program_day_id, program_days(name)')
         .not('finished_at', 'is', null)
         .order('started_at', { ascending: false })
         .range(pageParam, pageParam + PAGE_SIZE - 1)
@@ -52,6 +53,7 @@ export function useWorkoutSessions() {
         )
         const prCount = workingSets.filter((set) => set.is_pr).length
 
+        const programDay = (s as any).program_days as { name: string } | null
         return {
           id: s.id,
           startedAt: s.started_at,
@@ -59,6 +61,7 @@ export function useWorkoutSessions() {
           durationSeconds: s.duration_seconds,
           notes: s.notes,
           programDayId: s.program_day_id,
+          programDayName: programDay?.name ?? null,
           exerciseIds,
           exerciseCount: exerciseIds.length,
           setCount: workingSets.length,

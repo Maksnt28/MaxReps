@@ -94,6 +94,7 @@ export default function ProgramDetailScreen() {
     const doStart = async () => {
       try {
         if (isActive) {
+          // TODO: use discardWorkout instead of endWorkout to delete orphaned DB row
           endWorkout()
         }
         resetTimer()

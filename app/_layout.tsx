@@ -1,4 +1,4 @@
-import i18n from '@/lib/i18n'
+import i18n, { initLocale, saveLocale } from '@/lib/i18n'
 
 import { useCallback, useEffect, useState } from 'react'
 import { Stack, useRouter, useSegments } from 'expo-router'
@@ -100,6 +100,7 @@ export default function RootLayout() {
           restSecondsFailure: row.rest_seconds_failure ?? null,
         })
         i18n.changeLanguage(locale)
+        saveLocale(locale)
       }
     } catch (e) {
       console.warn('syncUserProfile: unexpected error', e)
@@ -109,6 +110,8 @@ export default function RootLayout() {
   useEffect(() => {
     // Check initial session — await sync before marking loaded
     supabase.auth.getSession().then(async ({ data: { session } }) => {
+      // Restore cached locale instantly (~5ms) before any network calls
+      await initLocale()
       setSession(session)
       if (session) await syncUserProfile(session)
       setIsLoading(false)
