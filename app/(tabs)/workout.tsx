@@ -1,14 +1,19 @@
 import { useState } from 'react'
 import { Alert } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
+import { YStack, XStack } from 'tamagui'
 import { useTranslation } from 'react-i18next'
 
 import { useWorkoutStore } from '@/stores/useWorkoutStore'
 import { useRestTimerStore } from '@/stores/useRestTimerStore'
 import { useFinishWorkout, useDiscardWorkout } from '@/hooks/useWorkoutMutations'
 import { hapticHeavy } from '@/lib/animations'
+import { colors } from '@/lib/theme'
+import { AppText } from '@/components/ui/AppText'
 import { StartWorkoutButton } from '@/components/workout/StartWorkoutButton'
 import { ActiveWorkoutScreen } from '@/components/workout/ActiveWorkoutScreen'
 import { WorkoutSummary } from '@/components/workout/WorkoutSummary'
+import { WorkoutHistoryList } from '@/components/workout/WorkoutHistoryList'
 
 interface SummaryData {
   durationSeconds: number
@@ -114,7 +119,25 @@ export default function WorkoutScreen() {
   }
 
   if (!isActive) {
-    return <StartWorkoutButton />
+    return (
+      <SafeAreaView style={{ flex: 1, backgroundColor: colors.gray1 }} edges={['top']}>
+        <YStack flex={1}>
+          <XStack paddingHorizontal={16} paddingTop={16} paddingBottom={8}>
+            <AppText fontSize={28} fontWeight="800" color={colors.gray12}>
+              {t('tabs.workout')}
+            </AppText>
+          </XStack>
+
+          <YStack paddingHorizontal={16}>
+            <StartWorkoutButton />
+          </YStack>
+
+          <YStack flex={1}>
+            <WorkoutHistoryList />
+          </YStack>
+        </YStack>
+      </SafeAreaView>
+    )
   }
 
   return <ActiveWorkoutScreen onFinish={handleFinish} />

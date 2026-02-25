@@ -17,6 +17,10 @@ export default function WorkoutLayout() {
           headerShown: false,
         }}
       />
+      <Stack.Screen
+        name="[sessionId]"
+        options={{ headerShown: false }}
+      />
     </Stack>
   )
 }

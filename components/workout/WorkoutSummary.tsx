@@ -7,6 +7,7 @@ import { AppButton } from '@/components/ui/AppButton'
 import { AppCard } from '@/components/ui/AppCard'
 import { Divider } from '@/components/ui/Divider'
 import { colors } from '@/lib/theme'
+import { formatDuration } from '@/lib/timerUtils'
 
 interface WorkoutSummaryProps {
   durationSeconds: number
@@ -14,13 +15,6 @@ interface WorkoutSummaryProps {
   setsCount: number
   totalVolumeKg: number
   onDone: () => void
-}
-
-function formatDuration(seconds: number): string {
-  const h = Math.floor(seconds / 3600)
-  const m = Math.floor((seconds % 3600) / 60)
-  if (h > 0) return `${h}h ${m}m`
-  return `${m}m`
 }
 
 function SummaryRow({ label, value }: { label: string; value: string }) {

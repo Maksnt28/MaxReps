@@ -34,6 +34,7 @@ export function useFinishWorkout() {
       queryClient.invalidateQueries({ queryKey: ['personal-records'] })
       queryClient.invalidateQueries({ queryKey: ['progress-stats'] })
       queryClient.invalidateQueries({ queryKey: ['recent-exercises'] })
+      queryClient.invalidateQueries({ queryKey: ['workout-sessions'] })
     },
     mutationFn: async (params: {
       sessionId: string

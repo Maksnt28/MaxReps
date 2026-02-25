@@ -1,11 +1,20 @@
-# Review: Deferred Items — Apple Sign-In + Cross-User RLS Tests
+# Review: Workout History
 
-> **Date:** 2026-02-24
-> **Status:** review-round-4
+> **Date:** 2026-02-25
+> **Status:** review-round-10
 > **Reviewer:** Review pane (independent Claude Code session)
 
 ## Summary Verdict
-**READY** — Plan has been through three review rounds and is tight. All critical and improvement issues resolved. Validated assumptions against the actual codebase and Vitest 4 docs. Two minor items remain from round 3 that weren't incorporated, plus one new observation.
+**READY** — no issues remaining
+
+After 9 prior rounds catching real bugs (timezone rollback, warmup prefix localization, weight_kg=0 falsiness, exercise UUID ordering, duplicate i18n keys, SectionList page-boundary dedup, missing accessibility labels, formatDuration DRY violation, FK constraint blocker), all critiques have been addressed with clear resolutions and updated code snippets.
+
+Independent verification confirms:
+- All i18n keys checked against both EN and FR locale files — no conflicts, no duplicates
+- Step 10 warmup prefix now uses `t('workout.warmup')` — "W" (EN) / "E" (FR)
+- Step 12 reuse list is complete: `workout.set`, `workout.warmup`, `workout.reps`, `workout.rpe`, `workout.weight`, `workout.notes`
+- Step 12 new keys reduced to 2 (sessionDetail, back) — Files Summary updated to ~8 total
+- All code snippets internally consistent with the i18n strategy
 
 ## Critical Issues (must fix)
 
@@ -17,12 +26,8 @@ None.
 
 ## Minor Notes (nice to have)
 
-- **M1 — Stale `afterAll` description (carried from round 3):** Line 188 still says "FK-ordered deletion + auth user removal." Should read "Cascade deletion from `public.users` + auth user removal" to match step 10's corrected cascade approach.
-
-- **M2 — Line number drift in plan text:** `signInWithApple()` is at lines 117-153 (plan says 113-153), and `handle_new_user()` starts at line 143 (plan says 142). Cosmetic only — doesn't affect execution.
-
-- **M3 — `resolve.alias` inheritance with `extends: true`:** Vitest docs confirm `extends: true` merges "all options" but don't explicitly list `resolve.alias` as inherited. The plan correctly provides an explicit `resolve.alias` on the integration project (`extends: false`), so the only risk is on the unit project. If alias inheritance fails, unit tests would break immediately and obviously — easy to debug by adding explicit `resolve` to the unit project. Very low risk, but worth a mental note during step 7.
+None. The plan is implementation-ready.
 
 ## Questions for the Author
 
-None. Plan is approved for execution.
+None.
