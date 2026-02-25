@@ -8,9 +8,10 @@ interface ProgressRingProps {
 }
 
 export function ProgressRing({ size = 15, strokeWidth = 1.5, progress }: ProgressRingProps) {
+  const clampedProgress = Math.max(0, Math.min(1, progress))
   const radius = (size - strokeWidth) / 2
   const circumference = 2 * Math.PI * radius
-  const strokeDashoffset = circumference * (1 - progress)
+  const strokeDashoffset = circumference * (1 - clampedProgress)
 
   return (
     <Svg width={size} height={size} style={{ transform: [{ rotate: '-90deg' }] }}>

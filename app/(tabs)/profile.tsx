@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
-import { Alert, KeyboardAvoidingView, Platform, Pressable, ScrollView, StyleSheet, TextInput, View } from 'react-native'
+import { Alert, KeyboardAvoidingView, Platform, Pressable, ScrollView, StyleSheet, Switch as RNSwitch, TextInput, View } from 'react-native'
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated'
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
-import { YStack } from 'tamagui'
+import { XStack, YStack } from 'tamagui'
 import { useTranslation } from 'react-i18next'
 import { signOut } from '@/lib/auth'
 import { supabase } from '@/lib/supabase'
@@ -97,7 +97,8 @@ export default function ProfileScreen() {
   const insets = useSafeAreaInsets()
   const {
     displayName, experienceLevel, goals, equipment, locale,
-    limitations, daysPerWeek, sex, age, heightCm, weightKg, setUser,
+    limitations, daysPerWeek, sex, age, heightCm, weightKg,
+    defaultRestSeconds, restSecondsSuccess, restSecondsFailure, setUser,
   } = useUserStore()
   const updateProfile = useUpdateProfile()
   const [signOutLoading, setSignOutLoading] = useState(false)
@@ -113,6 +114,9 @@ export default function ProfileScreen() {
   const [localAge, setLocalAge] = useState<number | null>(age)
   const [localHeightCm, setLocalHeightCm] = useState<number | null>(heightCm)
   const [localWeightKg, setLocalWeightKg] = useState<number | null>(weightKg)
+  const [localDefaultRestSeconds, setLocalDefaultRestSeconds] = useState<number | null>(defaultRestSeconds)
+  const [localRestSecondsSuccess, setLocalRestSecondsSuccess] = useState<number | null>(restSecondsSuccess)
+  const [localRestSecondsFailure, setLocalRestSecondsFailure] = useState<number | null>(restSecondsFailure)
 
   // Save state
   const [saving, setSaving] = useState(false)
@@ -124,9 +128,21 @@ export default function ProfileScreen() {
   const [limitationsFocused, setLimitationsFocused] = useState(false)
 
   // Re-sync local state if store updates externally (e.g., session restore)
+  const localAdaptiveEnabled = localRestSecondsSuccess !== null
+
+  function handleToggleAdaptive(checked: boolean) {
+    if (checked) {
+      setLocalRestSecondsSuccess(localDefaultRestSeconds ?? 90)
+      setLocalRestSecondsFailure((localDefaultRestSeconds ?? 90) * 2)
+    } else {
+      setLocalRestSecondsSuccess(null)
+      setLocalRestSecondsFailure(null)
+    }
+  }
+
   const storeRef = useRef({
     experienceLevel, goals, equipment, daysPerWeek, limitations, locale,
-    sex, age, heightCm, weightKg,
+    sex, age, heightCm, weightKg, defaultRestSeconds, restSecondsSuccess, restSecondsFailure,
   })
   useEffect(() => {
     const prev = storeRef.current
@@ -140,7 +156,10 @@ export default function ProfileScreen() {
       prev.sex !== sex ||
       prev.age !== age ||
       prev.heightCm !== heightCm ||
-      prev.weightKg !== weightKg
+      prev.weightKg !== weightKg ||
+      prev.defaultRestSeconds !== defaultRestSeconds ||
+      prev.restSecondsSuccess !== restSecondsSuccess ||
+      prev.restSecondsFailure !== restSecondsFailure
     ) {
       setLocalExperience(experienceLevel)
       setLocalGoals(goals)
@@ -152,12 +171,15 @@ export default function ProfileScreen() {
       setLocalAge(age)
       setLocalHeightCm(heightCm)
       setLocalWeightKg(weightKg)
+      setLocalDefaultRestSeconds(defaultRestSeconds)
+      setLocalRestSecondsSuccess(restSecondsSuccess)
+      setLocalRestSecondsFailure(restSecondsFailure)
       storeRef.current = {
         experienceLevel, goals, equipment, daysPerWeek, limitations, locale,
-        sex, age, heightCm, weightKg,
+        sex, age, heightCm, weightKg, defaultRestSeconds, restSecondsSuccess, restSecondsFailure,
       }
     }
-  }, [experienceLevel, goals, equipment, daysPerWeek, limitations, locale, sex, age, heightCm, weightKg])
+  }, [experienceLevel, goals, equipment, daysPerWeek, limitations, locale, sex, age, heightCm, weightKg, defaultRestSeconds, restSecondsSuccess, restSecondsFailure])
 
   // Revert language on unmount if unsaved
   useEffect(() => {
@@ -199,6 +221,9 @@ export default function ProfileScreen() {
             age: row.age ?? null,
             heightCm: row.height_cm ?? null,
             weightKg: row.weight_kg ?? null,
+            defaultRestSeconds: row.default_rest_seconds ?? null,
+            restSecondsSuccess: row.rest_seconds_success ?? null,
+            restSecondsFailure: row.rest_seconds_failure ?? null,
           })
         }
       } catch {
@@ -227,7 +252,10 @@ export default function ProfileScreen() {
     localSex !== sex ||
     localAge !== age ||
     localHeightCm !== heightCm ||
-    localWeightKg !== weightKg
+    localWeightKg !== weightKg ||
+    localDefaultRestSeconds !== defaultRestSeconds ||
+    localRestSecondsSuccess !== restSecondsSuccess ||
+    localRestSecondsFailure !== restSecondsFailure
 
   async function handleSave() {
     setSaving(true)
@@ -256,6 +284,9 @@ export default function ProfileScreen() {
     if (localAge !== age) payload.age = localAge
     if (localHeightCm !== heightCm) payload.height_cm = localHeightCm
     if (localWeightKg !== weightKg) payload.weight_kg = localWeightKg
+    if (localDefaultRestSeconds !== defaultRestSeconds) payload.default_rest_seconds = localDefaultRestSeconds
+    if (localRestSecondsSuccess !== restSecondsSuccess) payload.rest_seconds_success = localRestSecondsSuccess
+    if (localRestSecondsFailure !== restSecondsFailure) payload.rest_seconds_failure = localRestSecondsFailure
 
     try {
       await updateProfile.mutateAsync(payload as any)
@@ -272,6 +303,9 @@ export default function ProfileScreen() {
         age: localAge,
         heightCm: localHeightCm,
         weightKg: localWeightKg,
+        defaultRestSeconds: localDefaultRestSeconds,
+        restSecondsSuccess: localRestSecondsSuccess,
+        restSecondsFailure: localRestSecondsFailure,
       })
 
       // Update ref so re-sync effect doesn't re-fire
@@ -286,6 +320,9 @@ export default function ProfileScreen() {
         age: localAge,
         heightCm: localHeightCm,
         weightKg: localWeightKg,
+        defaultRestSeconds: localDefaultRestSeconds,
+        restSecondsSuccess: localRestSecondsSuccess,
+        restSecondsFailure: localRestSecondsFailure,
       }
 
       // Show brief success confirmation before hiding save bar
@@ -496,6 +533,103 @@ export default function ProfileScreen() {
                   accessibilityLabel={t('profile.experienceLevel')}
                 />
               </AppCard>
+
+              {/* Rest Timer */}
+              <AppCard>
+                <AppText preset="caption" color={colors.gray7} marginBottom={8}>
+                  {t('profile.restTimerSection')}
+                </AppText>
+                <XStack justifyContent="space-between" alignItems="center">
+                  <AppText preset="caption" color={colors.gray7}>
+                    {t('profile.defaultRestDuration')}
+                  </AppText>
+                  <XStack alignItems="center" gap={6}>
+                    <TextInput
+                      value={localDefaultRestSeconds != null ? String(localDefaultRestSeconds) : ''}
+                      onChangeText={(text) => {
+                        const n = parseInt(text, 10)
+                        setLocalDefaultRestSeconds(Number.isNaN(n) ? null : Math.max(0, n))
+                      }}
+                      keyboardType="number-pad"
+                      style={styles.restInput}
+                      accessibilityLabel={t('profile.defaultRestDuration')}
+                      maxLength={3}
+                      placeholder="90"
+                      placeholderTextColor={colors.gray5}
+                    />
+                    <AppText preset="caption" color={colors.gray7}>
+                      {t('profile.restUnit')}
+                    </AppText>
+                  </XStack>
+                </XStack>
+                <Divider marginVertical={14} />
+                <XStack justifyContent="space-between" alignItems="center" marginBottom={8}>
+                  <AppText preset="caption" color={colors.gray7}>
+                    {t('profile.adaptiveRest')}
+                  </AppText>
+                  <RNSwitch
+                    value={localAdaptiveEnabled}
+                    onValueChange={handleToggleAdaptive}
+                    trackColor={{ false: colors.gray5, true: colors.accent }}
+                    thumbColor="#FFFFFF"
+                    style={{ transform: [{ scale: 0.8 }] }}
+                  />
+                </XStack>
+                <AppText preset="chipLabel" color={colors.gray6} marginBottom={12}>
+                  {t('profile.adaptiveRestDescription')}
+                </AppText>
+                {localAdaptiveEnabled && (
+                  <>
+                    <XStack justifyContent="space-between" alignItems="center">
+                      <AppText preset="caption" color={colors.gray7}>
+                        {t('profile.restAfterSuccess')}
+                      </AppText>
+                      <XStack alignItems="center" gap={6}>
+                        <TextInput
+                          value={localRestSecondsSuccess != null ? String(localRestSecondsSuccess) : ''}
+                          onChangeText={(text) => {
+                            const n = parseInt(text, 10)
+                            setLocalRestSecondsSuccess(Number.isNaN(n) ? null : Math.max(0, n))
+                          }}
+                          keyboardType="number-pad"
+                          style={styles.restInput}
+                          accessibilityLabel={t('profile.restAfterSuccess')}
+                          maxLength={3}
+                          placeholder="90"
+                          placeholderTextColor={colors.gray5}
+                        />
+                        <AppText preset="caption" color={colors.gray7}>
+                          {t('profile.restUnit')}
+                        </AppText>
+                      </XStack>
+                    </XStack>
+                    <Divider marginVertical={14} />
+                    <XStack justifyContent="space-between" alignItems="center">
+                      <AppText preset="caption" color={colors.gray7}>
+                        {t('profile.restAfterFailure')}
+                      </AppText>
+                      <XStack alignItems="center" gap={6}>
+                        <TextInput
+                          value={localRestSecondsFailure != null ? String(localRestSecondsFailure) : ''}
+                          onChangeText={(text) => {
+                            const n = parseInt(text, 10)
+                            setLocalRestSecondsFailure(Number.isNaN(n) ? null : Math.max(0, n))
+                          }}
+                          keyboardType="number-pad"
+                          style={styles.restInput}
+                          accessibilityLabel={t('profile.restAfterFailure')}
+                          maxLength={3}
+                          placeholder="180"
+                          placeholderTextColor={colors.gray5}
+                        />
+                        <AppText preset="caption" color={colors.gray7}>
+                          {t('profile.restUnit')}
+                        </AppText>
+                      </XStack>
+                    </XStack>
+                  </>
+                )}
+              </AppCard>
             </YStack>
 
             {/* ── 4. Training Goals ── */}
@@ -685,6 +819,19 @@ const styles = StyleSheet.create({
     minHeight: 76,
     textAlignVertical: 'top',
     padding: 0,
+  },
+  restInput: {
+    backgroundColor: colors.gray3,
+    borderWidth: 1,
+    borderColor: colors.gray5,
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    fontFamily: 'Inter-Medium',
+    fontSize: 16,
+    color: colors.gray11,
+    width: 64,
+    textAlign: 'center',
   },
   floatingBar: {
     position: 'absolute',

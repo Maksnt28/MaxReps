@@ -8,6 +8,7 @@ import type { Exercise } from '@/hooks/useExercises'
 import type { ActiveExercise } from '@/stores/useWorkoutStore'
 import { useWorkoutStore } from '@/stores/useWorkoutStore'
 import { useRestTimerStore, DEFAULT_REST_SECONDS } from '@/stores/useRestTimerStore'
+import { useUserStore } from '@/stores/useUserStore'
 import { useOverloadSuggestion } from '@/hooks/useOverloadSuggestion'
 import { getLocalizedExercise } from '@/lib/exercises'
 import { getWeightIncrement } from '@/lib/overload'
@@ -29,7 +30,9 @@ export function ExerciseCard({ activeExercise, exercise, locale }: ExerciseCardP
     useWorkoutStore()
   const startTimer = useRestTimerStore((s) => s.startTimer)
   const skipTimer = useRestTimerStore((s) => s.skip)
-  const isTimerRunning = useRestTimerStore((s) => s.isRunning)
+
+  const isTimerDisabled = useRestTimerStore((s) => s.disabledExerciseIds.includes(activeExercise.exerciseId))
+  const toggleTimer = useRestTimerStore((s) => s.toggleTimerForExercise)
 
   const exerciseId = activeExercise.exerciseId
   const sessionId = useWorkoutStore((s) => s.sessionId)
@@ -95,10 +98,42 @@ export function ExerciseCard({ activeExercise, exercise, locale }: ExerciseCardP
 
   function handleCompleteSet(set: typeof activeExercise.sets[number]) {
     completeSet(exerciseId, set.id)
-    if (!set.isCompleted && !set.isWarmup) {
-      // Completing a working set → start rest timer
-      startTimer(exerciseId, activeExercise.restSeconds ?? DEFAULT_REST_SECONDS)
-    } else if (set.isCompleted && !set.isWarmup && isTimerRunning) {
+    const isDisabled = useRestTimerStore.getState().disabledExerciseIds.includes(exerciseId)
+    if (!set.isCompleted && !set.isWarmup && !isDisabled) {
+      const { defaultRestSeconds, restSecondsSuccess, restSecondsFailure } = useUserStore.getState()
+
+      let restDuration: number
+      let adaptiveFailure = false
+
+      // Check adaptive failure first — failure rest overrides everything
+      const adaptiveEnabled = restSecondsSuccess != null && restSecondsFailure != null
+      const isFailure = adaptiveEnabled
+        && activeExercise.repsTarget != null
+        && set.reps != null
+        && set.reps < activeExercise.repsTarget
+
+      if (isFailure) {
+        // Adaptive failure overrides per-exercise rest
+        restDuration = restSecondsFailure!
+        adaptiveFailure = true
+      } else if (activeExercise.restSeconds != null) {
+        // Per-exercise override for success / non-adaptive
+        restDuration = activeExercise.restSeconds
+      } else if (adaptiveEnabled) {
+        // Adaptive success (no per-exercise override)
+        restDuration = restSecondsSuccess!
+      } else {
+        restDuration = defaultRestSeconds ?? DEFAULT_REST_SECONDS
+      }
+
+      startTimer(exerciseId, restDuration)
+      // Always set adaptive failure flag when adaptive mode is active (intent-based, not value-matching).
+      // Must set to false on success too — otherwise a success timer replacing a running failure timer
+      // mid-run would inherit the stale isAdaptiveFailure=true (expire()/skip() never fired to clear it).
+      if (restSecondsSuccess != null && restSecondsFailure != null) {
+        useRestTimerStore.setState({ isAdaptiveFailure: adaptiveFailure })
+      }
+    } else if (set.isCompleted && !set.isWarmup && useRestTimerStore.getState().isRunning) {
       // Uncompleting a working set while timer runs → cancel it
       skipTimer()
     }
@@ -131,13 +166,26 @@ export function ExerciseCard({ activeExercise, exercise, locale }: ExerciseCardP
             <AppText preset="caption" color={colors.gray7}>{muscleLabel}</AppText>
           ) : null}
         </YStack>
-        <Pressable
-          onPress={handleRemove}
-          accessibilityLabel={t('workout.removeExercise')}
-          hitSlop={8}
-        >
-          <Ionicons name="trash-outline" size={18} color={colors.gray6} />
-        </Pressable>
+        <XStack gap={8} alignItems="center">
+          <Pressable
+            onPress={() => toggleTimer(exerciseId)}
+            accessibilityLabel={isTimerDisabled ? t('workout.timerDisabled') : t('workout.timerEnabled')}
+            hitSlop={8}
+          >
+            <Ionicons
+              name={isTimerDisabled ? 'timer-outline' : 'timer'}
+              size={18}
+              color={isTimerDisabled ? colors.gray5 : colors.gray7}
+            />
+          </Pressable>
+          <Pressable
+            onPress={handleRemove}
+            accessibilityLabel={t('workout.removeExercise')}
+            hitSlop={8}
+          >
+            <Ionicons name="trash-outline" size={18} color={colors.gray6} />
+          </Pressable>
+        </XStack>
       </XStack>
 
       {/* Column headers */}

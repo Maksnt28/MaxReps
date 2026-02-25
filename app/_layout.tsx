@@ -95,6 +95,9 @@ export default function RootLayout() {
           age: row.age ?? null,
           heightCm: row.height_cm ?? null,
           weightKg: row.weight_kg ?? null,
+          defaultRestSeconds: row.default_rest_seconds ?? null,
+          restSecondsSuccess: row.rest_seconds_success ?? null,
+          restSecondsFailure: row.rest_seconds_failure ?? null,
         })
         i18n.changeLanguage(locale)
       }

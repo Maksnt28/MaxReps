@@ -14,6 +14,9 @@ interface ProfileUpdate {
   age?: number | null
   height_cm?: number | null
   weight_kg?: number | null
+  default_rest_seconds?: number | null
+  rest_seconds_success?: number | null
+  rest_seconds_failure?: number | null
 }
 
 export function useUpdateProfile() {

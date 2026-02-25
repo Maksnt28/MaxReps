@@ -17,6 +17,9 @@ export type UserRow = {
   age: number | null
   height_cm: number | null
   weight_kg: number | null
+  default_rest_seconds: number | null
+  rest_seconds_success: number | null
+  rest_seconds_failure: number | null
   [key: string]: unknown
 }
 
@@ -34,6 +37,9 @@ interface UserState {
   age: number | null
   heightCm: number | null
   weightKg: number | null
+  defaultRestSeconds: number | null
+  restSecondsSuccess: number | null
+  restSecondsFailure: number | null
 
   setUser: (user: Partial<UserState>) => void
   clearUser: () => void
@@ -53,6 +59,9 @@ export const useUserStore = create<UserState>((set) => ({
   age: null,
   heightCm: null,
   weightKg: null,
+  defaultRestSeconds: null,
+  restSecondsSuccess: null,
+  restSecondsFailure: null,
 
   setUser: (user) => set((state) => ({ ...state, ...user })),
   clearUser: () =>
@@ -70,5 +79,8 @@ export const useUserStore = create<UserState>((set) => ({
       age: null,
       heightCm: null,
       weightKg: null,
+      defaultRestSeconds: null,
+      restSecondsSuccess: null,
+      restSecondsFailure: null,
     }),
 }))

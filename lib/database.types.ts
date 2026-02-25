@@ -229,6 +229,7 @@ export type Database = {
         Row: {
           age: number | null
           created_at: string
+          default_rest_seconds: number | null
           display_name: string | null
           equipment: string[] | null
           experience_level: string | null
@@ -238,6 +239,8 @@ export type Database = {
           is_onboarded: boolean
           limitations: string[] | null
           locale: string | null
+          rest_seconds_failure: number | null
+          rest_seconds_success: number | null
           schedule: Json | null
           sex: string | null
           updated_at: string
@@ -246,6 +249,7 @@ export type Database = {
         Insert: {
           age?: number | null
           created_at?: string
+          default_rest_seconds?: number | null
           display_name?: string | null
           equipment?: string[] | null
           experience_level?: string | null
@@ -255,6 +259,8 @@ export type Database = {
           is_onboarded?: boolean
           limitations?: string[] | null
           locale?: string | null
+          rest_seconds_failure?: number | null
+          rest_seconds_success?: number | null
           schedule?: Json | null
           sex?: string | null
           updated_at?: string
@@ -263,6 +269,7 @@ export type Database = {
         Update: {
           age?: number | null
           created_at?: string
+          default_rest_seconds?: number | null
           display_name?: string | null
           equipment?: string[] | null
           experience_level?: string | null
@@ -272,6 +279,8 @@ export type Database = {
           is_onboarded?: boolean
           limitations?: string[] | null
           locale?: string | null
+          rest_seconds_failure?: number | null
+          rest_seconds_success?: number | null
           schedule?: Json | null
           sex?: string | null
           updated_at?: string

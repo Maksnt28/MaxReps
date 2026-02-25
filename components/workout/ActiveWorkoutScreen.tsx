@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { ScrollView, KeyboardAvoidingView, Platform, StyleSheet } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { YStack, XStack } from 'tamagui'
@@ -17,6 +17,7 @@ import { colors, backgroundGradient, spacing } from '@/lib/theme'
 import { WorkoutHeader } from './WorkoutHeader'
 import { ExerciseCard } from './ExerciseCard'
 import { RestTimerBandeau } from './RestTimerBandeau'
+import { FullScreenTimer } from './FullScreenTimer'
 
 interface ActiveWorkoutScreenProps {
   onFinish: () => void
@@ -58,6 +59,13 @@ export function ActiveWorkoutScreen({ onFinish }: ActiveWorkoutScreenProps) {
   const isTimerRunning = useRestTimerStore((s) => s.isRunning)
   const { data: allExercises } = useExercises()
 
+  const [isTimerExpanded, setIsTimerExpanded] = useState(false)
+
+  // Auto-collapse when timer stops (single source of truth for collapse)
+  useEffect(() => {
+    if (!isTimerRunning) setIsTimerExpanded(false)
+  }, [isTimerRunning])
+
   const exerciseMap = useMemo(() => {
     const map = new Map<string, NonNullable<typeof allExercises>[number]>()
     allExercises?.forEach((e) => map.set(e.id, e))
@@ -82,7 +90,9 @@ export function ActiveWorkoutScreen({ onFinish }: ActiveWorkoutScreenProps) {
 
           {exercises.length > 0 && <ProgressDots exercises={exercises} />}
 
-          {isTimerRunning && <RestTimerBandeau />}
+          {isTimerRunning && !isTimerExpanded && (
+            <RestTimerBandeau onExpand={() => setIsTimerExpanded(true)} />
+          )}
 
           <ScrollView
             style={{ flex: 1 }}
@@ -134,7 +144,7 @@ export function ActiveWorkoutScreen({ onFinish }: ActiveWorkoutScreenProps) {
             >
               {t('workout.addExercise')}
             </AppButton>
-            {exercises.length > 0 && (
+            {exercises.length > 0 ? (
               <AppButton
                 variant="secondary"
                 icon="checkmark-done"
@@ -144,10 +154,25 @@ export function ActiveWorkoutScreen({ onFinish }: ActiveWorkoutScreenProps) {
               >
                 {t('workout.finishWorkout')}
               </AppButton>
+            ) : (
+              <AppButton
+                variant="destructive"
+                icon="close"
+                fullWidth
+                onPress={onFinish}
+                accessibilityLabel={t('workout.discardWorkout')}
+              >
+                {t('workout.discardWorkout')}
+              </AppButton>
             )}
           </YStack>
         </YStack>
       </SafeAreaView>
+
+      {/* Full-screen timer overlay */}
+      {isTimerExpanded && isTimerRunning && (
+        <FullScreenTimer onCollapse={() => setIsTimerExpanded(false)} />
+      )}
     </KeyboardAvoidingView>
   )
 }
