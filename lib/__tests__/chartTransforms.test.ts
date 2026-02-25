@@ -1,11 +1,69 @@
 import { describe, it, expect } from 'vitest'
 import {
+  niceAxisScale,
   computeStrengthPoints,
   computeVolumePoints,
   computeFrequencyPoints,
   type SessionRow,
   type SetRow,
 } from '../chartTransforms'
+
+// ── niceAxisScale ─────────────────────────────────────────
+
+describe('niceAxisScale', () => {
+  it('returns labels ending in 0 or 5 for typical strength values', () => {
+    const { maxValue, stepValue, noOfSections } = niceAxisScale(127)
+    expect(maxValue % 5).toBe(0)
+    expect(stepValue % 5).toBe(0)
+    expect(noOfSections).toBeGreaterThanOrEqual(3)
+    expect(noOfSections).toBeLessThanOrEqual(5)
+    expect(maxValue).toBeGreaterThanOrEqual(127)
+  })
+
+  it('returns labels ending in 0 or 5 for typical volume values', () => {
+    const { maxValue, stepValue, noOfSections } = niceAxisScale(8500)
+    expect(maxValue % 5).toBe(0)
+    expect(stepValue % 5).toBe(0)
+    expect(noOfSections).toBeGreaterThanOrEqual(3)
+    expect(noOfSections).toBeLessThanOrEqual(5)
+    expect(maxValue).toBeGreaterThanOrEqual(8500)
+  })
+
+  it('handles small values', () => {
+    const { maxValue, stepValue, noOfSections } = niceAxisScale(45)
+    expect(maxValue % 5).toBe(0)
+    expect(stepValue % 5).toBe(0)
+    expect(maxValue).toBeGreaterThanOrEqual(45)
+    expect(noOfSections).toBeGreaterThanOrEqual(3)
+  })
+
+  it('handles zero/negative dataMax', () => {
+    const result = niceAxisScale(0)
+    expect(result).toEqual({ maxValue: 100, stepValue: 25, noOfSections: 4 })
+    expect(niceAxisScale(-10)).toEqual({ maxValue: 100, stepValue: 25, noOfSections: 4 })
+  })
+
+  it('produces consistent maxValue = stepValue * noOfSections', () => {
+    for (const dataMax of [45, 85, 127, 1800, 3200, 8500, 12000]) {
+      const { maxValue, stepValue, noOfSections } = niceAxisScale(dataMax)
+      expect(stepValue * noOfSections).toBe(maxValue)
+    }
+  })
+
+  it('handles large volume values', () => {
+    const { maxValue, stepValue } = niceAxisScale(12000)
+    expect(maxValue % 5).toBe(0)
+    expect(stepValue % 5).toBe(0)
+    expect(maxValue).toBeGreaterThanOrEqual(12000)
+  })
+
+  it('handles very small positive values with fallback', () => {
+    const { maxValue, stepValue, noOfSections } = niceAxisScale(3)
+    expect(stepValue).toBe(5)
+    expect(maxValue).toBeGreaterThanOrEqual(3)
+    expect(noOfSections).toBeGreaterThanOrEqual(3)
+  })
+})
 
 // ── computeStrengthPoints ─────────────────────────────────
 

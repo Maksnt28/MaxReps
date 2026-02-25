@@ -7,6 +7,7 @@ import { ChartCard } from './ChartCard'
 import { ExercisePicker } from './ExercisePicker'
 import { AppText } from '@/components/ui/AppText'
 import { useStrengthProgression } from '@/hooks/useStrengthProgression'
+import { niceAxisScale } from '@/lib/chartTransforms'
 import { colors, accent } from '@/lib/theme'
 
 export function StrengthChart({ range }: { range: string }) {
@@ -26,6 +27,8 @@ export function StrengthChart({ range }: { range: string }) {
   }))
 
   const hasData = chartData.length > 0
+  const dataMax = Math.max(...chartData.map((d) => d.value), 0)
+  const { maxValue, noOfSections } = niceAxisScale(dataMax)
 
   return (
     <ChartCard
@@ -68,7 +71,8 @@ export function StrengthChart({ range }: { range: string }) {
             xAxisLabelTextStyle={styles.axisText}
             yAxisTextNumberOfLines={1}
             hideRules
-            noOfSections={4}
+            maxValue={maxValue}
+            noOfSections={noOfSections}
             pointerConfig={{
               pointerStripColor: colors.gray4,
               pointerStripWidth: 1,

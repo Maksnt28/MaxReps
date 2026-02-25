@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useMemo } from 'react'
 import { Alert, Pressable } from 'react-native'
 import { YStack, XStack } from 'tamagui'
 import { useTranslation } from 'react-i18next'
@@ -9,22 +9,24 @@ import type { ActiveExercise } from '@/stores/useWorkoutStore'
 import { useWorkoutStore } from '@/stores/useWorkoutStore'
 import { useRestTimerStore, DEFAULT_REST_SECONDS } from '@/stores/useRestTimerStore'
 import { useUserStore } from '@/stores/useUserStore'
-import { useOverloadSuggestion } from '@/hooks/useOverloadSuggestion'
+import { useExerciseHistory } from '@/hooks/useWorkoutHistory'
 import { getLocalizedExercise } from '@/lib/exercises'
-import { getWeightIncrement } from '@/lib/overload'
+import { getLastSessionData } from '@/lib/lastSession'
 import { AppCard } from '@/components/ui/AppCard'
 import { AppText } from '@/components/ui/AppText'
 import { Divider } from '@/components/ui/Divider'
 import { colors } from '@/lib/theme'
 import { SetRow } from './SetRow'
+import { PRCelebrationCard } from './PRCelebrationCard'
 
 interface ExerciseCardProps {
   activeExercise: ActiveExercise
   exercise: Exercise | undefined
   locale: string
+  prState?: { isPR: boolean; previousMax: number; newMax: number; delta: number } | null
 }
 
-export function ExerciseCard({ activeExercise, exercise, locale }: ExerciseCardProps) {
+export function ExerciseCard({ activeExercise, exercise, locale, prState }: ExerciseCardProps) {
   const { t } = useTranslation()
   const { addSet, updateSet, removeSet, completeSet, toggleWarmup, removeExercise } =
     useWorkoutStore()
@@ -38,47 +40,17 @@ export function ExerciseCard({ activeExercise, exercise, locale }: ExerciseCardP
   const sessionId = useWorkoutStore((s) => s.sessionId)
   const name = exercise ? getLocalizedExercise(exercise, locale).name : exerciseId
 
-  const { suggestion } = useOverloadSuggestion(
-    exerciseId,
-    sessionId,
-    activeExercise.repsTarget
+  // Last session data for ghost values + context line
+  const { data: history } = useExerciseHistory(exerciseId, sessionId ?? undefined)
+  const lastSessionData = useMemo(
+    () => (history ? getLastSessionData(history) : null),
+    [history]
   )
-
-  // Pre-fill first empty working set once per exercise
-  const preFilled = useRef(false)
-  useEffect(() => {
-    if (preFilled.current || !suggestion) return
-    const firstEmpty = activeExercise.sets.find(
-      (s) => !s.isWarmup && !s.isCompleted && s.weightKg == null
-    )
-    if (firstEmpty) {
-      updateSet(exerciseId, firstEmpty.id, {
-        weightKg: suggestion.weight,
-        reps: firstEmpty.reps ?? suggestion.reps,
-      })
-      preFilled.current = true
-    }
-  }, [suggestion, activeExercise.sets, exerciseId, updateSet])
-
-  // Find first incomplete non-warmup set to show indicator
-  const indicatorSetId = (() => {
-    if (!suggestion) return null
-    const target = activeExercise.sets.find(
-      (s) => !s.isWarmup && !s.isCompleted
-    )
-    if (!target || target.weightKg == null) return null
-    if (Math.abs(target.weightKg - suggestion.weight) < 0.01) return target.id
-    return null
-  })()
 
   // Find first incomplete non-warmup set (current set)
   const currentSetId = activeExercise.sets.find(
     (s) => !s.isWarmup && !s.isCompleted
   )?.id ?? null
-
-  const increment = exercise?.muscle_primary
-    ? getWeightIncrement(exercise.muscle_primary)
-    : 2.5
 
   const muscleLabel = exercise
     ? t(`exercises.muscles.${exercise.muscle_primary}`)
@@ -97,6 +69,23 @@ export function ExerciseCard({ activeExercise, exercise, locale }: ExerciseCardP
   )
 
   function handleCompleteSet(set: typeof activeExercise.sets[number]) {
+    // Auto-fill ghost values when completing a set with empty fields
+    if (!set.isCompleted && !set.isWarmup && lastSessionData) {
+      let workingIdx = 0
+      for (const s of activeExercise.sets) {
+        if (s.id === set.id) break
+        if (!s.isWarmup) workingIdx++
+      }
+      const ghost = lastSessionData.lastSets.get(workingIdx)
+      if (ghost) {
+        const updates: { weightKg?: number; reps?: number } = {}
+        if (set.weightKg == null) updates.weightKg = ghost.weightKg
+        if (set.reps == null) updates.reps = ghost.reps
+        if (Object.keys(updates).length > 0) {
+          updateSet(exerciseId, set.id, updates)
+        }
+      }
+    }
     completeSet(exerciseId, set.id)
     const isDisabled = useRestTimerStore.getState().disabledExerciseIds.includes(exerciseId)
     if (!set.isCompleted && !set.isWarmup && !isDisabled) {
@@ -156,7 +145,7 @@ export function ExerciseCard({ activeExercise, exercise, locale }: ExerciseCardP
 
   return (
     <AppCard blur>
-      {/* Header: exercise name + muscle chip + overflow */}
+      {/* Header: exercise name + muscle chip + last session context + overflow */}
       <XStack alignItems="center" justifyContent="space-between" marginBottom={4}>
         <YStack flex={1} gap={2}>
           <AppText preset="exerciseName" numberOfLines={1} accessibilityRole="header">
@@ -164,6 +153,16 @@ export function ExerciseCard({ activeExercise, exercise, locale }: ExerciseCardP
           </AppText>
           {muscleLabel ? (
             <AppText preset="caption" color={colors.gray7}>{muscleLabel}</AppText>
+          ) : null}
+          {/* Last session context line — fontSize 11 (spec says 8 but that's unreadable on mobile) */}
+          {lastSessionData?.summary ? (
+            <AppText fontSize={11} fontWeight="600" color={colors.gray6}>
+              {t('workout.lastSessionContext', {
+                weight: lastSessionData.summary.maxWeight,
+                sets: lastSessionData.summary.setCount,
+                reps: lastSessionData.summary.commonReps,
+              })}
+            </AppText>
           ) : null}
         </YStack>
         <XStack gap={8} alignItems="center">
@@ -211,30 +210,45 @@ export function ExerciseCard({ activeExercise, exercise, locale }: ExerciseCardP
       <Divider />
 
       {/* Set rows */}
-      {activeExercise.sets.map((s, i) => (
-        <YStack key={s.id}>
-          {/* Done/todo separator */}
-          {i === firstUpcomingIdx && lastCompletedIdx >= 0 && (
-            <Divider variant="accent" marginVertical={4} />
-          )}
-          <SetRow
-            set={s}
-            isCurrent={s.id === currentSetId}
-            onUpdate={(updates) => updateSet(exerciseId, s.id, updates)}
-            onComplete={() => handleCompleteSet(s)}
-            onToggleWarmup={() => toggleWarmup(exerciseId, s.id)}
-            onRemove={() => removeSet(exerciseId, s.id)}
-            suggestionType={s.id === indicatorSetId ? suggestion!.type : undefined}
-            suggestionHint={
-              s.id === indicatorSetId
-                ? suggestion!.type === 'increase'
-                  ? t('workout.overload.increase', { increment })
-                  : t('workout.overload.deload')
-                : undefined
-            }
-          />
-        </YStack>
-      ))}
+      {(() => {
+        let workingSetIndex = 0
+        return activeExercise.sets.map((s, i) => {
+          // Ghost values: only for working sets, indexed by working set position
+          const ghost = !s.isWarmup ? lastSessionData?.lastSets.get(workingSetIndex) : undefined
+          const ghostWeight = !s.isWarmup && !s.isCompleted && s.weightKg == null ? ghost?.weightKg : undefined
+          const ghostReps = !s.isWarmup && !s.isCompleted && s.reps == null ? ghost?.reps : undefined
+          if (!s.isWarmup) workingSetIndex++
+
+          return (
+            <YStack key={s.id}>
+              {/* Done/todo separator */}
+              {i === firstUpcomingIdx && lastCompletedIdx >= 0 && (
+                <Divider variant="accent" marginVertical={4} />
+              )}
+              <SetRow
+                set={s}
+                isCurrent={s.id === currentSetId}
+                onUpdate={(updates) => updateSet(exerciseId, s.id, updates)}
+                onComplete={() => handleCompleteSet(s)}
+                onToggleWarmup={() => toggleWarmup(exerciseId, s.id)}
+                onRemove={() => removeSet(exerciseId, s.id)}
+                ghostWeight={ghostWeight ?? null}
+                ghostReps={ghostReps ?? null}
+              />
+            </YStack>
+          )
+        })
+      })()}
+
+      {/* PR celebration card — inline below sets */}
+      {prState?.isPR && (
+        <PRCelebrationCard
+          exerciseName={name}
+          newMax={prState.newMax}
+          previousMax={prState.previousMax}
+          delta={prState.delta}
+        />
+      )}
 
       {/* Add set button */}
       <Pressable

@@ -1,3 +1,10 @@
+export interface PRSummaryItem {
+  exerciseName: string
+  weight: number
+  previousMax: number
+  delta: number
+}
+
 export type ExperienceLevel = 'beginner' | 'intermediate' | 'advanced'
 
 export type Goal =

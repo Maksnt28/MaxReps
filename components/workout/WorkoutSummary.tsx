@@ -8,12 +8,14 @@ import { AppCard } from '@/components/ui/AppCard'
 import { Divider } from '@/components/ui/Divider'
 import { colors } from '@/lib/theme'
 import { formatDuration } from '@/lib/timerUtils'
+import type { PRSummaryItem } from '@/lib/types'
 
 interface WorkoutSummaryProps {
   durationSeconds: number
   exerciseCount: number
   setsCount: number
   totalVolumeKg: number
+  prs: PRSummaryItem[]
   onDone: () => void
 }
 
@@ -31,6 +33,7 @@ export function WorkoutSummary({
   exerciseCount,
   setsCount,
   totalVolumeKg,
+  prs,
   onDone,
 }: WorkoutSummaryProps) {
   const { t } = useTranslation()
@@ -56,6 +59,34 @@ export function WorkoutSummary({
           value={`${Math.round(totalVolumeKg).toLocaleString()} kg`}
         />
       </AppCard>
+
+      {/* Personal Records section */}
+      {prs.length > 0 && (
+        <AppCard style={{ width: '100%', maxWidth: 300 }}>
+          <XStack alignItems="center" gap={6} marginBottom={8}>
+            <Ionicons name="trophy" size={16} color={colors.pr} />
+            <AppText fontSize={13} fontWeight="700" color={colors.pr}>
+              {t('workout.prSummaryTitle')}
+            </AppText>
+          </XStack>
+          {prs.map((pr, i) => (
+            <YStack key={pr.exerciseName}>
+              {i > 0 && <Divider />}
+              <XStack justifyContent="space-between" alignItems="center" paddingVertical={4}>
+                <YStack>
+                  <AppText preset="caption" color={colors.gray8}>{pr.exerciseName}</AppText>
+                  <AppText preset="exerciseName">{pr.weight} kg</AppText>
+                </YStack>
+                <AppText fontSize={12} fontWeight="600" color={colors.progress}>
+                  {pr.previousMax === 0
+                    ? t('workout.prFirst')
+                    : t('workout.prDelta', { delta: pr.delta })}
+                </AppText>
+              </XStack>
+            </YStack>
+          ))}
+        </AppCard>
+      )}
 
       <AppButton
         variant="primary"

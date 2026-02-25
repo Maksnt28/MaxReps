@@ -9,6 +9,7 @@ import { useRestTimerStore } from '@/stores/useRestTimerStore'
 import { useFinishWorkout, useDiscardWorkout } from '@/hooks/useWorkoutMutations'
 import { hapticHeavy } from '@/lib/animations'
 import { colors } from '@/lib/theme'
+import type { PRSummaryItem } from '@/lib/types'
 import { AppText } from '@/components/ui/AppText'
 import { StartWorkoutButton } from '@/components/workout/StartWorkoutButton'
 import { ActiveWorkoutScreen } from '@/components/workout/ActiveWorkoutScreen'
@@ -20,6 +21,7 @@ interface SummaryData {
   exerciseCount: number
   setsCount: number
   totalVolumeKg: number
+  prs: PRSummaryItem[]
 }
 
 export default function WorkoutScreen() {
@@ -31,7 +33,7 @@ export default function WorkoutScreen() {
   const resetTimer = useRestTimerStore((s) => s.reset)
   const [summary, setSummary] = useState<SummaryData | null>(null)
 
-  function handleFinish() {
+  function handleFinish(prData?: PRSummaryItem[]) {
     const completedSets = exercises.flatMap((e) =>
       e.sets.filter((s) => s.isCompleted)
     )
@@ -91,6 +93,7 @@ export default function WorkoutScreen() {
                 exerciseCount: exercises.length,
                 setsCount: result.setsCount,
                 totalVolumeKg,
+                prs: prData ?? [],
               })
             } catch {
               Alert.alert(t('common.error'), t('workout.saveError'))
@@ -109,6 +112,7 @@ export default function WorkoutScreen() {
         exerciseCount={summary.exerciseCount}
         setsCount={summary.setsCount}
         totalVolumeKg={summary.totalVolumeKg}
+        prs={summary.prs}
         onDone={() => {
           setSummary(null)
           endWorkout()

@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { ScrollView, KeyboardAvoidingView, Platform, StyleSheet } from 'react-native'
+import { useKeepAwake } from 'expo-keep-awake'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { YStack, XStack } from 'tamagui'
 import { useTranslation } from 'react-i18next'
@@ -11,16 +12,20 @@ import { useWorkoutStore } from '@/stores/useWorkoutStore'
 import type { ActiveExercise } from '@/stores/useWorkoutStore'
 import { useRestTimerStore } from '@/stores/useRestTimerStore'
 import { useExercises } from '@/hooks/useExercises'
+import { getLocalizedExercise } from '@/lib/exercises'
+import { useRealtimePR } from '@/hooks/useRealtimePR'
 import { AppText } from '@/components/ui/AppText'
 import { AppButton } from '@/components/ui/AppButton'
 import { colors, backgroundGradient, spacing } from '@/lib/theme'
+import type { PRSummaryItem } from '@/lib/types'
 import { WorkoutHeader } from './WorkoutHeader'
 import { ExerciseCard } from './ExerciseCard'
 import { RestTimerBandeau } from './RestTimerBandeau'
 import { FullScreenTimer } from './FullScreenTimer'
+import { MomentumBar } from './MomentumBar'
 
 interface ActiveWorkoutScreenProps {
-  onFinish: () => void
+  onFinish: (prData?: PRSummaryItem[]) => void
 }
 
 function ProgressDots({ exercises }: { exercises: ActiveExercise[] }) {
@@ -50,6 +55,7 @@ function ProgressDots({ exercises }: { exercises: ActiveExercise[] }) {
 }
 
 export function ActiveWorkoutScreen({ onFinish }: ActiveWorkoutScreenProps) {
+  useKeepAwake()
   const { t, i18n } = useTranslation()
   const router = useRouter()
   const locale = i18n.language
@@ -72,6 +78,47 @@ export function ActiveWorkoutScreen({ onFinish }: ActiveWorkoutScreenProps) {
     return map
   }, [allExercises])
 
+  const exerciseIds = useMemo(
+    () => exercises.map((e) => e.exerciseId),
+    [exercises]
+  )
+
+  const sessionId = useWorkoutStore((s) => s.sessionId)
+  const prStates = useRealtimePR(exerciseIds, sessionId, exercises)
+
+  // Set progress for contextual CTA
+  const { completedWorkingSets, totalWorkingSets } = useMemo(() => {
+    let completed = 0
+    let total = 0
+    for (const e of exercises) {
+      for (const s of e.sets) {
+        if (s.isWarmup) continue
+        total++
+        if (s.isCompleted) completed++
+      }
+    }
+    return { completedWorkingSets: completed, totalWorkingSets: total }
+  }, [exercises])
+
+  const allWorkingDone = totalWorkingSets > 0 && completedWorkingSets === totalWorkingSets
+
+  // Snapshot PR data for passing to onFinish
+  const prData = useMemo<PRSummaryItem[]>(() => {
+    const items: PRSummaryItem[] = []
+    for (const [exId, state] of prStates) {
+      if (!state?.isPR) continue
+      const ex = exerciseMap.get(exId)
+      const name = ex ? getLocalizedExercise(ex, locale).name : exId
+      items.push({
+        exerciseName: name,
+        weight: state.newMax,
+        previousMax: state.previousMax,
+        delta: state.delta,
+      })
+    }
+    return items
+  }, [prStates, exerciseMap, locale])
+
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
@@ -89,6 +136,7 @@ export function ActiveWorkoutScreen({ onFinish }: ActiveWorkoutScreenProps) {
           {startedAt && <WorkoutHeader startedAt={startedAt} onFinish={onFinish} />}
 
           {exercises.length > 0 && <ProgressDots exercises={exercises} />}
+          {exercises.length > 0 && <MomentumBar exerciseIds={exerciseIds} />}
 
           {isTimerRunning && !isTimerExpanded && (
             <RestTimerBandeau onExpand={() => setIsTimerExpanded(true)} />
@@ -120,6 +168,7 @@ export function ActiveWorkoutScreen({ onFinish }: ActiveWorkoutScreenProps) {
                   activeExercise={ae}
                   exercise={exerciseMap.get(ae.exerciseId)}
                   locale={locale}
+                  prState={prStates.get(ae.exerciseId)}
                 />
               ))
             )}
@@ -149,10 +198,12 @@ export function ActiveWorkoutScreen({ onFinish }: ActiveWorkoutScreenProps) {
                 variant="secondary"
                 icon="checkmark-done"
                 fullWidth
-                onPress={onFinish}
-                accessibilityLabel={t('workout.finishWorkout')}
+                onPress={() => onFinish(prData)}
+                accessibilityLabel={allWorkingDone ? t('workout.finishWorkoutCta') : t('workout.finishProgress', { current: completedWorkingSets, total: totalWorkingSets })}
               >
-                {t('workout.finishWorkout')}
+                {allWorkingDone
+                  ? t('workout.finishWorkoutCta')
+                  : t('workout.finishProgress', { current: completedWorkingSets, total: totalWorkingSets })}
               </AppButton>
             ) : (
               <AppButton

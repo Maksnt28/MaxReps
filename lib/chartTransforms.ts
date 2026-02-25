@@ -1,5 +1,44 @@
 import { estimateMax1RM, needsWeeklyDownsample, groupByWeek } from './formulas'
 
+// ── Axis Scale ────────────────────────────────────────────
+
+/**
+ * Compute nice Y-axis scale where all labels end in 0 or 5.
+ * Uses "nice numbers" algorithm: steps from [1, 2, 2.5, 5, 10] × magnitude.
+ */
+export function niceAxisScale(dataMax: number): {
+  maxValue: number
+  stepValue: number
+  noOfSections: number
+} {
+  if (dataMax <= 0) return { maxValue: 100, stepValue: 25, noOfSections: 4 }
+
+  const rawStep = dataMax / 4
+  const magnitude = Math.pow(10, Math.floor(Math.log10(rawStep)))
+  const candidates = [1, 2, 2.5, 5, 10].map((m) => m * magnitude)
+
+  for (const step of candidates) {
+    if (step < 5) continue // ensure labels end in 0 or 5
+    const maxVal = Math.ceil(dataMax / step) * step
+    const sections = Math.round(maxVal / step)
+    if (sections >= 3 && sections <= 5) {
+      return { maxValue: maxVal, stepValue: step, noOfSections: sections }
+    }
+  }
+
+  // Fallback for very small values
+  const fallbackStep = 5
+  const fallbackMax = Math.max(
+    Math.ceil(dataMax / fallbackStep) * fallbackStep,
+    fallbackStep * 4
+  )
+  return {
+    maxValue: fallbackMax,
+    stepValue: fallbackStep,
+    noOfSections: fallbackMax / fallbackStep,
+  }
+}
+
 // ── Types ─────────────────────────────────────────────────
 
 export type SessionRow = { id: string; started_at: string }

@@ -5,6 +5,7 @@ import { LineChart } from 'react-native-gifted-charts'
 import { ChartCard } from './ChartCard'
 import { AppText } from '@/components/ui/AppText'
 import { useVolumeProgression } from '@/hooks/useVolumeProgression'
+import { niceAxisScale } from '@/lib/chartTransforms'
 import { formatVolume } from '@/lib/formulas'
 import { colors, accent } from '@/lib/theme'
 
@@ -22,6 +23,8 @@ export function VolumeChart({ range }: { range: string }) {
   }))
 
   const hasData = chartData.length > 0
+  const dataMax = Math.max(...chartData.map((d) => d.value), 0)
+  const { maxValue, noOfSections } = niceAxisScale(dataMax)
 
   return (
     <ChartCard
@@ -60,7 +63,8 @@ export function VolumeChart({ range }: { range: string }) {
             yAxisTextStyle={styles.axisText}
             xAxisLabelTextStyle={styles.axisText}
             hideRules
-            noOfSections={4}
+            maxValue={maxValue}
+            noOfSections={noOfSections}
             pointerConfig={{
               pointerStripColor: colors.gray4,
               pointerStripWidth: 1,

@@ -22,10 +22,7 @@ export function useExerciseHistory(
         .limit(2)
 
       if (sessionsError) throw sessionsError
-      if (!sessions || sessions.length < 2) return sessions?.map((s) => ({
-        startedAt: s.started_at,
-        sets: [],
-      })) ?? []
+      if (!sessions || sessions.length === 0) return []
 
       // Step 2: Fetch all non-warmup sets for those 2 sessions
       const sessionIds = sessions.map((s) => s.id)
