@@ -10,9 +10,10 @@ import {
   useUpdateProgram,
   useDeleteProgram,
   useUpsertProgramDay,
+  useActivateProgram,
   type ProgramDayWithExercises,
 } from '@/hooks/usePrograms'
-import { useCreateSession } from '@/hooks/useWorkoutMutations'
+import { useCreateSession, useDiscardWorkout } from '@/hooks/useWorkoutMutations'
 import { useWorkoutStore } from '@/stores/useWorkoutStore'
 import { useRestTimerStore } from '@/stores/useRestTimerStore'
 import { ProgramDayCard } from '@/components/program/ProgramDayCard'
@@ -34,6 +35,7 @@ export default function ProgramDetailScreen() {
   const updateProgram = useUpdateProgram()
   const deleteProgram = useDeleteProgram()
   const upsertDay = useUpsertProgramDay()
+  const activateProgram = useActivateProgram()
   const createSession = useCreateSession()
 
   const isActive = useWorkoutStore((s) => s.isActive)
@@ -72,6 +74,11 @@ export default function ProgramDetailScreen() {
     })
   }
 
+  function handleToggleActive() {
+    if (!program) return
+    activateProgram.mutate({ id: id!, activate: !program.is_active })
+  }
+
   function handleDeleteProgram() {
     Alert.alert(
       t('programs.deleteProgram'),
@@ -90,11 +97,14 @@ export default function ProgramDetailScreen() {
     )
   }
 
+  const discardWorkout = useDiscardWorkout()
+
   function handleStartWorkout(day: ProgramDayWithExercises) {
     const doStart = async () => {
       try {
         if (isActive) {
-          // TODO: use discardWorkout instead of endWorkout to delete orphaned DB row
+          const sid = useWorkoutStore.getState().sessionId
+          if (sid) await discardWorkout.mutateAsync(sid)
           endWorkout()
         }
         resetTimer()
@@ -152,6 +162,27 @@ export default function ProgramDetailScreen() {
           style={headerButtonStyles.navButton}
         >
           <Ionicons name="chevron-back" size={headerButtonIcon.size} color={headerButtonIcon.color} />
+        </TouchableOpacity>
+        <View style={{ flex: 1 }} />
+        <TouchableOpacity
+          onPress={handleToggleActive}
+          disabled={activateProgram.isPending}
+          accessibilityLabel={program.is_active ? t('programs.deactivate') : t('programs.activate')}
+          hitSlop={8}
+          style={styles.activateButton}
+        >
+          <Ionicons
+            name={program.is_active ? 'checkmark-circle' : 'checkmark-circle-outline'}
+            size={20}
+            color={program.is_active ? colors.accent : colors.gray7}
+          />
+          <AppText
+            preset="caption"
+            fontWeight="600"
+            color={program.is_active ? colors.accent : colors.gray7}
+          >
+            {program.is_active ? t('programs.active') : t('programs.activate')}
+          </AppText>
         </TouchableOpacity>
       </View>
 
@@ -256,5 +287,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     height: 52,
     paddingHorizontal: 12,
+  },
+  activateButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 16,
   },
 })

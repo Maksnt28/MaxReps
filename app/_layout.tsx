@@ -113,7 +113,15 @@ export default function RootLayout() {
       // Restore cached locale instantly (~5ms) before any network calls
       await initLocale()
       setSession(session)
-      if (session) await syncUserProfile(session)
+      if (session) {
+        await syncUserProfile(session)
+        // Fire-and-forget prefetch for home screen CTA
+        const { nextProgramDayQueryKey, nextProgramDayQueryFn } = require('@/hooks/useNextProgramDay')
+        queryClient.prefetchQuery({
+          queryKey: nextProgramDayQueryKey(session.user.id),
+          queryFn: () => nextProgramDayQueryFn(session.user.id),
+        })
+      }
       setIsLoading(false)
     })
 

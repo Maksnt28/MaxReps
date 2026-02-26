@@ -97,6 +97,46 @@ export function useUpdateProgram() {
     onSuccess: (_, params) => {
       queryClient.invalidateQueries({ queryKey: ['programs'] })
       queryClient.invalidateQueries({ queryKey: ['programs', params.id] })
+      queryClient.invalidateQueries({ queryKey: ['next-program-day'] })
+    },
+  })
+}
+
+export function useActivateProgram() {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async (params: { id: string; activate: boolean }) => {
+      if (params.activate) {
+        // Deactivate all programs for this user first
+        const { error: deactivateError } = await supabase
+          .from('programs')
+          .update({ is_active: false })
+          .eq('is_active', true)
+
+        if (deactivateError) throw deactivateError
+
+        // Activate the target program
+        const { error: activateError } = await supabase
+          .from('programs')
+          .update({ is_active: true })
+          .eq('id', params.id)
+
+        if (activateError) throw activateError
+      } else {
+        // Deactivate this program
+        const { error } = await supabase
+          .from('programs')
+          .update({ is_active: false })
+          .eq('id', params.id)
+
+        if (error) throw error
+      }
+    },
+    onSuccess: (_, params) => {
+      queryClient.invalidateQueries({ queryKey: ['programs'] })
+      queryClient.invalidateQueries({ queryKey: ['programs', params.id] })
+      queryClient.invalidateQueries({ queryKey: ['next-program-day'] })
     },
   })
 }
@@ -115,6 +155,7 @@ export function useDeleteProgram() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['programs'] })
+      queryClient.invalidateQueries({ queryKey: ['next-program-day'] })
     },
   })
 }
@@ -148,6 +189,7 @@ export function useUpsertProgramDay() {
     onSuccess: (_, params) => {
       queryClient.invalidateQueries({ queryKey: ['programs'], exact: true })
       queryClient.invalidateQueries({ queryKey: ['programs', params.programId] })
+      queryClient.invalidateQueries({ queryKey: ['next-program-day'] })
     },
   })
 }
@@ -167,6 +209,7 @@ export function useDeleteProgramDay() {
     onSuccess: (_, params) => {
       queryClient.invalidateQueries({ queryKey: ['programs'], exact: true })
       queryClient.invalidateQueries({ queryKey: ['programs', params.programId] })
+      queryClient.invalidateQueries({ queryKey: ['next-program-day'] })
     },
   })
 }
@@ -196,6 +239,7 @@ export function useAddProgramExercises() {
     },
     onSuccess: async (_, params) => {
       await queryClient.invalidateQueries({ queryKey: ['programs', params.programId] })
+      queryClient.invalidateQueries({ queryKey: ['next-program-day'] })
     },
   })
 }
@@ -224,6 +268,7 @@ export function useUpdateProgramExercise() {
     },
     onSuccess: (_, params) => {
       queryClient.invalidateQueries({ queryKey: ['programs', params.programId] })
+      queryClient.invalidateQueries({ queryKey: ['next-program-day'] })
     },
   })
 }
@@ -242,6 +287,7 @@ export function useDeleteProgramExercise() {
     },
     onSuccess: (_, params) => {
       queryClient.invalidateQueries({ queryKey: ['programs', params.programId] })
+      queryClient.invalidateQueries({ queryKey: ['next-program-day'] })
     },
   })
 }
@@ -296,6 +342,7 @@ export function useReorderProgramExercises() {
     },
     onSettled: (_, _error, params) => {
       queryClient.invalidateQueries({ queryKey: ['programs', params.programId] })
+      queryClient.invalidateQueries({ queryKey: ['next-program-day'] })
     },
   })
 }

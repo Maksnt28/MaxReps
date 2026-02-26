@@ -5,7 +5,11 @@ import { YStack, XStack } from 'tamagui'
 import { useTranslation } from 'react-i18next'
 
 import { AppText } from '@/components/ui/AppText'
+import { Divider } from '@/components/ui/Divider'
 import { colors, spacing, radii, accent } from '@/lib/theme'
+import { NextWorkoutCard } from '@/components/home/NextWorkoutCard'
+import { WeeklyProgressCard } from '@/components/home/WeeklyProgressCard'
+import { StreakCard } from '@/components/home/StreakCard'
 import { StatCards } from '@/components/charts/StatCards'
 import { VolumeChart } from '@/components/charts/VolumeChart'
 import { StrengthChart } from '@/components/charts/StrengthChart'
@@ -96,6 +100,14 @@ export default function HomeScreen() {
         }}
         showsVerticalScrollIndicator={false}
       >
+        {/* Action cards */}
+        <NextWorkoutCard />
+        <WeeklyProgressCard />
+        <StreakCard />
+
+        <Divider variant="neutral" />
+
+        {/* Charts section */}
         {!hasData && stats !== undefined ? (
           <YStack
             flex={1}

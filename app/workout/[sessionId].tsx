@@ -49,6 +49,7 @@ export default function SessionDetailScreen() {
         }))
       )
       queryClient.invalidateQueries({ queryKey: ['month-sessions'] })
+      queryClient.invalidateQueries({ queryKey: ['next-program-day'] })
       router.replace('/(tabs)/workout')
     } catch {
       Alert.alert(t('common.error'))

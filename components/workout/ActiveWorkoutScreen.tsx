@@ -26,6 +26,7 @@ import { MomentumBar } from './MomentumBar'
 
 interface ActiveWorkoutScreenProps {
   onFinish: (prData?: PRSummaryItem[]) => void
+  onDiscard: () => void
 }
 
 function ProgressDots({ exercises }: { exercises: ActiveExercise[] }) {
@@ -54,7 +55,7 @@ function ProgressDots({ exercises }: { exercises: ActiveExercise[] }) {
   )
 }
 
-export function ActiveWorkoutScreen({ onFinish }: ActiveWorkoutScreenProps) {
+export function ActiveWorkoutScreen({ onFinish, onDiscard }: ActiveWorkoutScreenProps) {
   useKeepAwake()
   const { t, i18n } = useTranslation()
   const router = useRouter()
@@ -133,7 +134,7 @@ export function ActiveWorkoutScreen({ onFinish }: ActiveWorkoutScreenProps) {
       />
       <SafeAreaView style={{ flex: 1 }} edges={['top']}>
         <YStack flex={1}>
-          {startedAt && <WorkoutHeader startedAt={startedAt} onFinish={onFinish} />}
+          {startedAt && <WorkoutHeader startedAt={startedAt} onFinish={onFinish} onDiscard={onDiscard} />}
 
           {exercises.length > 0 && <ProgressDots exercises={exercises} />}
           {exercises.length > 0 && <MomentumBar exerciseIds={exerciseIds} />}
@@ -193,7 +194,7 @@ export function ActiveWorkoutScreen({ onFinish }: ActiveWorkoutScreenProps) {
             >
               {t('workout.addExercise')}
             </AppButton>
-            {exercises.length > 0 ? (
+            {exercises.length > 0 && (
               <AppButton
                 variant="secondary"
                 icon="checkmark-done"
@@ -204,16 +205,6 @@ export function ActiveWorkoutScreen({ onFinish }: ActiveWorkoutScreenProps) {
                 {allWorkingDone
                   ? t('workout.finishWorkoutCta')
                   : t('workout.finishProgress', { current: completedWorkingSets, total: totalWorkingSets })}
-              </AppButton>
-            ) : (
-              <AppButton
-                variant="destructive"
-                icon="close"
-                fullWidth
-                onPress={onFinish}
-                accessibilityLabel={t('workout.discardWorkout')}
-              >
-                {t('workout.discardWorkout')}
               </AppButton>
             )}
           </YStack>

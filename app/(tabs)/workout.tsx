@@ -104,6 +104,31 @@ export default function WorkoutScreen() {
     )
   }
 
+  function handleDiscard() {
+    Alert.alert(
+      t('workout.discardWorkout'),
+      t('workout.discardConfirm'),
+      [
+        { text: t('common.cancel'), style: 'cancel' },
+        {
+          text: t('common.confirm'),
+          style: 'destructive',
+          onPress: async () => {
+            if (sessionId) {
+              try {
+                await discardWorkout.mutateAsync(sessionId)
+              } catch {
+                // Session cleanup failed — still clear local state
+              }
+            }
+            endWorkout()
+            resetTimer()
+          },
+        },
+      ],
+    )
+  }
+
   // Show summary after finishing
   if (summary) {
     return (
@@ -144,5 +169,5 @@ export default function WorkoutScreen() {
     )
   }
 
-  return <ActiveWorkoutScreen onFinish={handleFinish} />
+  return <ActiveWorkoutScreen onFinish={handleFinish} onDiscard={handleDiscard} />
 }
