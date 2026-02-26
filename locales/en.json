@@ -95,7 +95,12 @@
     "adaptiveRest": "Adaptive Rest",
     "adaptiveRestDescription": "Longer rest after missed reps",
     "restAfterSuccess": "Rest after success",
-    "restAfterFailure": "Rest after missed reps"
+    "restAfterFailure": "Rest after missed reps",
+    "deleteAccount": "Delete Account",
+    "deleteAccountTitle": "Delete Account?",
+    "deleteAccountMessage": "This will permanently delete your account and all your data. This action cannot be undone.",
+    "deleteAccountConfirm": "Delete",
+    "deleteAccountError": "Failed to delete account. Please try again."
   },
   "auth": {
     "tagline": "Track your lifts. Beat your PRs.",

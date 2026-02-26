@@ -95,7 +95,12 @@
     "adaptiveRest": "Repos adaptatif",
     "adaptiveRestDescription": "Repos plus long après des répétitions manquées",
     "restAfterSuccess": "Repos après réussite",
-    "restAfterFailure": "Repos après échec"
+    "restAfterFailure": "Repos après échec",
+    "deleteAccount": "Supprimer le compte",
+    "deleteAccountTitle": "Supprimer le compte ?",
+    "deleteAccountMessage": "Cette action supprimera définitivement votre compte et toutes vos données. Cette action est irréversible.",
+    "deleteAccountConfirm": "Supprimer",
+    "deleteAccountError": "Échec de la suppression du compte. Veuillez réessayer."
   },
   "auth": {
     "tagline": "Suis tes s\u00e9ries. Bats tes records.",

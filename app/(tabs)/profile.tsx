@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { Alert, KeyboardAvoidingView, Platform, Pressable, ScrollView, StyleSheet, Switch as RNSwitch, TextInput, View } from 'react-native'
+import { ActivityIndicator, Alert, KeyboardAvoidingView, Platform, Pressable, ScrollView, StyleSheet, Switch as RNSwitch, TextInput, View } from 'react-native'
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated'
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 import { XStack, YStack } from 'tamagui'
@@ -20,6 +20,7 @@ import { SelectionCard } from '@/components/ui/SelectionCard'
 import { Divider } from '@/components/ui/Divider'
 import { colors, card, radii, semantic } from '@/lib/theme'
 import { hapticNotification } from '@/lib/animations'
+import { useDeleteAccount } from '@/hooks/useDeleteAccount'
 
 const EQUIPMENT = [
   'barbell', 'dumbbell', 'cable', 'machine', 'bodyweight', 'bands', 'kettlebell',
@@ -102,6 +103,7 @@ export default function ProfileScreen() {
     defaultRestSeconds, restSecondsSuccess, restSecondsFailure, setUser,
   } = useUserStore()
   const updateProfile = useUpdateProfile()
+  const { deleteAccount, isDeleting } = useDeleteAccount()
   const [signOutLoading, setSignOutLoading] = useState(false)
 
   // Local editable state — initialized from store
@@ -377,6 +379,23 @@ export default function ProfileScreen() {
             await signOut()
           } finally {
             setSignOutLoading(false)
+          }
+        },
+      },
+    ])
+  }
+
+  function handleDeleteAccount() {
+    Alert.alert(t('profile.deleteAccountTitle'), t('profile.deleteAccountMessage'), [
+      { text: t('common.cancel'), style: 'cancel' },
+      {
+        text: t('profile.deleteAccountConfirm'),
+        style: 'destructive',
+        onPress: async () => {
+          try {
+            await deleteAccount()
+          } catch {
+            Alert.alert(t('profile.deleteAccountError'))
           }
         },
       },
@@ -738,16 +757,24 @@ export default function ProfileScreen() {
               </AppCard>
             </YStack>
 
-            {/* Sign Out */}
-            <YStack alignItems="center" paddingTop={16}>
+            {/* Sign Out & Delete Account */}
+            <YStack alignItems="center" paddingTop={16} gap={12}>
               <AppButton
                 variant="destructive"
                 onPress={handleSignOut}
-                disabled={signOutLoading}
+                disabled={signOutLoading || isDeleting}
                 loading={signOutLoading}
                 accessibilityLabel={t('auth.signOut')}
               >
                 {t('auth.signOut')}
+              </AppButton>
+              <AppButton
+                variant="destructive"
+                onPress={handleDeleteAccount}
+                disabled={signOutLoading || isDeleting}
+                accessibilityLabel={t('profile.deleteAccount')}
+              >
+                {t('profile.deleteAccount')}
               </AppButton>
             </YStack>
           </YStack>
@@ -792,6 +819,11 @@ export default function ProfileScreen() {
           </Animated.View>
         )}
       </KeyboardAvoidingView>
+      {isDeleting && (
+        <View style={styles.deletingOverlay} pointerEvents="auto">
+          <ActivityIndicator size="large" color={colors.accent} />
+        </View>
+      )}
     </SafeAreaView>
   )
 }
@@ -850,5 +882,11 @@ const styles = StyleSheet.create({
     borderRadius: radii.button,
     paddingHorizontal: 24,
     paddingVertical: 10,
+  },
+  deletingOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0,0,0,0.6)',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 })

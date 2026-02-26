@@ -11,10 +11,14 @@ import * as SplashScreen from 'expo-splash-screen'
 import type { Session } from '@supabase/supabase-js'
 
 import tamaguiConfig from '@/tamagui.config'
+import { ErrorBoundary } from '@/components/ui/ErrorBoundary'
 import { supabase } from '@/lib/supabase'
 import { useUserStore, type UserRow } from '@/stores/useUserStore'
 import type { ExperienceLevel, Goal, Sex } from '@/lib/types'
 import { getTargetRoute } from '@/lib/routeGuard'
+import { checkWorkoutRecovery } from '@/hooks/useWorkoutRecovery'
+import { useWorkoutStore } from '@/stores/useWorkoutStore'
+import { useRestTimerStore } from '@/stores/useRestTimerStore'
 
 SplashScreen.preventAutoHideAsync()
 
@@ -115,6 +119,8 @@ export default function RootLayout() {
       setSession(session)
       if (session) {
         await syncUserProfile(session)
+        // Validate persisted workout state (clears orphaned sessions)
+        await checkWorkoutRecovery()
         // Fire-and-forget prefetch for home screen CTA
         const { nextProgramDayQueryKey, nextProgramDayQueryFn } = require('@/hooks/useNextProgramDay')
         queryClient.prefetchQuery({
@@ -135,6 +141,8 @@ export default function RootLayout() {
           syncUserProfile(session).catch(() => {})
         } else {
           clearUser()
+          useWorkoutStore.getState().endWorkout()
+          useRestTimerStore.getState().reset()
         }
       }
     )
@@ -153,31 +161,35 @@ export default function RootLayout() {
   if (isLoading || !fontsLoaded) {
     return (
       <GestureHandlerRootView style={{ flex: 1 }}>
-        <TamaguiProvider config={tamaguiConfig} defaultTheme="dark">
-          <YStack flex={1} alignItems="center" justifyContent="center" backgroundColor="$background">
-            <Spinner size="large" color="$color" />
-          </YStack>
-          <StatusBar style="light" />
-        </TamaguiProvider>
+        <ErrorBoundary>
+          <TamaguiProvider config={tamaguiConfig} defaultTheme="dark">
+            <YStack flex={1} alignItems="center" justifyContent="center" backgroundColor="$background">
+              <Spinner size="large" color="$color" />
+            </YStack>
+            <StatusBar style="light" />
+          </TamaguiProvider>
+        </ErrorBoundary>
       </GestureHandlerRootView>
     )
   }
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <QueryClientProvider client={queryClient}>
-        <TamaguiProvider config={tamaguiConfig} defaultTheme="dark">
-          <Stack screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="(auth)" />
-            <Stack.Screen name="(onboarding)" />
-            <Stack.Screen name="(tabs)" />
-            <Stack.Screen name="exercise" />
-            <Stack.Screen name="workout" />
-            <Stack.Screen name="program" />
-          </Stack>
-          <StatusBar style="light" />
-        </TamaguiProvider>
-      </QueryClientProvider>
+      <ErrorBoundary>
+        <QueryClientProvider client={queryClient}>
+          <TamaguiProvider config={tamaguiConfig} defaultTheme="dark">
+            <Stack screenOptions={{ headerShown: false }}>
+              <Stack.Screen name="(auth)" />
+              <Stack.Screen name="(onboarding)" />
+              <Stack.Screen name="(tabs)" />
+              <Stack.Screen name="exercise" />
+              <Stack.Screen name="workout" />
+              <Stack.Screen name="program" />
+            </Stack>
+            <StatusBar style="light" />
+          </TamaguiProvider>
+        </QueryClientProvider>
+      </ErrorBoundary>
     </GestureHandlerRootView>
   )
 }
