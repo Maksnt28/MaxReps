@@ -14,7 +14,7 @@ import tamaguiConfig from '@/tamagui.config'
 import { ErrorBoundary } from '@/components/ui/ErrorBoundary'
 import { supabase } from '@/lib/supabase'
 import { useUserStore, type UserRow } from '@/stores/useUserStore'
-import type { ExperienceLevel, Goal, Sex } from '@/lib/types'
+import type { ExperienceLevel, Goal, Sex, TrainingSplit } from '@/lib/types'
 import { getTargetRoute } from '@/lib/routeGuard'
 import { checkWorkoutRecovery } from '@/hooks/useWorkoutRecovery'
 import { useWorkoutStore } from '@/stores/useWorkoutStore'
@@ -102,6 +102,9 @@ export default function RootLayout() {
           defaultRestSeconds: row.default_rest_seconds ?? null,
           restSecondsSuccess: row.rest_seconds_success ?? null,
           restSecondsFailure: row.rest_seconds_failure ?? null,
+          preferredSplit: (row.preferred_split as TrainingSplit | null) ?? null,
+          sessionDurationMinutes: row.session_duration_minutes ?? null,
+          aiNotes: row.ai_notes ?? null,
         })
         i18n.changeLanguage(locale)
         saveLocale(locale)

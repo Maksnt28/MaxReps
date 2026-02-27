@@ -9,8 +9,8 @@ import { saveLocale } from '@/lib/i18n'
 import { supabase } from '@/lib/supabase'
 import { useUserStore, type UserRow } from '@/stores/useUserStore'
 import { useUpdateProfile, parseLimitations, formatLimitations } from '@/hooks/useUpdateProfile'
-import type { ExperienceLevel, Goal, Sex } from '@/lib/types'
-import { GOAL_CATEGORIES } from '@/lib/types'
+import type { ExperienceLevel, Goal, Sex, TrainingSplit } from '@/lib/types'
+import { GOAL_CATEGORIES, TRAINING_SPLITS, SESSION_DURATION_OPTIONS } from '@/lib/types'
 import { AppText } from '@/components/ui/AppText'
 import { AppButton } from '@/components/ui/AppButton'
 import { AppCard } from '@/components/ui/AppCard'
@@ -97,7 +97,8 @@ export default function ProfileScreen() {
   const {
     displayName, experienceLevel, goals, equipment, locale,
     limitations, daysPerWeek, sex, age, heightCm, weightKg,
-    defaultRestSeconds, restSecondsSuccess, restSecondsFailure, setUser,
+    defaultRestSeconds, restSecondsSuccess, restSecondsFailure,
+    preferredSplit, sessionDurationMinutes, aiNotes, setUser,
   } = useUserStore()
   const updateProfile = useUpdateProfile()
   const { deleteAccount, isDeleting } = useDeleteAccount()
@@ -117,6 +118,10 @@ export default function ProfileScreen() {
   const [localDefaultRestSeconds, setLocalDefaultRestSeconds] = useState<number | null>(defaultRestSeconds)
   const [localRestSecondsSuccess, setLocalRestSecondsSuccess] = useState<number | null>(restSecondsSuccess)
   const [localRestSecondsFailure, setLocalRestSecondsFailure] = useState<number | null>(restSecondsFailure)
+  const [localPreferredSplit, setLocalPreferredSplit] = useState<TrainingSplit | null>(preferredSplit)
+  const [localSessionDuration, setLocalSessionDuration] = useState<number | null>(sessionDurationMinutes)
+  const [localAiNotes, setLocalAiNotes] = useState(aiNotes ?? '')
+  const [aiNotesFocused, setAiNotesFocused] = useState(false)
 
   // Save state
   const [saving, setSaving] = useState(false)
@@ -143,6 +148,7 @@ export default function ProfileScreen() {
   const storeRef = useRef({
     experienceLevel, goals, equipment, daysPerWeek, limitations, locale,
     sex, age, heightCm, weightKg, defaultRestSeconds, restSecondsSuccess, restSecondsFailure,
+    preferredSplit, sessionDurationMinutes, aiNotes,
   })
   useEffect(() => {
     const prev = storeRef.current
@@ -159,7 +165,10 @@ export default function ProfileScreen() {
       prev.weightKg !== weightKg ||
       prev.defaultRestSeconds !== defaultRestSeconds ||
       prev.restSecondsSuccess !== restSecondsSuccess ||
-      prev.restSecondsFailure !== restSecondsFailure
+      prev.restSecondsFailure !== restSecondsFailure ||
+      prev.preferredSplit !== preferredSplit ||
+      prev.sessionDurationMinutes !== sessionDurationMinutes ||
+      prev.aiNotes !== aiNotes
     ) {
       setLocalExperience(experienceLevel)
       setLocalGoals(goals)
@@ -174,12 +183,16 @@ export default function ProfileScreen() {
       setLocalDefaultRestSeconds(defaultRestSeconds)
       setLocalRestSecondsSuccess(restSecondsSuccess)
       setLocalRestSecondsFailure(restSecondsFailure)
+      setLocalPreferredSplit(preferredSplit)
+      setLocalSessionDuration(sessionDurationMinutes)
+      setLocalAiNotes(aiNotes ?? '')
       storeRef.current = {
         experienceLevel, goals, equipment, daysPerWeek, limitations, locale,
         sex, age, heightCm, weightKg, defaultRestSeconds, restSecondsSuccess, restSecondsFailure,
+        preferredSplit, sessionDurationMinutes, aiNotes,
       }
     }
-  }, [experienceLevel, goals, equipment, daysPerWeek, limitations, locale, sex, age, heightCm, weightKg, defaultRestSeconds, restSecondsSuccess, restSecondsFailure])
+  }, [experienceLevel, goals, equipment, daysPerWeek, limitations, locale, sex, age, heightCm, weightKg, defaultRestSeconds, restSecondsSuccess, restSecondsFailure, preferredSplit, sessionDurationMinutes, aiNotes])
 
   // Revert language on unmount if unsaved
   useEffect(() => {
@@ -224,6 +237,9 @@ export default function ProfileScreen() {
             defaultRestSeconds: row.default_rest_seconds ?? null,
             restSecondsSuccess: row.rest_seconds_success ?? null,
             restSecondsFailure: row.rest_seconds_failure ?? null,
+            preferredSplit: (row.preferred_split as TrainingSplit | null) ?? null,
+            sessionDurationMinutes: row.session_duration_minutes ?? null,
+            aiNotes: row.ai_notes ?? null,
           })
         }
       } catch {
@@ -255,7 +271,10 @@ export default function ProfileScreen() {
     localWeightKg !== weightKg ||
     localDefaultRestSeconds !== defaultRestSeconds ||
     localRestSecondsSuccess !== restSecondsSuccess ||
-    localRestSecondsFailure !== restSecondsFailure
+    localRestSecondsFailure !== restSecondsFailure ||
+    localPreferredSplit !== preferredSplit ||
+    localSessionDuration !== sessionDurationMinutes ||
+    localAiNotes !== (aiNotes ?? '')
 
   async function handleSave() {
     setSaving(true)
@@ -287,6 +306,9 @@ export default function ProfileScreen() {
     if (localDefaultRestSeconds !== defaultRestSeconds) payload.default_rest_seconds = localDefaultRestSeconds
     if (localRestSecondsSuccess !== restSecondsSuccess) payload.rest_seconds_success = localRestSecondsSuccess
     if (localRestSecondsFailure !== restSecondsFailure) payload.rest_seconds_failure = localRestSecondsFailure
+    if (localPreferredSplit !== preferredSplit) payload.preferred_split = localPreferredSplit
+    if (localSessionDuration !== sessionDurationMinutes) payload.session_duration_minutes = localSessionDuration
+    if (localAiNotes !== (aiNotes ?? '')) payload.ai_notes = localAiNotes || null
 
     try {
       await updateProfile.mutateAsync(payload as any)
@@ -306,6 +328,9 @@ export default function ProfileScreen() {
         defaultRestSeconds: localDefaultRestSeconds,
         restSecondsSuccess: localRestSecondsSuccess,
         restSecondsFailure: localRestSecondsFailure,
+        preferredSplit: localPreferredSplit,
+        sessionDurationMinutes: localSessionDuration,
+        aiNotes: localAiNotes || null,
       })
 
       // Update ref so re-sync effect doesn't re-fire
@@ -323,6 +348,9 @@ export default function ProfileScreen() {
         defaultRestSeconds: localDefaultRestSeconds,
         restSecondsSuccess: localRestSecondsSuccess,
         restSecondsFailure: localRestSecondsFailure,
+        preferredSplit: localPreferredSplit,
+        sessionDurationMinutes: localSessionDuration,
+        aiNotes: localAiNotes || null,
       }
 
       // Persist locale to AsyncStorage for fast cold-start
@@ -429,6 +457,14 @@ export default function ProfileScreen() {
     { value: 'male', label: t('profile.male') },
     { value: 'female', label: t('profile.female') },
   ]
+  const splitOptions = TRAINING_SPLITS.map(s => ({
+    value: s,
+    label: t(`profile.split.${s}`),
+  }))
+  const durationOptions = SESSION_DURATION_OPTIONS.map(n => ({
+    value: String(n),
+    label: `${n} ${t('profile.minutesUnit')}`,
+  }))
 
   // Save bar sits above the absolutely-positioned tab bar
   const saveBarBottomPad = TAB_BAR_CONTENT_HEIGHT + insets.bottom
@@ -704,35 +740,104 @@ export default function ProfileScreen() {
               </View>
             </AppCard>
 
-            {/* ── 6. Limitations / Injuries ── */}
-            <AppCard>
-              <AppText preset="caption" color={colors.gray7} marginBottom={8}>
-                {t('profile.limitationsLabel')}
-              </AppText>
-              <View
-                style={[
-                  styles.limitationsContainer,
-                  limitationsFocused && styles.limitationsContainerFocused,
-                ]}
-              >
-                <TextInput
-                  value={localLimitations}
-                  onChangeText={setLocalLimitations}
-                  onFocus={() => setLimitationsFocused(true)}
-                  onBlur={() => setLimitationsFocused(false)}
-                  placeholder={t('profile.limitationsPlaceholder')}
-                  placeholderTextColor={colors.gray7}
-                  multiline
-                  numberOfLines={4}
-                  textAlignVertical="top"
-                  style={styles.limitationsInput}
-                  accessibilityLabel={t('profile.limitationsLabel')}
+            {/* ── 6. AI Training Profile ── */}
+            <YStack gap={16}>
+              <YStack gap={4}>
+                <AppText preset="label" color={colors.gray8}>
+                  {t('profile.aiTrainingProfile')}
+                </AppText>
+                <AppText preset="chipLabel" color={colors.gray6}>
+                  {t('profile.aiTrainingProfileDescription')}
+                </AppText>
+              </YStack>
+
+              {/* Preferred Training Split */}
+              <AppCard>
+                <AppText preset="caption" color={colors.gray7} marginBottom={8}>
+                  {t('profile.preferredSplit')}
+                </AppText>
+                <PillSelector
+                  options={splitOptions}
+                  selected={localPreferredSplit}
+                  onSelect={(v) => setLocalPreferredSplit(v === localPreferredSplit ? null : v as TrainingSplit)}
+                  accessibilityLabel={t('profile.preferredSplit')}
                 />
-              </View>
-              <AppText preset="caption" color={colors.gray7} marginTop={6}>
-                {t('profile.limitationsHint')}
-              </AppText>
-            </AppCard>
+              </AppCard>
+
+              {/* Session Duration */}
+              <AppCard>
+                <AppText preset="caption" color={colors.gray7} marginBottom={8}>
+                  {t('profile.sessionDuration')}
+                </AppText>
+                <PillSelector
+                  options={durationOptions}
+                  selected={localSessionDuration != null ? String(localSessionDuration) : null}
+                  onSelect={(v) => setLocalSessionDuration(parseInt(v, 10) === localSessionDuration ? null : parseInt(v, 10))}
+                  accessibilityLabel={t('profile.sessionDuration')}
+                />
+              </AppCard>
+
+              {/* Injuries & Limitations */}
+              <AppCard>
+                <AppText preset="caption" color={colors.gray7} marginBottom={8}>
+                  {t('profile.limitationsLabel')}
+                </AppText>
+                <View
+                  style={[
+                    styles.textareaContainer,
+                    limitationsFocused && styles.textareaContainerFocused,
+                  ]}
+                >
+                  <TextInput
+                    value={localLimitations}
+                    onChangeText={setLocalLimitations}
+                    onFocus={() => setLimitationsFocused(true)}
+                    onBlur={() => setLimitationsFocused(false)}
+                    placeholder={t('profile.limitationsPlaceholder')}
+                    placeholderTextColor={colors.gray7}
+                    multiline
+                    numberOfLines={4}
+                    textAlignVertical="top"
+                    style={styles.textareaInput}
+                    accessibilityLabel={t('profile.limitationsLabel')}
+                  />
+                </View>
+                <AppText preset="caption" color={colors.gray7} marginTop={6}>
+                  {t('profile.limitationsHint')}
+                </AppText>
+              </AppCard>
+
+              {/* Additional Notes for AI */}
+              <AppCard>
+                <AppText preset="caption" color={colors.gray7} marginBottom={8}>
+                  {t('profile.aiNotesLabel')}
+                </AppText>
+                <View
+                  style={[
+                    styles.textareaContainer,
+                    aiNotesFocused && styles.textareaContainerFocused,
+                  ]}
+                >
+                  <TextInput
+                    value={localAiNotes}
+                    onChangeText={setLocalAiNotes}
+                    onFocus={() => setAiNotesFocused(true)}
+                    onBlur={() => setAiNotesFocused(false)}
+                    placeholder={t('profile.aiNotesPlaceholder')}
+                    placeholderTextColor={colors.gray7}
+                    multiline
+                    numberOfLines={4}
+                    textAlignVertical="top"
+                    maxLength={500}
+                    style={styles.textareaInput}
+                    accessibilityLabel={t('profile.aiNotesLabel')}
+                  />
+                </View>
+                <AppText preset="caption" color={colors.gray7} marginTop={6}>
+                  {t('profile.aiNotesHint')}
+                </AppText>
+              </AppCard>
+            </YStack>
 
             {/* ── 7. Secondary Settings ── */}
             <YStack gap={16}>
@@ -834,7 +939,7 @@ const styles = StyleSheet.create({
   gridItem: {
     width: '48%',
   },
-  limitationsContainer: {
+  textareaContainer: {
     backgroundColor: colors.gray3,
     borderWidth: 1,
     borderColor: colors.gray5,
@@ -842,10 +947,10 @@ const styles = StyleSheet.create({
     padding: 12,
     minHeight: 100,
   },
-  limitationsContainerFocused: {
+  textareaContainerFocused: {
     borderColor: colors.accent,
   },
-  limitationsInput: {
+  textareaInput: {
     fontFamily: 'Inter-Regular',
     fontSize: 16,
     color: colors.gray11,

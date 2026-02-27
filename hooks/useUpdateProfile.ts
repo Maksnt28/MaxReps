@@ -17,6 +17,9 @@ interface ProfileUpdate {
   default_rest_seconds?: number | null
   rest_seconds_success?: number | null
   rest_seconds_failure?: number | null
+  preferred_split?: string | null
+  session_duration_minutes?: number | null
+  ai_notes?: string | null
 }
 
 export function useUpdateProfile() {

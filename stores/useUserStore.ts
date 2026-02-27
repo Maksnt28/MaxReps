@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import type { ExperienceLevel, Goal, Sex } from '@/lib/types'
+import type { ExperienceLevel, Goal, Sex, TrainingSplit } from '@/lib/types'
 
 // Manual type — keep in sync with users table schema
 // is_onboarded is not in generated types (migration added after type gen)
@@ -20,6 +20,9 @@ export type UserRow = {
   default_rest_seconds: number | null
   rest_seconds_success: number | null
   rest_seconds_failure: number | null
+  preferred_split?: string | null
+  session_duration_minutes?: number | null
+  ai_notes?: string | null
   [key: string]: unknown
 }
 
@@ -40,6 +43,9 @@ interface UserState {
   defaultRestSeconds: number | null
   restSecondsSuccess: number | null
   restSecondsFailure: number | null
+  preferredSplit: TrainingSplit | null
+  sessionDurationMinutes: number | null
+  aiNotes: string | null
 
   setUser: (user: Partial<UserState>) => void
   clearUser: () => void
@@ -62,6 +68,9 @@ export const useUserStore = create<UserState>((set) => ({
   defaultRestSeconds: null,
   restSecondsSuccess: null,
   restSecondsFailure: null,
+  preferredSplit: null,
+  sessionDurationMinutes: null,
+  aiNotes: null,
 
   setUser: (user) => set((state) => ({ ...state, ...user })),
   clearUser: () =>
@@ -82,5 +91,8 @@ export const useUserStore = create<UserState>((set) => ({
       defaultRestSeconds: null,
       restSecondsSuccess: null,
       restSecondsFailure: null,
+      preferredSplit: null,
+      sessionDurationMinutes: null,
+      aiNotes: null,
     }),
 }))
