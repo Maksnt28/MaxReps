@@ -1,5 +1,5 @@
 -- MaxReps Exercise Seed Data
--- ≥50 exercises covering all 7 equipment types and all major muscle groups
+-- Base exercise set (53). Additional exercises added via migrations 20260226100000 and 20260227100000.
 -- Each exercise has EN/FR names and coaching cues
 
 insert into public.exercises (name_en, name_fr, muscle_primary, muscle_secondary, equipment, category, cues_en, cues_fr, difficulty) values

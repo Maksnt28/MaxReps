@@ -12,11 +12,8 @@ import { SelectionCard } from '@/components/ui/SelectionCard'
 import { useOnboardingStore } from '@/stores/useOnboardingStore'
 import { useUserStore } from '@/stores/useUserStore'
 import { supabase } from '@/lib/supabase'
+import { EQUIPMENT } from '@/lib/exercises'
 import { colors, headerButtonStyles, headerButtonIcon } from '@/lib/theme'
-
-const EQUIPMENT = [
-  'barbell', 'dumbbell', 'cable', 'machine', 'bodyweight', 'bands', 'kettlebell',
-] as const
 
 export default function EquipmentScreen() {
   const { t } = useTranslation()

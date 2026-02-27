@@ -22,6 +22,8 @@ export type Goal =
 
 export type Sex = 'male' | 'female'
 
+export type MovementPattern = 'push' | 'pull' | 'hinge' | 'squat' | 'carry' | 'rotation' | 'isolation'
+
 export const GOAL_CATEGORIES = [
   { key: 'strengthPower', goals: ['strength', 'hypertrophy', 'powerlifting'] as Goal[] },
   { key: 'bodyComposition', goals: ['weight_loss', 'body_recomp'] as Goal[] },

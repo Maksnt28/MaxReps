@@ -9,7 +9,7 @@ import Ionicons from '@expo/vector-icons/Ionicons'
 import { useExercises, type Exercise } from '@/hooks/useExercises'
 import { useProgram, useAddProgramExercises } from '@/hooks/usePrograms'
 import { useDebouncedValue } from '@/hooks/useDebouncedValue'
-import { filterExercises, getLocalizedExercise } from '@/lib/exercises'
+import { filterExercises, getLocalizedExercise, MUSCLE_GROUPS, EQUIPMENT } from '@/lib/exercises'
 import { SearchBar } from '@/components/SearchBar'
 import { FilterButtons } from '@/components/FilterButtons'
 import { EmptyState } from '@/components/EmptyState'
@@ -18,15 +18,6 @@ import { AppText } from '@/components/ui/AppText'
 import { AppButton } from '@/components/ui/AppButton'
 import { colors, separator, headerButtonStyles, headerButtonIcon } from '@/lib/theme'
 import { hapticLight } from '@/lib/animations'
-
-const MUSCLE_GROUPS = [
-  'chest', 'back', 'shoulders', 'biceps', 'triceps',
-  'quads', 'hamstrings', 'glutes', 'calves', 'abs',
-] as const
-
-const EQUIPMENT = [
-  'barbell', 'dumbbell', 'cable', 'machine', 'bodyweight', 'bands', 'kettlebell',
-] as const
 
 export default function ProgramAddExerciseScreen() {
   const { t, i18n } = useTranslation()

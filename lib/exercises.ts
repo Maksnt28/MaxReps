@@ -1,5 +1,14 @@
 import type { Exercise } from '@/hooks/useExercises'
 
+export const MUSCLE_GROUPS = [
+  'chest', 'back', 'shoulders', 'traps', 'biceps', 'triceps', 'forearms',
+  'quads', 'hamstrings', 'glutes', 'calves', 'abs',
+] as const
+
+export const EQUIPMENT = [
+  'barbell', 'dumbbell', 'cable', 'machine', 'bodyweight', 'bands', 'kettlebell',
+] as const
+
 interface LocalizedExercise {
   name: string
   cues: string | null

@@ -8,7 +8,7 @@ import { useRouter } from 'expo-router'
 import { useExercises } from '@/hooks/useExercises'
 import { useDebouncedValue } from '@/hooks/useDebouncedValue'
 import { useExerciseStore } from '@/stores/useExerciseStore'
-import { filterExercises } from '@/lib/exercises'
+import { filterExercises, MUSCLE_GROUPS, EQUIPMENT } from '@/lib/exercises'
 import { SearchBar } from '@/components/SearchBar'
 import { FilterButtons } from '@/components/FilterButtons'
 import {
@@ -19,15 +19,6 @@ import { EmptyState } from '@/components/EmptyState'
 import { AppText } from '@/components/ui/AppText'
 import { AppButton } from '@/components/ui/AppButton'
 import { colors, spacing } from '@/lib/theme'
-
-const MUSCLE_GROUPS = [
-  'chest', 'back', 'shoulders', 'biceps', 'triceps',
-  'quads', 'hamstrings', 'glutes', 'calves', 'abs',
-] as const
-
-const EQUIPMENT = [
-  'barbell', 'dumbbell', 'cable', 'machine', 'bodyweight', 'bands', 'kettlebell',
-] as const
 
 export default function ExercisesScreen() {
   const { t, i18n } = useTranslation()

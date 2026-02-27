@@ -18,13 +18,10 @@ import { PillSelector } from '@/components/ui/PillSelector'
 import { RulerPicker } from '@/components/ui/RulerPicker'
 import { SelectionCard } from '@/components/ui/SelectionCard'
 import { Divider } from '@/components/ui/Divider'
+import { EQUIPMENT } from '@/lib/exercises'
 import { colors, card, radii, semantic } from '@/lib/theme'
 import { hapticNotification } from '@/lib/animations'
 import { useDeleteAccount } from '@/hooks/useDeleteAccount'
-
-const EQUIPMENT = [
-  'barbell', 'dumbbell', 'cable', 'machine', 'bodyweight', 'bands', 'kettlebell',
-] as const
 
 // Tab bar content area height (CustomTabBar: paddingTop 8 + tab ~48)
 const TAB_BAR_CONTENT_HEIGHT = 60
